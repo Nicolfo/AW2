@@ -1,3 +1,5 @@
+import kotlin.properties.Delegates
+
 class Reactor<T>() {
     // Your compute cell's addCallback method must return an object
     // that implements the Subscription interface.
@@ -13,12 +15,14 @@ class Reactor<T>() {
     }
 
     inner class InputCell (value:T): Cell<T>(){
-        override var value:T =value
-            set(value){
-                field=value
+        override var value:T by
+        Delegates.observable(value)
+        {
+            property, oldValue, newValue ->
                 riferimenti.forEach { it.updateValue() }                    //update all references values
                 riferimenti.forEach { it.doCallBacks() }                //callbacks called after all updates
-            }
+        }
+
     }
 
     inner class ComputeCell private constructor(val compute:()->T):Cell<T>(){
