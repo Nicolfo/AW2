@@ -13,7 +13,10 @@ class ProductServiceImpl(private val productRepository: ProductRepository): Prod
     }
 
     override fun getProduct(ean: String): ProductDTO? {
-        return productRepository.findByIdOrNull(ean)?.toDTO()
+        val product=productRepository.findByIdOrNull(ean);
+        if(product!=null)
+            return product.toDTO()
+        throw PrimaryKeyNotFoundException("ean not found")
     }
 
 }
