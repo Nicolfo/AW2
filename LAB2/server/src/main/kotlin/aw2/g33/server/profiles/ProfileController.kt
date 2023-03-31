@@ -16,21 +16,25 @@ class ProfileController(private val profileService: ProfileService) {
         return profileService.getProfileInfo(email)
     }
 
-    @PostMapping("/API/profiles")
-    fun insertProfile(@RequestBody body:String){
+    @PostMapping("/API/profiles/")
+    fun insertProfile(@RequestBody body:String): ProfileDTO {
         val parsed= JSONParser(body).parseObject();
         if(!parsed.containsKey("name") || !parsed.containsKey("email")){
-            return error("Error Body")
+            throw RequestBodyException("Request Body format is incorrect")
         }
-         profileService.addProfile(ProfileDTO(parsed["email"].toString(),parsed.get("name").toString()))
+        val profile_to_add=ProfileDTO(parsed["email"].toString(),parsed.get("name").toString())
 
+        profileService.addProfile(profile_to_add)
+        return profile_to_add
     }
     @PutMapping("/API/profiles/{email}")
-    fun updateProfile(@PathVariable email:String,@RequestBody body:String){
+    fun updateProfile(@PathVariable email:String,@RequestBody body:String): ProfileDTO {
         val parsed= JSONParser(body).parseObject();
         if(!parsed.containsKey("name") || !parsed.containsKey("email")){
-            return error("Error Body")
+            throw RequestBodyException("Request Body format is incorrect")
         }
-        profileService.updateProfile(email,ProfileDTO(parsed["email"].toString(),parsed.get("name").toString()))
+        val profile_to_update=ProfileDTO(parsed["email"].toString(),parsed.get("name").toString())
+        profileService.updateProfile(email,profile_to_update)
+        return profile_to_update
     }
 }

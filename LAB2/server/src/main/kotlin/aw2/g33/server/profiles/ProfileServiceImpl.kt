@@ -11,19 +11,22 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository):Profi
             return profile;
         }
         else
-            return null;
+            throw EmailConflictException("Email already used")
     }
 
     override fun getProfileInfo(email: String): ProfileDTO? {
-        return profileRepository.findByIdOrNull(email)?.toDTO();
+        val value=profileRepository.findByIdOrNull(email);
+        if(value!=null)
+            return value.toDTO()
+        throw PrimaryKeyNotFoundException("Email not found in DB");
     }
 
     override fun updateProfile(email: String, profile: ProfileDTO): ProfileDTO? {
 
         if(profileRepository.findByIdOrNull(email)==null)           //se non esisteva vecchia mail
-            return null
-        if(profileRepository.findByIdOrNull(profile.email)!=null)   //se email nuova non valida
-            return null
+            throw PrimaryKeyNotFoundException("Email not found in DB");
+        if(profileRepository.findByIdOrNull(profile.email)!=null && email!=profile.email)   //se email nuova non valida
+            throw EmailConflictException("New Email is already used");
 
         profileRepository.deleteById(email);
         profileRepository.save(Profile(profile.email,profile.name));

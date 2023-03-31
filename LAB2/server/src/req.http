@@ -1,9 +1,9 @@
-PUT HTTP://127.0.0.1:8080/API/profiles/prova2@polito.it
+PUT HTTP://127.0.0.1:8080/API/profiles/prova3@polito.it
 content-type: application/json
 
 {
-    "email": "prova@polito.it",
-    "name": "prova" 
+    "email": "prova3@polito.it",
+    "name": "prova1" 
 }
 
 ###
@@ -11,8 +11,8 @@ POST HTTP://127.0.0.1:8080/API/profiles/
 content-type: application/json
 
 {
-    "email": "prova@polito.it",
-    "name": "prova" 
+    "email": "prova3@polito.it",
+    "name": "prova2" 
 }
 
 ###
