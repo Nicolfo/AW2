@@ -1,4 +1,4 @@
-PUT HTTP://127.0.0.1:8080/API/profiles/prova3@polito.it
+PUT HTTP://127.0.0.1:8080/API/profiles/prova4@polito.it
 content-type: application/json
 
 {
@@ -16,7 +16,7 @@ content-type: application/json
 }
 
 ###
-GET HTTP://127.0.0.1:8080/API/profiles/prova@polito.it
+GET HTTP://127.0.0.1:8080/API/profiles/prova3@polito.it
 
 
 ###
