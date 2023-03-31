@@ -6,8 +6,8 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "profiles")
-class Profile {
-    @Id
-    val email: String=""
-    val name:String=""
+class Profile(@Id var email: String, var name: String) {
+
+
+
 }
