@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import './AddUser'
-import AddUser from "./AddUser";
+import './UserInfo/AddUser'
+import AddUser from "./UserInfo/AddUser";
 import 'bootstrap/dist/css/bootstrap.css';
-import NavBar from "./NavBar";
-import Page from "./Page";
+import NavBar from "./NavBar/NavBar";
+import Page from "./MainPage/Page";
 
 function App() {
   return (

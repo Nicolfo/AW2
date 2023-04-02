@@ -1,8 +1,12 @@
 {
-  "name": "y",
-  "version": "0.1.0",
+  "name": "Client_Lab2",
+  "version": "1",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.15",
+    "@mui/styled-engine-sc": "^5.11.11",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -11,6 +15,7 @@
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "styled-components": "^5.3.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -41,5 +46,5 @@
   "main": "index.js",
   "author": "",
   "license": "ISC",
-  "proxy": "http://172.20.10.6:8080"
+  "proxy": "http://localhost:8080"
 }
