@@ -1,0 +1,19 @@
+.mainNavBar{
+    width: 100vw;
+    height: 2vh;
+    /*background-color: darkblue;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
+.containerUserImage{
+    width: 80px;
+    height: 80px;
+    position: relative;
+    left: 85%;
+    margin-top: 10vh;
+    border-radius: 50px;
+    border: 1px black solid;
+}
