@@ -27,8 +27,9 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository):Profi
             throw EmailConflictException("New Email is already used")
 
         profileRepository.deleteById(email)
-        profileRepository.save(Profile(profile.email,profile.name))
-        return profile
+        val profileToADD=Profile (profile.email,profile.name);
+        profileRepository.save(profileToADD)
+        return profileToADD.toDTO()
     }
 
 }

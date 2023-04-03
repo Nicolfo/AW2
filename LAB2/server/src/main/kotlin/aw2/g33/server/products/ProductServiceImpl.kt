@@ -11,11 +11,11 @@ class ProductServiceImpl(private val productRepository: ProductRepository): Prod
         return productRepository.findAll().map {it.toDTO()}
     }
 
-    override fun getProduct(ean: String): List<ProductDTO?> {
+    override fun getProduct(ean: String): ProductDTO? {
         val product=productRepository.findByIdOrNull(ean)
         if(product==null) throw PrimaryKeyNotFoundException("ean not found");
 
-        return listOf<ProductDTO?>(product?.toDTO())
+        return product?.toDTO()
     }
 
 }
