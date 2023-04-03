@@ -18,7 +18,8 @@ async function getProduct(ean=""){
     let products = [] ;
     try{
         response = await fetch(url+"API/products/"+ean);
-        products = await response.json();
+        let product = await response.json();
+        products.push(product);
     }
     catch(err){
         console.log(err);
