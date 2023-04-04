@@ -3,25 +3,27 @@ let response;
 
 async function getProfile(email=""){
     let tmpUser = null ;
-    try{
-        if(email.trim()!="" && email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
+
+        /*if(email.trim()!="" && email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
             response = await fetch(url+"API/profiles/"+email);
             if(response && response.ok){
                 tmpUser = await response.json();
             }
-        }
-    }
-    catch(err){
-        console.log(err);
-        return tmpUser;
-    }
+        }*/
 
-    return tmpUser;
+    response = await fetch(url+"API/profiles/"+email);
+    tmpUser = await response.json();
+
+    if(response.ok)
+        return tmpUser;
+    else
+        throw tmpUser;
+
 }
 
 async function addProfile(addedUser=null){
     let tmpUser = null ;
-    try{
+
         response = await fetch(url+"API/profiles/", {
 
             method: 'POST',
@@ -29,16 +31,16 @@ async function addProfile(addedUser=null){
             body: JSON.stringify({ "name" : addedUser.name, "email" :addedUser.email}),
         });
 
-        if(response && response.ok){
-            tmpUser = await response.json();
-        }
-    }
-    catch(err){
-        console.log(err);
-        return tmpUser
-    }
 
-    return tmpUser;
+            tmpUser = await response.json();
+
+
+    if(response.ok)
+        return tmpUser;
+    else
+        throw tmpUser;
+
+
 }
 
 async function updateProfile(updatedUser=null){

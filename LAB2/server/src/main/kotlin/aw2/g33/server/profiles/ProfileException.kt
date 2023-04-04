@@ -14,7 +14,9 @@ class ProblemDetailsHandler: ResponseEntityExceptionHandler() {
     @ExceptionHandler(EmailConflictException::class)
     fun handleEmailConflict(e: EmailConflictException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.CONFLICT,  e.message!! )
-
+    @ExceptionHandler(EmailInvalidException::class)
+    fun handleEmailInvalid(e: EmailInvalidException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY,  e.message!! )
     @ExceptionHandler(RequestBodyException::class)
     fun handleRequestBodyError(e: RequestBodyException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
@@ -25,6 +27,10 @@ class PrimaryKeyNotFoundException(message: String?) : Throwable(message) {
 
 }
 class EmailConflictException(message: String?) : Throwable(message) {
+
+}
+
+class EmailInvalidException(message: String?) : Throwable(message) {
 
 }
 

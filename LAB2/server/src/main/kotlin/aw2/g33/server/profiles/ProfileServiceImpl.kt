@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service
 @Service
 class ProfileServiceImpl(private val profileRepository: ProfileRepository):ProfileService {
     override fun addProfile(profile: ProfileDTO): ProfileDTO? {
+        val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})";
+        if(!EMAIL_REGEX.toRegex().matches(profile.email))
+            throw EmailInvalidException("Invalid Email Format")
+
         if(profileRepository.findByIdOrNull(profile.email)==null) {
             profileRepository.save(profile.toProfile())
             return profile
