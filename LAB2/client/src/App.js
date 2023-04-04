@@ -7,7 +7,7 @@ import NavBar from "./Navbar/NavBar";
 import API_Products from "./API/API_Products/API_Products";
 import API_Profile from "./API/API_Profile/API_Profile";
 import ShowProductsTable from "./Contents/ShowProductsTable";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SingleProductForm from "./Contents/SingleProductForm";
 import SingleProfileForm from "./Contents/SingleProfileForm";
 import AddProfileForm from "./Contents/AddProfileForm";
@@ -76,14 +76,21 @@ function Layout(){
     )
 }
 function Content(){
+
     const [listOfProducts,setListOfProducts]=useState([]);
+
     const path = useLocation().pathname.toString();
+    useEffect(()=>{
+        if(path==='/list-products' || path ==='/')
+        API_Products.getAllProducts().then((products)=>{setListOfProducts(((old) => old=products))})
+            .catch((err)=>{
+                console.log("Error " + err.status + " " + err.detail + " on API call " + err.instance);
+            });
+
+    },[path])
     switch (path){
         case '/list-products':
-            API_Products.getAllProducts().then((products)=>{setListOfProducts(_=>products)})
-                .catch((err)=>{
-                    return <div>{"Error " + err.status + " " + err.detail + " on API call " + err.instance}</div>;
-                });
+
             return (<div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div>)
         case '/get-product':
             return (<div className="col-9"><SingleProductForm getProduct={API_Products.getProduct}></SingleProductForm></div>);
