@@ -21,6 +21,13 @@ class ProfileController(private val profileService: ProfileService) {
         return profileService.getProfileInfo(email)
     }
 
+    @GetMapping("/API/profiles/")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun getProfileWithNoParam(){
+        throw RequestParamException("GET request at /API/profiles/ have to include a mail as a param")
+    }
+
+
     @PostMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.CREATED)
     fun insertProfile(@RequestBody profileToAdd:ProfileDTO?): ProfileDTO {

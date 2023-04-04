@@ -1,7 +1,8 @@
 const url = 'http://localhost:8080/';
 let response;
 
-async function getProfile(email=""){
+async function getProfile(email=undefined){
+
     let tmpUser = null ;
 
         /*if(email.trim()!="" && email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
@@ -43,26 +44,25 @@ async function addProfile(addedUser=null){
 
 }
 
-async function updateProfile(updatedUser=null){
+async function updateProfile(oldMail,updatedUser){
     let tmpUser = null ;
-    try{
-        response = await fetch(url+"API/profiles/"+updatedUser.email, {
 
+        response = await fetch(url+"API/profiles/"+oldMail, {
             method: 'PUT',
             headers : { 'Content-Type' : 'application/json'},
             body: JSON.stringify({ "name" : updatedUser.name, "email" :updatedUser.email}),
         });
 
-        if(response && response.ok){
-            tmpUser = await response.json();
-        }
-    }
-    catch(err){
-        console.log(err);
-        return tmpUser
-    }
 
-    return tmpUser;
+        tmpUser = await response.json();
+        if(response.ok)
+            return tmpUser;
+        else
+            throw tmpUser;
 }
+
+
+
+
 
 export default {getProfile,updateProfile,addProfile};

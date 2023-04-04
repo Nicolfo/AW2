@@ -29,6 +29,9 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository):Profi
             throw PrimaryKeyNotFoundException("Email not found in DB")
         if(profileRepository.findByIdOrNull(profile.email)!=null && email!=profile.email)   //se email nuova esiste già
             throw EmailConflictException("New Email is already used")
+        val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})";
+        if(!EMAIL_REGEX.toRegex().matches(profile.email))
+            throw EmailInvalidException("Invalid Email Format")
 
         profileRepository.deleteById(email)
         val profileToADD=Profile (profile.email,profile.name);

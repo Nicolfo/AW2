@@ -21,6 +21,10 @@ class ProblemDetailsHandler: ResponseEntityExceptionHandler() {
     fun handleRequestBodyError(e: RequestBodyException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
 
+    @ExceptionHandler(RequestParamException::class)
+    fun handleRequestBodyError(e: RequestParamException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+
 }
 
 class PrimaryKeyNotFoundException(message: String?) : Throwable(message) {
@@ -35,5 +39,8 @@ class EmailInvalidException(message: String?) : Throwable(message) {
 }
 
 class RequestBodyException(message: String?) : Throwable(message) {
+
+}
+class RequestParamException(message: String?) : Throwable(message) {
 
 }
