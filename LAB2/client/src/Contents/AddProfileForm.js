@@ -39,6 +39,7 @@ function AddProfileForm(props){
     else
         return <div>
             {resultMessage}
+            <br></br>
             <Button variant="primary" type="submit" onClick={()=>{
                 setResultMessage("");
                 setName("");

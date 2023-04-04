@@ -40,6 +40,7 @@ function SingleProfileForm(props){
         return (
             <div>
                 {errMsg}
+                <br/>
                 <Button variant="primary" type="submit" onClick={()=>{
                     setErrMsg("");
                     setName("");

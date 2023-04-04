@@ -31,8 +31,11 @@ class ProfileController(private val profileService: ProfileService) {
     @PostMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.CREATED)
     fun insertProfile(@RequestBody profileToAdd:ProfileDTO?): ProfileDTO {
-        if(profileToAdd==null){
+        if(profileToAdd?.name == null ||profileToAdd?.email==null||profileToAdd==null){
             throw RequestBodyException("Request Body format is incorrect")
+        }
+        if(profileToAdd.email=="" || profileToAdd.name==""){
+            throw RequestBodyException("Name and mail field cannot be empty!")
         }
         profileService.addProfile(profileToAdd)
         return profileToAdd
@@ -42,11 +45,17 @@ class ProfileController(private val profileService: ProfileService) {
     @ResponseStatus(HttpStatus.OK)
     fun updateProfile(@PathVariable email:String,@RequestBody profileToUpdate:ProfileDTO?): ProfileDTO {
 
-        if(profileToUpdate==null){
+        if(profileToUpdate==null||profileToUpdate?.email==null||profileToUpdate?.name==null){
             throw RequestBodyException("Request Body format is incorrect")
         }
 
         profileService.updateProfile(email,profileToUpdate)
         return profileToUpdate
     }
+    @PutMapping("/API/profiles/")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun updateProfileWithNoParam(){
+        throw RequestParamException("PUT request at /API/profiles/ have to include a mail and a name as a param")
+    }
+
 }

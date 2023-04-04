@@ -45,6 +45,7 @@ function UpdateProfileForm(props){
     else
         return <div>
             {resultMessage}
+            <br/>
             <Button variant="primary" type="submit" onClick={()=>{
                 setResultMessage("");
                 setName("");

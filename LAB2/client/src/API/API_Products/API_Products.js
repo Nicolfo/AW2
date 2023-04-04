@@ -17,7 +17,6 @@ async function getAllProducts(){
 
 async function getProduct(ean=""){
     let products = [] ;
-
         response = await fetch(url+"API/products/"+ean);
         products = await response.json();
         if(response.ok)

@@ -40,11 +40,12 @@ function SingleProductForm(props){
     if(errMsg!==""){
         return (<div>{errMsg}</div>)
     }
-    if(isSubmitted){
+    if(isSubmitted && eanToSearch!=""){
 
         return <>
             <div>
                 <ShowProductsTable listOfProducts={[{ean:eanToSearch,name,brand}]}></ShowProductsTable>
+                <br></br>
                 <Button variant="primary" type="submit" onClick={()=>{
                     setErrMsg("");
                     setName("");
@@ -59,7 +60,20 @@ function SingleProductForm(props){
 
         </>
     }
+    else return (<>Please fill ean field
+        <br></br>
+        <Button variant="primary" type="submit" onClick={()=>{
+            setErrMsg("");
+            setName("");
+            setBrand("");
+            setIsSubmitted(false);
+            setEanToSearch("");
+        }
+        }>
+            Search another
+        </Button>
 
+    </>)
 }
 
 export default SingleProductForm;
