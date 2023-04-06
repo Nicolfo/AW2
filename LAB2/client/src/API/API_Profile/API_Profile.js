@@ -4,7 +4,7 @@ let response;
 async function getProfile(email=""){
     let tmpUser = null ;
     try{
-        if(email.trim()!="" && email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
+        if(email.trim()!=="" && email.match('[a-z0-9]+@[a-z]+[a-z]{2,3}')){
             response = await fetch(url+"API/profiles/"+email);
             if(response && response.ok){
                 tmpUser = await response.json();
