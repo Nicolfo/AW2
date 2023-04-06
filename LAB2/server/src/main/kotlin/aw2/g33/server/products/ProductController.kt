@@ -22,5 +22,6 @@ class ProductController(private val productService: ProductService) {           
     fun getProduct(@PathVariable ean:String):ProductDTO?{
 
       return productService.getProduct(ean)
+
     }
 }

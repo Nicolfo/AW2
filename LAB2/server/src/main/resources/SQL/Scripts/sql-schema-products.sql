@@ -3,5 +3,3 @@ CREATE TABLE IF NOT EXISTS products(
     name varchar(255),
     brand varchar(255)
 );
-
-

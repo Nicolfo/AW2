@@ -22,8 +22,8 @@ function Page(props){
     },[]);
 
     async function handleValueChangeSearchBar(event=null,clicked=false){
-        if((event && event.key=="Enter") || clicked){
-            if(valueSearchBar=="") {
+        if((event && event.key==="Enter") || clicked){
+            if(valueSearchBar==="") {
                 setProducts(await API_Products.getAllProducts());
                     return ;
             }
@@ -42,7 +42,7 @@ function Page(props){
                    onKeyDown={(event)=>handleValueChangeSearchBar(event)}
                    onChange={event => setValueSearchBar(event.target.value)}
                    type={<textarea name="" id="" rows="1"></textarea>}/>
-            <img src={searchImage} onClick={()=>handleValueChangeSearchBar(null,true)}></img>
+            <img alt="searchImage" prop src={searchImage} onClick={()=>handleValueChangeSearchBar(null,true)}></img>
         </div>
         {
         products && products.length>0 ?
@@ -67,7 +67,7 @@ function Page(props){
         <>
             <div className="mainPage_noProducts">
                 <span>!!!No Product in Database!!!</span>
-                <img src={sadImage}/>
+                <img alt="sad images" prop src={sadImage}/>
             </div>
 
         </>

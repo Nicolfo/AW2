@@ -1,11 +1,9 @@
 import './UserDialog.css'
 import {useEffect, useState} from "react";
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {Box, Tab, Tabs} from "@mui/material";
 import * as PropTypes from "prop-types";
@@ -35,8 +33,8 @@ function UserDialog(props) {
     },[props.openUserDialog])
 
     async function handleValueChangeEmailLogIn(event=null, clickedSend = false){
-        if((event && event.key=="Enter") || clickedSend ){
-            if(!emailUser.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'))
+        if((event && event.key==="Enter") || clickedSend ){
+            if(!emailUser.match('[a-z0-9]+@[a-z]+[a-z]{2,3}'))
             {
                 setErrorMessage("No valid email ...")
                 return;
@@ -53,7 +51,7 @@ function UserDialog(props) {
 
     async function handleAddNewUser(){
         if(updatedUser.email && updatedUser.name){
-            if(!updatedUser.email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'))
+            if(!updatedUser.email.match('[a-z0-9]+@[a-z]+[a-z]{2,3}'))
             {
                 setErrorMessage("No valid email ...")
                 return;
@@ -73,11 +71,11 @@ function UserDialog(props) {
 
     async function handleUpdateUser(){
         if(updatedUser.email && updatedUser.name){
-            if(updatedUser.email == userLogged.email && updatedUser.name == userLogged.name){
+            if(updatedUser.email === userLogged.email && updatedUser.name === userLogged.name){
                 setErrorMessage("No changes have been done ...")
                 return ;
             }
-            if(!updatedUser.email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'))
+            if(!updatedUser.email.match('[a-z0-9]+@[a-z]+[a-z]{2,3}'))
             {
                 setErrorMessage("No valid email ...")
                 return;
@@ -104,7 +102,7 @@ function UserDialog(props) {
                         value={indexTab}
                         onChange={(event,index)=>{
                                   setIndexTab(index);
-                                  if(index==1)
+                                  if(index===1)
                                       setUpdatedUser({"name":"","email":""})
                                   else{
                                       setUpdatedUser(userLogged)
@@ -117,7 +115,7 @@ function UserDialog(props) {
                     </Tabs>
                 </DialogTitle>
                 <DialogContent className="main-container-log-in">
-                    {indexTab == 0 ?
+                    {indexTab === 0 ?
                         !userLogged ?
                             <>
                                 <span className="text-description-user-dialog">Write your email to log in </span>
