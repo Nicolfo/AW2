@@ -5,5 +5,5 @@ Members of this team are:
 * Nicolò Fontana
 * Matteo Fontana
 * Jacopo Spaccatrosi (s285891)
-* Membro 4
+* Giuseppe Galluzzo
  
