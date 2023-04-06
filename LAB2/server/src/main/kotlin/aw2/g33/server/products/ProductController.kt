@@ -17,9 +17,11 @@ class ProductController(private val productService: ProductService) {           
     fun getAll():List<ProductDTO>{
         return productService.getAll()
     }
-    @ResponseStatus(HttpStatus.OK
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/API/products/{ean}")
     fun getProduct(@PathVariable ean:String):ProductDTO?{
-        return productService.getProduct(ean)
+
+      return productService.getProduct(ean)
+
     }
 }
