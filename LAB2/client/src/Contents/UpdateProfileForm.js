@@ -42,7 +42,7 @@ function UpdateProfileForm(props){
             Submit
         </Button>
     </Form>);
-    else
+    else if(resultMessage!=="")
         return <div>
             {resultMessage}
             <br/>
@@ -56,6 +56,8 @@ function UpdateProfileForm(props){
                 Update another
             </Button>
     </div>
+    else
+        return <div>Sending Request ...</div>
 
 }
 export default UpdateProfileForm;

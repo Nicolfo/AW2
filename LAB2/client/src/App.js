@@ -78,19 +78,24 @@ function Layout(){
 function Content(){
 
     const [listOfProducts,setListOfProducts]=useState([]);
-
+    const [errorMsg,setErrorMsg]=useState("");
     const path = useLocation().pathname.toString();
     useEffect(()=>{
         if(path==='/list-products' || path ==='/')
-        API_Products.getAllProducts().then((products)=>{setListOfProducts(((old) => old=products))})
+        API_Products.getAllProducts().then((products)=>{
+            setListOfProducts(((old) => old=products))
+            setErrorMsg("");
+        })
             .catch((err)=>{
-                console.log("Error " + err.status + " " + err.detail + " on API call " + err.instance);
+                setErrorMsg("Error " + err.status + " " + err.detail + " on API call " + err.instance);
             });
 
     },[path])
+
     switch (path){
         case '/list-products':
-
+            if(errorMsg!=="")
+                return (<div className="col-9">{errorMsg}</div>)
             return (<div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div>)
         case '/get-product':
             return (<div className="col-9"><SingleProductForm getProduct={API_Products.getProduct}></SingleProductForm></div>);

@@ -10,9 +10,8 @@ function SingleProfileForm(props){
     const [errMsg,setErrMsg]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
-        console.log(emailToSearch)
+        setIsSubmitted(true);
         props.getProfile(emailToSearch).then((profile)=>{
-            setIsSubmitted(true);
             setErrMsg("");
             setName(profile.name);
 
@@ -52,7 +51,11 @@ function SingleProfileForm(props){
                 </Button>
             </div>)
     }
-    if(isSubmitted){
+    if(isSubmitted && name===""){
+        return <div>Waiting Server Response ...</div>
+    }
+
+    if(isSubmitted ){
 
         return <>
             <div>
@@ -84,6 +87,8 @@ function SingleProfileForm(props){
 
         </>
     }
+
+
 
 }
 

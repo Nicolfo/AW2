@@ -1,19 +1,16 @@
 const url = 'http://localhost:8080/';
-let response;
 
 async function getProfile(email=undefined){
 
     let tmpUser = null ;
+    let response;
+    try{
+        response = await fetch(url+"API/profiles/"+email);
+        tmpUser = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/{"+email+"}"}
+    }
 
-        /*if(email.trim()!="" && email.match('[a-z0-9]+@[a-z]+\.[a-z]{2,3}')){
-            response = await fetch(url+"API/profiles/"+email);
-            if(response && response.ok){
-                tmpUser = await response.json();
-            }
-        }*/
-
-    response = await fetch(url+"API/profiles/"+email);
-    tmpUser = await response.json();
 
     if(response.ok)
         return tmpUser;
@@ -24,16 +21,17 @@ async function getProfile(email=undefined){
 
 async function addProfile(addedUser=null){
     let tmpUser = null ;
-
+    let response;
+    try{
         response = await fetch(url+"API/profiles/", {
-
             method: 'POST',
             headers : { 'Content-Type' : 'application/json'},
             body: JSON.stringify({ "name" : addedUser.name, "email" :addedUser.email}),
         });
-
-
-            tmpUser = await response.json();
+        tmpUser = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/"}
+    }
 
 
     if(response.ok)
@@ -46,15 +44,17 @@ async function addProfile(addedUser=null){
 
 async function updateProfile(oldMail,updatedUser){
     let tmpUser = null ;
-
-        response = await fetch(url+"API/profiles/"+oldMail, {
+    let response;
+    try {
+        response = await fetch(url + "API/profiles/" + oldMail, {
             method: 'PUT',
-            headers : { 'Content-Type' : 'application/json'},
-            body: JSON.stringify({ "name" : updatedUser.name, "email" :updatedUser.email}),
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({"name": updatedUser.name, "email": updatedUser.email}),
         });
-
-
         tmpUser = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/"+oldMail}
+    }
         if(response.ok)
             return tmpUser;
         else

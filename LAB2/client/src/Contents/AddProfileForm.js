@@ -36,7 +36,7 @@ function AddProfileForm(props){
             Submit
         </Button>
     </Form>);
-    else
+    else if(resultMessage!=="")
         return <div>
             {resultMessage}
             <br></br>
@@ -50,6 +50,7 @@ function AddProfileForm(props){
                 Add another
             </Button>
     </div>
+    else return <div>Sending Request ...</div>
 
 }
 export default AddProfileForm;

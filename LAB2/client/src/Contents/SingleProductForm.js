@@ -4,7 +4,7 @@ import {useState} from "react";
 import ShowProductsTable from "./ShowProductsTable";
 
 function SingleProductForm(props){
-    const [eanToSearch,setEanToSearch]=useState("");
+    const [idToSearch,setIdToSearch]=useState("");
     const [isSubmitted,setIsSubmitted]=useState(false);
     const [name,setName]=useState("");
     const [brand,setBrand]=useState("");
@@ -12,7 +12,7 @@ function SingleProductForm(props){
     const handleSubmit=(event)=>{
         event.preventDefault();
         setIsSubmitted(true);
-        props.getProduct(eanToSearch).then((product)=>{
+        props.getProduct(idToSearch).then((product)=>{
             setErrMsg("");
             setName(product.name);
             setBrand(product.brand);
@@ -26,8 +26,8 @@ function SingleProductForm(props){
     if(!isSubmitted && errMsg==="")
     return  <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Ean</Form.Label>
-            <Form.Control type="text" placeholder="Enter product ean" onChange={ev=>setEanToSearch(ev.target.value)}/>
+            <Form.Label>ProductId</Form.Label>
+            <Form.Control type="text" placeholder="Enter productId" onChange={ev=>setIdToSearch(ev.target.value)}/>
             <Form.Text className="text-muted">
             </Form.Text>
         </Form.Group>
@@ -38,20 +38,37 @@ function SingleProductForm(props){
     </Form>
 
     if(errMsg!==""){
-        return (<div>{errMsg}</div>)
+        return (
+            <div>
+                {errMsg}
+                <br/>
+                <Button variant="primary" type="submit" onClick={()=>{
+                    setErrMsg("");
+                    setName("");
+                    setBrand("");
+                    setIsSubmitted(false);
+                    setIdToSearch("");
+                }
+                }>
+                    Search another
+                </Button>
+            </div>)
     }
-    if(isSubmitted && eanToSearch!=""){
+    if(isSubmitted && name===""){
+        return <div>Waiting Server Response ...</div>
+    }
+    if(isSubmitted){
 
         return <>
             <div>
-                <ShowProductsTable listOfProducts={[{ean:eanToSearch,name,brand}]}></ShowProductsTable>
+                <ShowProductsTable listOfProducts={[{productId:idToSearch,name,brand}]}></ShowProductsTable>
                 <br></br>
                 <Button variant="primary" type="submit" onClick={()=>{
                     setErrMsg("");
                     setName("");
                     setBrand("");
                     setIsSubmitted(false);
-                    setEanToSearch("");
+                    setIdToSearch("");
                 }
                 }>
                     Search another
@@ -60,14 +77,14 @@ function SingleProductForm(props){
 
         </>
     }
-    else return (<>Please fill ean field
+    else return (<>Please fill productID field
         <br></br>
         <Button variant="primary" type="submit" onClick={()=>{
             setErrMsg("");
             setName("");
             setBrand("");
             setIsSubmitted(false);
-            setEanToSearch("");
+            setIdToSearch("");
         }
         }>
             Search another
