@@ -81,7 +81,7 @@ function Content(){
     const [errorMsg,setErrorMsg]=useState("");
     const path = useLocation().pathname.toString();
     useEffect(()=>{
-        if(path==='/list-products' || path ==='/')
+        if(path==='/list-products' || path ==='/' || path === '')
         API_Products.getAllProducts().then((products)=>{
             setListOfProducts(((old) => old=products))
             setErrorMsg("");
@@ -106,7 +106,8 @@ function Content(){
         case '/update-profile':
             return (<div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div>);
         default:
-            API_Products.getAllProducts().then((products)=>{setListOfProducts(products)});
+            if(errorMsg!=="")
+                return (<div className="col-9">{errorMsg}</div>)
             return (<div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div>)
     }
 }
