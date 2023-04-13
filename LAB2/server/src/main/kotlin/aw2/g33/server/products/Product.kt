@@ -8,7 +8,7 @@ import jakarta.persistence.Table
 @Table(name="products")
 class Product {
     @Id
-    val ean: String=""
+    val productId: String=""
     val name: String=""
     val brand: String=""
 }

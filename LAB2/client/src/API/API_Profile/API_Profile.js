@@ -1,66 +1,68 @@
 const url = 'http://localhost:8080/';
-let response;
 
-async function getProfile(email=""){
+async function getProfile(email=undefined){
+
     let tmpUser = null ;
+    let response;
     try{
-        if(email.trim()!=="" && email.match('[a-z0-9]+@[a-z]+[a-z]{2,3}')){
-            response = await fetch(url+"API/profiles/"+email);
-            if(response && response.ok){
-                tmpUser = await response.json();
-            }
-        }
-    }
-    catch(err){
-        console.log(err);
-        return tmpUser;
+        response = await fetch(url+"API/profiles/"+email);
+        tmpUser = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/{"+email+"}"}
     }
 
-    return tmpUser;
+
+    if(response.ok)
+        return tmpUser;
+    else
+        throw tmpUser;
+
 }
 
 async function addProfile(addedUser=null){
     let tmpUser = null ;
+    let response;
     try{
         response = await fetch(url+"API/profiles/", {
-
             method: 'POST',
             headers : { 'Content-Type' : 'application/json'},
             body: JSON.stringify({ "name" : addedUser.name, "email" :addedUser.email}),
         });
-
-        if(response && response.ok){
-            tmpUser = await response.json();
-        }
-    }
-    catch(err){
-        console.log(err);
-        return tmpUser
+        tmpUser = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/"}
     }
 
-    return tmpUser;
+
+    if(response.ok)
+        return tmpUser;
+    else
+        throw tmpUser;
+
+
 }
 
-async function updateProfile(updatedUser=null){
+async function updateProfile(oldMail,updatedUser){
     let tmpUser = null ;
-    try{
-        response = await fetch(url+"API/profiles/"+updatedUser.email, {
-
+    let response;
+    try {
+        response = await fetch(url + "API/profiles/" + oldMail, {
             method: 'PUT',
-            headers : { 'Content-Type' : 'application/json'},
-            body: JSON.stringify({ "name" : updatedUser.name, "email" :updatedUser.email}),
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({"name": updatedUser.name, "email": updatedUser.email}),
         });
-
-        if(response && response.ok){
-            tmpUser = await response.json();
-        }
+        tmpUser = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/"+oldMail}
     }
-    catch(err){
-        console.log(err);
-        return tmpUser
-    }
-
-    return tmpUser;
+        if(response.ok)
+            return tmpUser;
+        else
+            throw tmpUser;
 }
+
+
+
+
 
 export default {getProfile,updateProfile,addProfile};

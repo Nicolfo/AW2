@@ -1,7 +1,6 @@
 package aw2.g33.server.profiles
 
-import aw2.g33.server.products.ProductDTO
-import org.apache.tomcat.util.json.JSONParser
+
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,25 +20,35 @@ class ProfileController(private val profileService: ProfileService) {
         return profileService.getProfileInfo(email)
     }
 
+    @GetMapping("/API/profiles/")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun getProfileWithNoParam(){
+        throw RequestParamException("GET request at /API/profiles/ must include an email as param")
+    }
+
+
     @PostMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun insertProfile(@RequestBody profileToAdd:ProfileDTO?): ProfileDTO {
-        if(profileToAdd==null){
-            throw RequestBodyException("Request Body format is incorrect")
+    fun insertProfile(@RequestBody profileToAdd:ProfileDTO): ProfileDTO {
+        if(profileToAdd.email=="" || profileToAdd.name==""){
+            throw RequestBodyException("Name and mail field cannot be empty!")
         }
-        profileService.addProfile(profileToAdd)
-        return profileToAdd
+        return profileService.addProfile(profileToAdd)
     }
 
     @PutMapping("/API/profiles/{email}")
     @ResponseStatus(HttpStatus.OK)
-    fun updateProfile(@PathVariable email:String,@RequestBody profileToUpdate:ProfileDTO?): ProfileDTO {
+    fun updateProfile(@PathVariable email:String,@RequestBody profileToUpdate:ProfileDTO): ProfileDTO {
 
-        if(profileToUpdate==null){
-            throw RequestBodyException("Request Body format is incorrect")
+        if(profileToUpdate.email=="" || profileToUpdate.name==""){
+            throw RequestBodyException("Name and email field cannot be empty!")
         }
-
-        profileService.updateProfile(email,profileToUpdate)
-        return profileToUpdate
+        return profileService.updateProfile(email,profileToUpdate)
     }
+    @PutMapping("/API/profiles/")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun updateProfileWithNoParam(){
+        throw RequestParamException("PUT request at /API/profiles/ must include an email as param")
+    }
+
 }
