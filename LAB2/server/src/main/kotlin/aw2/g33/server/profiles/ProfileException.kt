@@ -27,20 +27,10 @@ class ProblemDetailsHandler: ResponseEntityExceptionHandler() {
 
 }
 
-class PrimaryKeyNotFoundException(message: String?) : Throwable(message) {
+class PrimaryKeyNotFoundException(message: String?) : Throwable(message)
+class EmailConflictException(message: String?) : Throwable(message)
 
-}
-class EmailConflictException(message: String?) : Throwable(message) {
+class EmailInvalidException(message: String?) : Throwable(message)
 
-}
-
-class EmailInvalidException(message: String?) : Throwable(message) {
-
-}
-
-class RequestBodyException(message: String?) : Throwable(message) {
-
-}
-class RequestParamException(message: String?) : Throwable(message) {
-
-}
+class RequestBodyException(message: String?) : Throwable(message)
+class RequestParamException(message: String?) : Throwable(message)

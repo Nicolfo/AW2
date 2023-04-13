@@ -14,8 +14,6 @@ class ProductExceptionHandler: ResponseEntityExceptionHandler() {
 
 }
 
-class PrimaryKeyNotFoundException(message: String?) : Throwable(message) {
-
-}
+class PrimaryKeyNotFoundException(message: String?) : Throwable(message)
 
 
