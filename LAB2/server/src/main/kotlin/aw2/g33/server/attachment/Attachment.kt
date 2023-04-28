@@ -9,9 +9,9 @@ class Attachment {
     @Id
     @GeneratedValue(generator = "uuid2")
     var attachment_id:UUID?=null
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "message_id", referencedColumnName = "message_id")
-    var message:Message?=null;
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "message_id", referencedColumnName = "message_id", nullable = false)
+    var message:Message?=null
 
     //var attachment:ByteArray
     //campo blob
