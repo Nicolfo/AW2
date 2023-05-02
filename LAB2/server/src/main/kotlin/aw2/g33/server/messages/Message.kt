@@ -20,7 +20,8 @@ class Message {
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "writer_email", referencedColumnName = "email")
     val writer: Profile? = null
-    @OneToMany(mappedBy = "message")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "message")
     val attachments  =mutableListOf<Attachment>();
+
 
 }

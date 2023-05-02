@@ -1,5 +1,7 @@
 package aw2.g33.server.tickets
 
+import aw2.g33.server.attachment.Attachment
+import aw2.g33.server.messages.Message
 import aw2.g33.server.profiles.Profile
 import jakarta.persistence.*
 import java.util.UUID
@@ -18,6 +20,11 @@ class Ticket (
     @GeneratedValue(generator="uuid2")
     var ticket_id:UUID?=null
 
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "worker_email", referencedColumnName = "email")
+    var worker:Profile?=null;
 
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "ticket")
+    val messages  =mutableListOf<Message>();
 
 }

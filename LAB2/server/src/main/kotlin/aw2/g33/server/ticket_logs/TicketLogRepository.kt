@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 
 import java.util.*
 @Repository
-interface Ticket_LogRepository : JpaRepository<Ticket_Log, UUID>
+interface TicketLogRepository : JpaRepository<TicketLog, UUID>
