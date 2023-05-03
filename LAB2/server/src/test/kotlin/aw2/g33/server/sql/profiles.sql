@@ -1,4 +1,3 @@
-INSERT INTO public.profiles (email, name) VALUES ('email', 'name');
 INSERT INTO public.profiles (email, name) VALUES ('john.doe@polito.it', 'John');
 INSERT INTO public.profiles (email, name) VALUES ('mario.rossi@polito.it', 'Mario');
 INSERT INTO public.profiles (email, name) VALUES ('paul@studenti.polito.it', 'Paul');
