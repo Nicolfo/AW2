@@ -1,5 +1,7 @@
 package aw2.g33.server.tickets
 
+import aw2.g33.server.messages.Message
+import aw2.g33.server.messages.MessageService
 import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
 import aw2.g33.server.profiles.toProfile
@@ -7,7 +9,7 @@ import aw2.g33.server.ticket_logs.TicketLogService
 import org.springframework.stereotype.Service
 
 @Service
-class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService):TicketService {
+class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService,private val messageService: MessageService):TicketService {
     override fun create_issue(description: String, customer: ProfileDTO): TicketDTO {
         var ticket_to_create=Ticket(description,customer.toProfile());
         ticketLogService.addToLog(ticket_to_create,ticket_to_create.status);
@@ -62,6 +64,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
             if(ticketToUpdate.status=="OPEN" || ticketToUpdate.status=="REOPEN"){
                 ticketToUpdate.status="IN PROGRESS"                                          //CONTROLLARE NOME STATUS
                 ticketToUpdate.worker=worker.toProfile()
+                ticketToUpdate.priority=priority
                 //TODO("Creare chat");
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status);
                 ticketRepository.save(ticketToUpdate);

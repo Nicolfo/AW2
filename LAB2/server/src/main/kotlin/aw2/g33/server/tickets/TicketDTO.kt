@@ -18,6 +18,5 @@ fun Ticket.toDTO(): TicketDTO {
 }
 
 fun TicketDTO.toTicket(): Ticket {
-    //return Profile(this.email,this.name)
     TODO()
 }

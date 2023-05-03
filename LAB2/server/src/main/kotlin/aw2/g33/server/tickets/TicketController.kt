@@ -2,6 +2,9 @@ package aw2.g33.server.tickets
 
 import aw2.g33.server.products.ProductDTO
 import aw2.g33.server.profiles.ProfileDTO
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -30,8 +33,10 @@ class TicketController(private val ticketService: TicketService) {
     }
     @PostMapping("/API/ticket/start/{priority}")
     @ResponseStatus(HttpStatus.OK)
-    fun start_progress(@RequestBody ticket: TicketDTO, @RequestBody worker: ProfileDTO,@PathVariable priority:Int):TicketDTO{
+    fun start_progress(@RequestBody json:ObjectNode,@PathVariable priority:Int):TicketDTO{
         // TODO: ("inserire gestione errori e validazione input")
+        var ticket:TicketDTO=jacksonObjectMapper().readValue<TicketDTO>(json.get("ticket").toString())
+        var worker=jacksonObjectMapper().readValue<ProfileDTO>(json.get("worker").toString())
         return ticketService.start_progress(ticket,worker,priority);
     }
     @PostMapping("/API/ticket/stop")
