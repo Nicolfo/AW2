@@ -6,12 +6,13 @@ import java.util.UUID
 
 @Entity
 class Attachment(
-    @ManyToOne(   fetch = FetchType.LAZY,cascade = [CascadeType.ALL])
+    @ManyToOne(   fetch = FetchType.LAZY)
     @JoinColumn(name = "message_id", referencedColumnName = "message_id", nullable = false)
     var message:Message?=null,
     @Lob
     var attachment:ByteArray?=null,
-    var file_type:String
+    var contentType:String,
+    var fileName:String
 ) {
     @Id
     @GeneratedValue(generator = "uuid2")

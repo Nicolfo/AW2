@@ -1,43 +1,44 @@
 package aw2.g33.server.tickets
 
-import aw2.g33.server.messages.Message
-import aw2.g33.server.messages.MessageService
+
 import aw2.g33.server.profiles.ProfileDTO
-import aw2.g33.server.profiles.ProfileService
 import aw2.g33.server.profiles.toProfile
 import aw2.g33.server.ticket_logs.TicketLogService
 import org.springframework.stereotype.Service
 
 @Service
-class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService,private val messageService: MessageService):TicketService {
+class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService):TicketService {
     override fun create_issue(description: String, customer: ProfileDTO): TicketDTO {
-        var ticket_to_create=Ticket(description,customer.toProfile());
-        ticketLogService.addToLog(ticket_to_create,ticket_to_create.status);
-        ticketRepository.save(ticket_to_create);
-        return ticket_to_create.toDTO();
+        var ticketToCreate=Ticket(description,customer.toProfile())
+        ticketLogService.addToLog(ticketToCreate,ticketToCreate.status);
+        ticketRepository.save(ticketToCreate);
+        return ticketToCreate.toDTO();
     }
 
     override fun close_issue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
-            return ticket;                                         //da generare eccezione
+            throw ServiceWithNullParams("ticket value cannot be null")
         var ticketOptional = ticketRepository.findById(ticket.ticket_id);
         if(!ticketOptional.isEmpty){
             var ticketToUpdate=ticketOptional.get();
             if(ticketToUpdate.status!=="CLOSED"){
-                ticketToUpdate.status="CLOSED"                                          //CONTROLLARE NOME STATUS
+                ticketToUpdate.status="CLOSED"
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status);
                 ticketRepository.save(ticketToUpdate);
                 return ticketToUpdate.toDTO();
             }
+            else{
+                throw StatusTransitionIncorrect("Cannot make the required operation, in order to close an issue the status cannot be CLOSED")
+            }
 
 
         }
-        return ticket;                                                                  //GENERARE ECCEZIONE
+        throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
 
     override fun resolve_issue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
-            return ticket;                                         //da generare eccezione
+            throw ServiceWithNullParams("ticket value cannot be null")
         var ticketOptional = ticketRepository.findById(ticket.ticket_id);
         if(!ticketOptional.isEmpty){
             var ticketToUpdate=ticketOptional.get();
@@ -47,69 +48,96 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
                 ticketRepository.save(ticketToUpdate);
                 return ticketToUpdate.toDTO();
             }
-
+            else{
+                throw StatusTransitionIncorrect("Cannot make the required operation, in order to resolve an issue the status has to be OPEN or REOPEN or IN PROGRESS")
+            }
 
         }
-        return ticket;                                                                  //GENERARE ECCEZIONE
+
+        throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
 
     override fun start_progress(ticket: TicketDTO, worker: ProfileDTO, priority: Int): TicketDTO {
         if(ticket.ticket_id==null)
-            return ticket;                                         //da generare eccezione
+            throw ServiceWithNullParams("ticket value cannot be null")
         if(worker==null)
-            return ticket;                                          //generare eccezione
+            throw ServiceWithNullParams("worker value cannot be null")
+
+
         var ticketOptional = ticketRepository.findById(ticket.ticket_id);
         if(!ticketOptional.isEmpty){
             var ticketToUpdate=ticketOptional.get();
             if(ticketToUpdate.status=="OPEN" || ticketToUpdate.status=="REOPEN"){
-                ticketToUpdate.status="IN PROGRESS"                                          //CONTROLLARE NOME STATUS
+                ticketToUpdate.status="IN PROGRESS"
                 ticketToUpdate.worker=worker.toProfile()
                 ticketToUpdate.priority=priority
-                //TODO("Creare chat");
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status);
                 ticketRepository.save(ticketToUpdate);
                 return ticketToUpdate.toDTO();
             }
+            else{
+                throw StatusTransitionIncorrect("Cannot make the required operation, in order to start progress the status has to be OPEN or REOPEN")
+            }
 
 
         }
-        return ticket;                                                                  //GENERARE ECCEZIONE
+
+        throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
 
     override fun stop_progress(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
-            return ticket;                                         //da generare eccezione
+            throw ServiceWithNullParams("ticket value cannot be null")
         var ticketOptional = ticketRepository.findById(ticket.ticket_id);
         if(!ticketOptional.isEmpty){
             var ticketToUpdate=ticketOptional.get();
             if(ticketToUpdate.status=="IN PROGRESS"){
-                ticketToUpdate.status="OPEN"                                          //CONTROLLARE NOME STATUS
+                ticketToUpdate.status="OPEN"
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status);
                 ticketRepository.save(ticketToUpdate);
                 return ticketToUpdate.toDTO();
             }
+            else{
+                throw StatusTransitionIncorrect("Cannot make the required operation, in order to stop a process the status has to be INPROGRESS")
+            }
 
 
         }
-        return ticket;                                                                  //GENERARE ECCEZIONE
+        throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
 
     override fun reopen_issue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
-            return ticket;                                         //da generare eccezione
+            throw ServiceWithNullParams("ticket value cannot be null")
         var ticketOptional = ticketRepository.findById(ticket.ticket_id);
         if(!ticketOptional.isEmpty){
             var ticketToUpdate=ticketOptional.get();
             if(ticketToUpdate.status!=="REOPENED" && ticketToUpdate.status!=="IN PROGRESS" && ticketToUpdate.status!=="OPEN"){
-                ticketToUpdate.status="REOPENED"                                          //CONTROLLARE NOME STATUS
+                ticketToUpdate.status="REOPENED"
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status);
                 ticketRepository.save(ticketToUpdate);
                 return ticketToUpdate.toDTO();
             }
+            else{
+                throw StatusTransitionIncorrect("Cannot make the required operation, in order to reopen a process the status has to be RESOLVED or CLOSED")
+            }
 
 
         }
-        return ticket;                                                                  //GENERARE ECCEZIONE
+        throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
+
     }
+
+    override fun ticketDTOToTicket(ticketDTO: TicketDTO): Ticket {
+
+            if(ticketDTO?.ticket_id == null)
+                throw ServiceWithNullParams("A ticket_id cannot be null")
+            if(!ticketRepository.existsById(ticketDTO.ticket_id))
+                throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
+
+            return ticketRepository.getReferenceById(ticketDTO.ticket_id);
+
+    }
+
 
 }

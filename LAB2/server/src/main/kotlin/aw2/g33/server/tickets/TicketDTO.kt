@@ -14,10 +14,10 @@ data class TicketDTO (
     val worker_email:String?
 )
 
+
 fun Ticket.toDTO(): TicketDTO {
     return TicketDTO(this.ticket_id,this.description,this.priority,this.status,this.customer?.email,this.worker?.email)
 }
 
-fun TicketDTO.toTicket(): Ticket {
-    TODO()
-}
+
+
