@@ -23,6 +23,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+    dependencyManagement {
+        imports {
+            mavenBom("org.testcontainers:testcontainers-bom:1.16.3")
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {
