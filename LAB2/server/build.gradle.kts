@@ -49,5 +49,5 @@ jib{
     container{
         ports= mutableListOf("8080")
     }
-to{image="nicolfo/g33.aw2.lab3"}
+to{image="nicolfo/aw2.g33.lab3"}
 }
