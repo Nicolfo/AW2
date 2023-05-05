@@ -6,7 +6,6 @@ import aw2.g33.server.profiles.toDTO
 import aw2.g33.server.ticket_logs.TicketLog
 import aw2.g33.server.ticket_logs.TicketLogRepository
 import aw2.g33.server.tickets.TicketDTO
-import aw2.g33.server.tickets.TicketRepository
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.jupiter.api.Order
@@ -72,8 +71,8 @@ class LogTicketsTests {
 
         currentTicketStatus ="OPEN"
         var ticketCreated: TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
-        var logsTicket:MutableList<TicketLog> = ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticket_id,"OPEN").toMutableList()
-        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticket_id==ticketCreated.ticket_id && logsTicket.get(0).ticket?.status.equals(currentTicketStatus)  )
+        var logsTicket:MutableList<TicketLog> = ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,"OPEN").toMutableList()
+        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(0).ticket?.status.equals(currentTicketStatus)  )
 
         var workerTicket:ProfileDTO? = custumer
         var bodyRequest:MutableMap<String,Any?>? = mutableMapOf<String,Any?>()
@@ -88,8 +87,8 @@ class LogTicketsTests {
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         currentTicketStatus ="IN PROGRESS"
-        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticket_id,currentTicketStatus).toMutableList()
-        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticket_id==ticketCreated.ticket_id && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
+        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,currentTicketStatus).toMutableList()
+        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
 
         response = mockMvc.post("/API/ticket/stop"){
             contentType = MediaType.APPLICATION_JSON
@@ -98,8 +97,8 @@ class LogTicketsTests {
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         currentTicketStatus ="OPEN"
-        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticket_id,currentTicketStatus).toMutableList()
-        assert(logsTicket.size>0 && logsTicket.get(logsTicket.size-1).ticket?.ticket_id==ticketCreated.ticket_id && logsTicket.get(logsTicket.size-1).ticket?.status.equals(currentTicketStatus))
+        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,currentTicketStatus).toMutableList()
+        assert(logsTicket.size>0 && logsTicket.get(logsTicket.size-1).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(logsTicket.size-1).ticket?.status.equals(currentTicketStatus))
 
         response = mockMvc.post("/API/ticket/resolve"){
             contentType = MediaType.APPLICATION_JSON
@@ -108,8 +107,8 @@ class LogTicketsTests {
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         currentTicketStatus ="RESOLVED"
-        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticket_id,currentTicketStatus).toMutableList()
-        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticket_id==ticketCreated.ticket_id && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
+        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,currentTicketStatus).toMutableList()
+        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
 
         response = mockMvc.post("/API/ticket/close"){
             contentType = MediaType.APPLICATION_JSON
@@ -118,8 +117,8 @@ class LogTicketsTests {
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         currentTicketStatus ="CLOSED"
-        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticket_id,currentTicketStatus).toMutableList()
-        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticket_id==ticketCreated.ticket_id && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
+        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,currentTicketStatus).toMutableList()
+        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
 
         response = mockMvc.post("/API/ticket/reopen"){
             contentType = MediaType.APPLICATION_JSON
@@ -128,8 +127,8 @@ class LogTicketsTests {
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         currentTicketStatus ="REOPENED"
-        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticket_id,currentTicketStatus).toMutableList()
-        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticket_id==ticketCreated.ticket_id && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
+        logsTicket= ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,currentTicketStatus).toMutableList()
+        assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(0).ticket?.status.equals(currentTicketStatus))
 
     }
 }

@@ -8,30 +8,20 @@ import java.util.UUID
 @Entity
 class TicketLog (
     @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "ticket_id", referencedColumnName = "ticket_id")
+    @JoinColumn(name = "ticketId", referencedColumnName = "ticketId")
     var ticket: Ticket?=null,
     var status:String?=null
 ){
-   /* @Id
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "ticket_id", referencedColumnName = "ticket_id")
-    var ticket: Ticket?=null;
 
-    @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
-    var time_stamp:LocalDateTime= LocalDateTime.now()*/
-   /* @EmbeddedId
-    var myKey=MyKey();
-*/
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    val log_id:UUID?=null
+    val logId:UUID?=null
 
 
 
-    @Column(name="timestamp",nullable=false)
-    var time_stamp:LocalDateTime= LocalDateTime.now()
+    @Column(nullable=false)
+    var timeStamp:LocalDateTime= LocalDateTime.now()
 
 
 }

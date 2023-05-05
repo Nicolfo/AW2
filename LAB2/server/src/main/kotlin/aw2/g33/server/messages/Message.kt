@@ -9,7 +9,7 @@ import jakarta.persistence.*
 @Entity
 class Message (
     @ManyToOne
-    @JoinColumn(name = "ticket_id", referencedColumnName = "ticket_id")
+    @JoinColumn(name = "ticketId", referencedColumnName = "ticketId")
     val ticket: Ticket? = null,
     val text:String="",
     @OneToOne
@@ -19,10 +19,10 @@ class Message (
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var message_id:Long?=null
+    var messageId:Long?=null
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "message")
-    val attachments = mutableListOf<Attachment>();
+    val attachments = mutableListOf<Attachment>()
 
 
 }

@@ -70,9 +70,9 @@ class TicketsTests {
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         var ticketCreated:TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
-        assert(ticketCreated.ticket_id!=null)
+        assert(ticketCreated.ticketId!=null)
         assert(ticketCreated.description!=null && ticketCreated.description.length>0)
-        assert(ticketCreated.customer_email.equals(custumer.email))
+        assert(ticketCreated.customerEmail.equals(custumer.email))
         }
 
     @Order(2)
@@ -93,7 +93,7 @@ class TicketsTests {
 //        }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
         assertDoesNotThrow { response.response.getContentAsString()!=null}
-        assert(ticketPresent!=null && ticketPresent.ticket_id!=null && ticketRepository.existsById(ticketPresent.ticket_id!!))
+        assert(ticketPresent!=null && ticketPresent.ticketId!=null && ticketRepository.existsById(ticketPresent.ticketId!!))
     }
 
     @Order(3)
@@ -111,7 +111,7 @@ class TicketsTests {
 
         assertDoesNotThrow { response.response.getContentAsString()!=null}
         var ticketResponse:TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
-        assert(ticketResponse!=null && ticketResponse.ticket_id!=null && ticketResponse.ticket_id == ticketPresent?.ticket_id && ticketResponse.status.equals("RESOLVED"))
+        assert(ticketResponse!=null && ticketResponse.ticketId!=null && ticketResponse.ticketId == ticketPresent?.ticketId && ticketResponse.status.equals("RESOLVED"))
     }
 
     @Order(4)
@@ -135,10 +135,10 @@ class TicketsTests {
 
         assertDoesNotThrow { response.response.getContentAsString()!=null}
         var ticketResponse:TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
-        assert(ticketResponse!=null && ticketResponse.ticket_id!=null && ticketResponse.ticket_id == ticketPresent?.ticket_id)
+        assert(ticketResponse!=null && ticketResponse.ticketId!=null && ticketResponse.ticketId == ticketPresent?.ticketId)
         assert(ticketResponse!=null && ticketResponse.priority==priorityTicket)
         assert(ticketResponse!=null && ticketResponse.status.equals("IN PROGRESS") && ticketPresent?.status.equals("OPEN"))
-        assert(ticketResponse!=null && ticketResponse.worker_email.equals(workerTicket?.email))
+        assert(ticketResponse!=null && ticketResponse.workerEmail.equals(workerTicket?.email))
     }
 
     @Order(5)
@@ -156,7 +156,7 @@ class TicketsTests {
 
         assertDoesNotThrow { response.response.getContentAsString()!=null}
         var ticketResponse:TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
-        assert(ticketResponse!=null && ticketResponse.ticket_id!=null && ticketResponse.ticket_id == ticketPresent?.ticket_id)
+        assert(ticketResponse!=null && ticketResponse.ticketId!=null && ticketResponse.ticketId == ticketPresent?.ticketId)
         assert(ticketResponse!=null && ticketPresent?.status.equals("IN PROGRESS") && ticketResponse.status.equals("OPEN"))
     }
 
@@ -175,7 +175,7 @@ class TicketsTests {
 
         assertDoesNotThrow { response.response.getContentAsString()!=null}
         var ticketResponse:TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
-        assert(ticketResponse!=null && ticketResponse.ticket_id!=null && ticketResponse.ticket_id == ticketPresent?.ticket_id)
+        assert(ticketResponse!=null && ticketResponse.ticketId!=null && ticketResponse.ticketId == ticketPresent?.ticketId)
         assert(ticketResponse!=null && ticketPresent?.status.equals("CLOSED") && ticketResponse.status.equals("REOPENED"))
     }
 }

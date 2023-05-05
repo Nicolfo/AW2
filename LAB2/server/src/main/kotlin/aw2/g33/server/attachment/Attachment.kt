@@ -7,7 +7,7 @@ import java.util.UUID
 @Entity
 class Attachment(
     @ManyToOne(   fetch = FetchType.LAZY)
-    @JoinColumn(name = "message_id", referencedColumnName = "message_id", nullable = false)
+    @JoinColumn(name = "messageId", referencedColumnName = "messageId", nullable = false)
     var message:Message?=null,
     @Lob
     var attachment:ByteArray?=null,
