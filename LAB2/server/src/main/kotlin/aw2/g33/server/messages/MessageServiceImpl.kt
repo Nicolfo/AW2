@@ -7,6 +7,7 @@ import aw2.g33.server.tickets.TicketDTO
 import aw2.g33.server.tickets.TicketService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class MessageServiceImpl(private val messageRepository: MessageRepository,private val ticketService: TicketService):MessageService {
@@ -44,8 +45,8 @@ class MessageServiceImpl(private val messageRepository: MessageRepository,privat
 
 
 
-    override fun receiveAllMessagesByTicket(ticketDTO: TicketDTO) :List<Message>{
-        val listOfMessages= messageRepository.findByTicket(ticketService.ticketDTOToTicket(ticketDTO))
+    override fun receiveAllMessagesByTicket(ticketID: UUID) :List<Message>{
+        var listOfMessages= messageRepository.findByTicketID(ticketID)
         if(listOfMessages.isEmpty()){
             throw EmptyChatException("Cannot retrieve a chat for the specified ticket")
         }

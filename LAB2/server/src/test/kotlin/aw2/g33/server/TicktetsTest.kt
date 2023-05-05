@@ -58,7 +58,7 @@ class TicketsTests {
 
     @Test
     @Order(1)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql"])
     fun openNewTicket(){
         var custumer:ProfileDTO = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
         var bodyJSON:String = jacksonObjectMapper().writeValueAsString(custumer)
@@ -76,7 +76,7 @@ class TicketsTests {
         }
 
     @Order(2)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     @Test
     fun closeTicket(){
 
@@ -97,7 +97,7 @@ class TicketsTests {
     }
 
     @Order(3)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     @Test
     fun resolveTicket(){
 
@@ -115,7 +115,7 @@ class TicketsTests {
     }
 
     @Order(4)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     @Test
     fun startProgressTickt(){
 
@@ -142,7 +142,7 @@ class TicketsTests {
     }
 
     @Order(5)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 3/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addInProgressTicket.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addInProgressTicket.sql"])
     @Test
     fun stopProgressTickt(){
 
@@ -161,7 +161,7 @@ class TicketsTests {
     }
 
     @Order(6)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 3/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addInProgressTicket.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addClosedTicket.sql"])
     @Test
     fun reOpenProgressTickt(){
 

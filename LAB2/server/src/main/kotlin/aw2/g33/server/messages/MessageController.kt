@@ -5,6 +5,8 @@ import aw2.g33.server.tickets.TicketDTO
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import jakarta.websocket.server.PathParam
+import org.springframework.data.repository.query.Param
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -22,8 +24,8 @@ class MessageController(private val messageService: MessageService){
         val text:String
         val numberOfAttachment:Int
 
-
             try {
+
                 ticket = jacksonObjectMapper().readValue(json.get("ticket").toString())
                 writer = jacksonObjectMapper().readValue(json.get("writer").toString())
                 text= json.get("text").asText()
@@ -63,10 +65,11 @@ class MessageController(private val messageService: MessageService){
         messageService.sendMessageWithAttachments(text, ticket, writer,files,filesName,filesType)
 
     }
-    @GetMapping("/API/Message/")
+    @GetMapping("/API/Message/{ticket}")
     @ResponseStatus(HttpStatus.OK)
-    fun receiveAllMessagesByTicket(@RequestBody ticket: TicketDTO):List<Message>
+    fun receiveAllMessagesByTicket(@PathVariable ticket: UUID):List<Message>
     {
+
         return messageService.receiveAllMessagesByTicket(ticket)
     }
 }
