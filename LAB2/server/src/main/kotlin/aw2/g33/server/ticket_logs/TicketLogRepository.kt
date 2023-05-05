@@ -9,8 +9,8 @@ import java.util.*
 @Repository
 interface TicketLogRepository : JpaRepository<TicketLog, UUID>{
     @Query("select * from ticket_log where ticket_id = :ticket_id", nativeQuery = true)
-    fun getTicketLogsByTickedId(@Param("ticket_id") ticket_id:UUID?):List<TicketLog>
+    fun getTicketLogsByTickedId(@Param("ticket_id") ticketId:UUID?):List<TicketLog>
 
     @Query("select * from ticket_log where ticket_id = :ticket_id and status=:status", nativeQuery = true)
-    fun getTicketLogsByTickedIdAndStatus(@Param("ticket_id") ticket_id:UUID?,@Param("status") status:String ):List<TicketLog>
+    fun getTicketLogsByTickedIdAndStatus(@Param("ticket_id") ticketId:UUID?,@Param("status") status:String ):List<TicketLog>
 }

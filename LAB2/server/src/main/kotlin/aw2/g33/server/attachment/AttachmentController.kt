@@ -15,6 +15,6 @@ class AttachmentController (private val attachmentService: AttachmentService){
     @PutMapping("/API/attachment/add/{messageId}")
     @ResponseStatus(HttpStatus.OK)
     fun addAttachment(@PathVariable messageId:Long,@RequestPart("file") file :MultipartFile,@RequestPart("seqNr") seqNr:Int){
-        attachmentService.addAttachmentToMessage(messageId,file,seqNr);
+        attachmentService.addAttachmentToMessage(messageId,file,seqNr)
     }
 }

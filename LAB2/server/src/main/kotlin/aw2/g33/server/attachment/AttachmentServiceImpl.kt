@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile
 class AttachmentServiceImpl (private val messageRepository: MessageRepository, private val messageService: MessageService):AttachmentService{
     @Transactional
     override fun addAttachmentToMessage(messageId: Long, file: MultipartFile, seqNr:Int) {
-        var message=messageRepository.findById(messageId);
+        val message=messageRepository.findById(messageId)
 
         if(message.isEmpty){
             throw MessageNotFoundException("message cannot be found on db")
@@ -22,7 +22,7 @@ class AttachmentServiceImpl (private val messageRepository: MessageRepository, p
         if(message.get().attachments.any { it.attachmentOrder == seqNr })
             return
 
-        var attachmentToAdd=Attachment(message.get(),file.bytes,file.contentType!!,file.originalFilename!!,seqNr)
-        messageService.addAttachmentToMessage(message.get(),attachmentToAdd);
+        val attachmentToAdd=Attachment(message.get(),file.bytes,file.contentType!!,file.originalFilename!!,seqNr)
+        messageService.addAttachmentToMessage(message.get(),attachmentToAdd)
     }
 }
