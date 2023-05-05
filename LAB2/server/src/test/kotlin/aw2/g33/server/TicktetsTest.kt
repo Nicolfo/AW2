@@ -55,7 +55,6 @@ class TicketsTests {
     @Autowired
     lateinit var ticketRepository: TicketRepository
 
-
     @Test
     @Order(1)
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql"])

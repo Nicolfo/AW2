@@ -92,9 +92,9 @@ class MessageAndAttachmentTests {
             accept = MediaType.APPLICATION_JSON
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
-        var messageCreated: Message = messageRepository.findByTicketID(ticketMessage?.ticket_id!!).get(0)
+        var messageCreated: Message = messageRepository.findByTicketID(ticketMessage?.ticketId!!).get(0)
         assertDoesNotThrow { messageCreated != null }
-        assert(messageCreated.ticket?.ticket_id == ticketMessage.ticket_id)
+        assert(messageCreated.ticket?.ticketId == ticketMessage.ticketId)
         assert(messageCreated.writer?.email == custmerTicket?.email)
         assert(messageCreated.text.equals(textMessage))
         assert(messageCreated.numberOfAttachment == numberOfAttachment)
@@ -136,7 +136,7 @@ class MessageAndAttachmentTests {
             accept = MediaType.APPLICATION_JSON
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
-        var response = mockMvc.get("/API/Message/"+ticketMessage?.ticket_id.toString()) {
+        var response = mockMvc.get("/API/Message/"+ticketMessage?.ticketId.toString()) {
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
