@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class MessageServiceImpl(private val messageRepository: MessageRepository,private val ticketService: TicketService):MessageService {
-     override fun sendMessage(text: String, ticketDTO: TicketDTO, writer: ProfileDTO) :Long{
+     override fun sendMessage(text: String, ticketDTO: TicketDTO, writer: ProfileDTO,numberOfAttachment:Int) :Long{
          var ticket=ticketService.ticketDTOToTicket(ticketDTO);
          if (ticket.status=="OPEN" || ticket.status=="CLOSED")
              throw TicketStatusError("Error chat is not open, in order to chat the status can't be OPEN or CLOSED")
-        var message = Message(ticket,text,writer.toProfile())
+        var message = Message(ticket,text,writer.toProfile(),numberOfAttachment)
         messageRepository.save(message);
          return message.message_id!!;
     }

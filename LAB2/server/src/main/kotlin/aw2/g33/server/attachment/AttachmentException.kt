@@ -13,7 +13,11 @@ class AttachmentException : ResponseEntityExceptionHandler(){
     @ExceptionHandler(MessageNotFoundException::class)
     fun handleMessageNotFoundException(e:MessageNotFoundException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+    @ExceptionHandler(AttachmentOutOfBoundException::class)
+    fun handleAttachmentOutOfBoundException(e:AttachmentOutOfBoundException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
 
 }
 
 class MessageNotFoundException(message: String?) : Throwable(message)
+class AttachmentOutOfBoundException(message: String?) : Throwable(message)

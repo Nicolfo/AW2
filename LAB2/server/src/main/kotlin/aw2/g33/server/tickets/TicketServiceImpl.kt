@@ -4,10 +4,12 @@ package aw2.g33.server.tickets
 import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.toProfile
 import aw2.g33.server.ticket_logs.TicketLogService
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService):TicketService {
+    @Transactional
     override fun create_issue(description: String, customer: ProfileDTO): TicketDTO {
         var ticketToCreate=Ticket(description,customer.toProfile())
         ticketLogService.addToLog(ticketToCreate,ticketToCreate.status);
@@ -15,6 +17,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         return ticketToCreate.toDTO();
     }
 
+   @Transactional
     override fun close_issue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -35,7 +38,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         }
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
-
+    @Transactional
     override fun resolve_issue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -56,7 +59,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
-
+    @Transactional
     override fun start_progress(ticket: TicketDTO, worker: ProfileDTO, priority: Int): TicketDTO {
         if(ticket.ticket_id==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -84,7 +87,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
-
+    @Transactional
     override fun stop_progress(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -105,7 +108,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         }
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
-
+    @Transactional
     override fun reopen_issue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticket_id==null)
             throw ServiceWithNullParams("ticket value cannot be null")

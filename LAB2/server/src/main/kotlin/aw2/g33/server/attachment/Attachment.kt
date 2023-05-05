@@ -12,9 +12,11 @@ class Attachment(
     @Lob
     var attachment:ByteArray?=null,
     var contentType:String,
-    var fileName:String
+    var fileName:String,
+    var attachmentOrder:Int
 ) {
     @Id
     @GeneratedValue(generator = "uuid2")
-    var attachment_id:UUID?=null
+    var attachmentId:UUID?=null
+
 }

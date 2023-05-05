@@ -16,32 +16,25 @@ import java.util.UUID
 @CrossOrigin
 class MessageController(private val messageService: MessageService){
 
-    @PutMapping("/API/Message/{text}")
+    @PutMapping("/API/Message/")
     @ResponseStatus(HttpStatus.OK)
     fun sendMessage(@RequestBody json:ObjectNode) {
         var ticket:TicketDTO
         var writer:ProfileDTO
-        var text:String;
+        var text:String
+        var numberOfAttachment:Int
+
 
             try {
                 ticket = jacksonObjectMapper().readValue<TicketDTO>(json.get("ticket").toString())
                 writer = jacksonObjectMapper().readValue<ProfileDTO>(json.get("writer").toString())
                 text= json.get("text").toString()
+                numberOfAttachment=json.get("numberOfAttachment").asInt()
             } catch (ex: Exception) {
                 throw MessageBodyException("PUT request at /API/Message/{text} has an incorrect body format")
             }
-            messageService.sendMessage(text, ticket, writer);
+            messageService.sendMessage(text, ticket, writer,numberOfAttachment);
 
-    }
-
-
-
-
-
-    @PutMapping("/API/Message/")
-    @ResponseStatus(HttpStatus.OK)
-    fun sendMessageWithoutText(){
-        throw MessageParamException("PUT request at /API/Message/ need a param")
     }
     @GetMapping("/API/Message/")
     @ResponseStatus(HttpStatus.OK)

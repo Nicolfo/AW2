@@ -15,7 +15,7 @@ class Message (
     @OneToOne
     @JoinColumn(name = "writer_email", referencedColumnName = "email")
     val writer: Profile? = null,
-
+    val numberOfAttachment:Int
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

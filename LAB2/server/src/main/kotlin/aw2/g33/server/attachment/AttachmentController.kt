@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile
 class AttachmentController (private val attachmentService: AttachmentService){
     @PutMapping("/API/attachment/add/{messageId}")
     @ResponseStatus(HttpStatus.OK)
-    fun addAttachment(@PathVariable messageId:Long,@RequestPart("file") file :MultipartFile){
-        attachmentService.addAttachmentToMessage(messageId,file);
+    fun addAttachment(@PathVariable messageId:Long,@RequestPart("file") file :MultipartFile,@RequestPart("seqNr") seqNr:Int){
+        attachmentService.addAttachmentToMessage(messageId,file,seqNr);
     }
 }
