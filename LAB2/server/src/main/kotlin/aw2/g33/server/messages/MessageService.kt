@@ -7,6 +7,7 @@ import aw2.g33.server.tickets.TicketDTO
 
 interface MessageService {
     fun sendMessage(text:String,ticketDTO:TicketDTO,writer: ProfileDTO,numberOfAttachment:Int):Long
+    fun sendMessageWithAttachments(text:String,ticketDTO:TicketDTO,writer: ProfileDTO,files:Array<ByteArray>,filesName:Array<String>,filesType:Array<String>):Long
     fun receiveAllMessagesByTicket(ticketDTO: TicketDTO):List<Message>
     fun addAttachmentToMessage(message:Message,attachment: Attachment)
 }
