@@ -5,6 +5,8 @@ import aw2.g33.server.tickets.TicketDTO
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import jakarta.websocket.server.PathParam
+import org.springframework.data.repository.query.Param
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -24,11 +26,10 @@ class MessageController(private val messageService: MessageService){
         var text:String
         var numberOfAttachment:Int
 
-
             try {
                 ticket = jacksonObjectMapper().readValue<TicketDTO>(json.get("ticket").toString())
                 writer = jacksonObjectMapper().readValue<ProfileDTO>(json.get("writer").toString())
-                text= json.get("text").toString()
+                text= json.get("text").asText()
                 numberOfAttachment=json.get("numberOfAttachment").asInt()
             } catch (ex: Exception) {
                 throw MessageBodyException("PUT request at /API/Message/{text} has an incorrect body format")
@@ -36,10 +37,10 @@ class MessageController(private val messageService: MessageService){
             messageService.sendMessage(text, ticket, writer,numberOfAttachment);
 
     }
-    @GetMapping("/API/Message/")
+    @GetMapping("/API/Message/{ticket}")
     @ResponseStatus(HttpStatus.OK)
-    fun receiveAllMessagesByTicket(@RequestBody ticket: TicketDTO):List<Message>
+    fun receiveAllMessagesByTicket(@PathVariable ticket: UUID):List<Message>
     {
-        return messageService.receiveAllMessagesByTicket(ticket);
+        return messageService.receiveAllMessagesByTicket(ticket );
     }
 }

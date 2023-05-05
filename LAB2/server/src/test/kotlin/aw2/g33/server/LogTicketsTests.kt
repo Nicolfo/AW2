@@ -58,7 +58,7 @@ class LogTicketsTests {
 
     @Test
     @Order(1)
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:/Users/jacopospaccatrosi/Desktop/POLI/Web Application II/Lab/Lab 2/AW2/LAB2/server/src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     fun checkLogInfoSwitchStatusTicket(){
         var custumer: ProfileDTO = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
         var currentTicketStatus:String
