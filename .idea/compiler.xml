@@ -3,6 +3,8 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="ticketing" target="17" />
+      <module name="ticketing.main" target="17" />
+      <module name="ticketing.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
