@@ -35,3 +35,13 @@ content-tyoe: application/json
     "ticket": {"ticket_id": "ade28676-0459-4822-ab28-a5b75c655fb0","description": "ciao","priority": -1,"status": "OPEN","customer_email": "prova2@polito.it"},
     "worker": {"email": "prova2@polito.it","name": "prova2"}
 }
+
+###
+POST 127.0.0.1:8081/user/validate/
+content-type: application/json
+
+{
+  "username": "u1s",
+  "password": "p1"
+}
+
