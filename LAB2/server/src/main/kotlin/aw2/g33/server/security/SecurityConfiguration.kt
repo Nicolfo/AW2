@@ -2,6 +2,8 @@ package aw2.g33.server.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -15,8 +17,7 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
-    val ADMIN = "admin"
-    val USER = "user"
+
 
 
     @Bean fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -24,6 +25,7 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
         http.authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
             .requestMatchers("/user/get_info").permitAll()
+            .requestMatchers("/API/ticket/create/**").hasAuthority("ROLE_Client")
             //.requestMatchers("/admin/**").hasRole("ADMIN")  //con ruoli specifici
             .and().formLogin().permitAll()
             .and().logout().permitAll()

@@ -18,7 +18,7 @@ import java.util.stream.Collectors
 
 @RestController
 @CrossOrigin
-class SecurityController (private val jwtAuthConverter: JwtAuthConverter){
+class SecurityController (){
     @PostMapping("/user/validate/")
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{

@@ -5,6 +5,7 @@ import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.toProfile
 import aw2.g33.server.ticket_logs.TicketLogService
 import jakarta.transaction.Transactional
+import org.springframework.security.access.annotation.Secured
 import org.springframework.stereotype.Service
 
 @Service

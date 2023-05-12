@@ -7,6 +7,8 @@ import com.fasterxml.jackson.module.kotlin.contains
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -15,6 +17,7 @@ class TicketController(private val ticketService: TicketService) {
 
     @PostMapping("/API/ticket/create/{description}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_Client')")
     fun createIssue(@PathVariable description:String, @RequestBody customer: ProfileDTO):TicketDTO{
         return ticketService.createIssue(description,customer)
     }
