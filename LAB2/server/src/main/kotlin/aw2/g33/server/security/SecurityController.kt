@@ -1,32 +1,30 @@
 package aw2.g33.server.security
 
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.web.bind.annotation.*
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
-import java.lang.Exception
-import java.net.HttpURLConnection
 import java.net.URI
-import java.net.URL
 import java.net.URLEncoder
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
-import java.net.http.HttpResponse
 import java.net.http.HttpResponse.BodyHandlers
+import java.security.Principal
+import java.util.stream.Collectors
 
 
 @RestController
 @CrossOrigin
-class SecurityController (){
+class SecurityController (private val jwtAuthConverter: JwtAuthConverter){
     @PostMapping("/user/validate/")
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{
 
         println(userDTO.toString())
-        val url = "http://localhost:8080/realms/Client/protocol/openid-connect/token"
+        val url = "http://localhost:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
 
 
         //con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
@@ -51,6 +49,28 @@ class SecurityController (){
             //throw Exception("Cannot log in, username or password incorrect")
         }
         return response.body()
-        //val userDetails = SecurityContextHolder.getContext().authentication.principal
+
+    }
+    @GetMapping("/user/get_info")
+    @ResponseStatus(HttpStatus.OK)
+    fun userInfoByAccessToken( ):Any{
+
+        val roles = SecurityContextHolder.getContext().authentication.authorities.filter { it.authority.contains("ROLE") }
+        val username= SecurityContextHolder.getContext().authentication.name
+        return username
+
+        /*val resourceAccess: Map<String, Any> = userDetails.getClaim("realm_access")
+        var resourceRoles: Collection<String> = resourceAccess["roles"] as Collection<String>;
+        return resourceRoles.first()*/
+
+       // return jwtAuthConverter.convert(userDetails).authorities.contains(SimpleGrantedAuthority("ROLE_Client")
+
+        //return userDetails
+        //jwtAuthConverter.extractResourceRoles(userDetails)
+
+        //val ret=jwtAuthConverter.convert( userDetails)
+
+
+       // return jwtAuthConverter.extractResourceRoles(userDetails).toString()
     }
 }

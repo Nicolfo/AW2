@@ -41,7 +41,7 @@ POST 127.0.0.1:8081/user/validate/
 content-type: application/json
 
 {
-  "username": "u1s",
+  "username": "u1",
   "password": "p1"
 }
 

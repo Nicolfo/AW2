@@ -23,10 +23,12 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
         http.csrf().disable()
         http.authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
+            .requestMatchers("/user/get_info").permitAll()
             //.requestMatchers("/admin/**").hasRole("ADMIN")  //con ruoli specifici
             .and().formLogin().permitAll()
             .and().logout().permitAll()
-        http.oauth2ResourceServer()
+            .and()
+            .oauth2ResourceServer()
             .jwt()
             .jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

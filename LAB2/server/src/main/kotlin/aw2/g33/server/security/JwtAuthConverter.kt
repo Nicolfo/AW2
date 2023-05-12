@@ -1,5 +1,6 @@
 package aw2.g33.server.security
 
+import org.springframework.context.annotation.Bean
 import org.springframework.core.convert.converter.Converter
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
@@ -16,6 +17,7 @@ import java.util.stream.Stream
 @Component
 class JwtAuthConverter(private val properties: JwtAuthConverterProperties) : Converter<Jwt?, AbstractAuthenticationToken?> {
     private val jwtGrantedAuthoritiesConverter = JwtGrantedAuthoritiesConverter()
+
     override fun convert(jwt: Jwt): AbstractAuthenticationToken {
 
         val authorities: Collection<GrantedAuthority> = Stream.concat(
@@ -34,12 +36,12 @@ class JwtAuthConverter(private val properties: JwtAuthConverterProperties) : Con
     }
 
     private fun extractResourceRoles(jwt: Jwt): Collection<GrantedAuthority> {
-        val resourceAccess: Map<String, Any> = jwt.getClaim("resource_access")
+        val resourceAccess: Map<String, Any> = jwt.getClaim("realm_access")
         try {
-            val resource: Map<String?, Any?> = resourceAccess[properties.getResourceId()] as Map<String?, Any?>
-            var resourceRoles: Collection<String> = resource["roles"] as Collection<String>;
+            var resourceRoles: Collection<String> = resourceAccess["roles"] as Collection<String>;
             return resourceRoles.stream().map { SimpleGrantedAuthority("ROLE_" + it) }.collect(Collectors.toSet())
         }catch(ex:Exception){
+            println("Errore")
             return emptySet()
         }
     }
