@@ -19,20 +19,23 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
 
 
-
     @Bean fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()
+            .formLogin().disable()
+
         http.authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
             .requestMatchers("/user/get_info").permitAll()
             .requestMatchers("/API/ticket/create/**").hasAuthority("ROLE_Client")
-            //.requestMatchers("/admin/**").hasRole("ADMIN")  //con ruoli specifici
-            .and().formLogin().permitAll()
-            .and().logout().permitAll()
+            .requestMatchers("/API/ticket/start/**").hasAuthority("ROLE_Manager")
+            .requestMatchers("/API/ticket/stop/**").authenticated()
+            .requestMatchers("/API/ticket/close/**").hasAuthority("ROLE_Manager")
+            .requestMatchers("/API/ticket/resolve/**").hasAuthority("ROLE_Manager")
+            .requestMatchers("/API/ticket/reopen/**").hasAuthority("ROLE_Manager")
             .and()
             .oauth2ResourceServer()
             .jwt()
-            .jwtAuthenticationConverter(jwtAuthConverter);
+            .jwtAuthenticationConverter(jwtAuthConverter)
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     return http.build()
 }

@@ -6,11 +6,13 @@ import aw2.g33.server.profiles.toProfile
 import aw2.g33.server.ticket_logs.TicketLogService
 import jakarta.transaction.Transactional
 import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 
 @Service
 class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService):TicketService {
     @Transactional
+    @PreAuthorize("hasAuthority('ROLE_Client')")
     override fun createIssue(description: String, customer: ProfileDTO): TicketDTO {
         val ticketToCreate=Ticket(description,customer.toProfile())
         ticketLogService.addToLog(ticketToCreate,ticketToCreate.status)
@@ -19,7 +21,8 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
     }
 
    @Transactional
-    override fun closeIssue(ticket: TicketDTO): TicketDTO {
+   @PreAuthorize("hasAuthority('ROLE_Manager')")
+   override fun closeIssue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
         val ticketOptional = ticketRepository.findById(ticket.ticketId)
@@ -40,6 +43,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     override fun resolveIssue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -61,6 +65,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     override fun startProgress(ticket: TicketDTO, worker: ProfileDTO, priority: Int): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -87,6 +92,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     override fun stopProgress(ticket: TicketDTO): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -108,6 +114,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     override fun reopenIssue(ticket: TicketDTO): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
