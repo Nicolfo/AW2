@@ -46,12 +46,12 @@ class SecurityController (){
 
         val response = client.send(request, BodyHandlers.ofString())
         if(!response.body().contains("access_token")){
-            //throw Exception("Cannot log in, username or password incorrect")
+            throw WrongCredentialsExceptions("Cannot log in, username or password incorrect")
         }
         return response.body()
 
     }
-    @GetMapping("/user/get_info")
+    /*@GetMapping("/user/get_info")
     @ResponseStatus(HttpStatus.OK)
     fun userInfoByAccessToken( ):Any{
 
@@ -72,5 +72,5 @@ class SecurityController (){
 
 
        // return jwtAuthConverter.extractResourceRoles(userDetails).toString()
-    }
+    }*/
 }
