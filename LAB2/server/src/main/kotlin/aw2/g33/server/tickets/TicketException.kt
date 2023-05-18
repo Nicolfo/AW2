@@ -28,6 +28,10 @@ class TicketException : ResponseEntityExceptionHandler(){
     @ExceptionHandler(ServiceWithNullParams::class)
     fun handleServiceWithNullParams(e:ServiceWithNullParams) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+    @ExceptionHandler(ServiceWithNullParams::class)
+    fun handleCredentialNotMatching(e:CredentialNotMatching) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+
 
 }
 class PrimaryKeyNotFoundException(message: String?) : Throwable(message)
@@ -35,3 +39,4 @@ class StatusTransitionIncorrect(message: String?) : Throwable(message)
 class RequestBodyException(message: String?) : Throwable(message)
 class RequestParamException(message: String?) : Throwable(message)
 class ServiceWithNullParams(message: String?):Throwable(message)
+class CredentialNotMatching(message: String?):Throwable(message)

@@ -6,4 +6,4 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "profiles")
-class Profile(@Id var email: String, var name: String)
+class Profile(@Id var email: String, var name: String/*, var role:String*/)

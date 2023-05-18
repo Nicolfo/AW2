@@ -9,9 +9,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 @RestControllerAdvice
-class ProblemDetailsHandler: ResponseEntityExceptionHandler() {
+class SecurityException: ResponseEntityExceptionHandler() {
     @ExceptionHandler(WrongCredentialsExceptions::class)
-    fun handleRequestBodyError(e: WrongCredentialsExceptions) = ProblemDetail
+    fun handleWrongCredentialsExceptions(e: WrongCredentialsExceptions) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
 
 }
