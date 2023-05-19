@@ -1,8 +1,0 @@
-
-qkotlin:S100"URename function "create_issue" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$(Ã²¿ şÿÿÿÿ
-pkotlin:S100"TRename function "close_issue" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$(““šóüÿÿÿÿ
-mkotlin:S100	"VRename function "resolve_issue" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$(¯ÌÔ¯
-skotlin:S100
-"WRename function "start_progress" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$(¯õÁûÿÿÿÿ
-rkotlin:S100"VRename function "stop_progress" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$(Ñ·Ô½üÿÿÿÿ
-qkotlin:S100"URename function "reopen_issue" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$(­ØĞúÿÿÿÿ

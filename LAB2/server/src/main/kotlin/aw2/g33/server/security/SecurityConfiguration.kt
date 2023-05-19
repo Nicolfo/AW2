@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
 
 
@@ -26,12 +27,12 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
         http.authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
             //.requestMatchers("/user/get_info").permitAll()
-            .requestMatchers("/API/ticket/create/**").hasAuthority("ROLE_Client")
-            .requestMatchers("/API/ticket/start/**").hasAuthority("ROLE_Manager")
-            .requestMatchers("/API/ticket/stop/**").authenticated()
-            .requestMatchers("/API/ticket/close/**").hasAuthority("ROLE_Manager")
-            .requestMatchers("/API/ticket/resolve/**").hasAuthority("ROLE_Manager")
-            .requestMatchers("/API/ticket/reopen/**").hasAuthority("ROLE_Manager")
+            //.requestMatchers("/API/ticket/start/**").hasAuthority("ROLE_Manager")
+            //.requestMatchers("/API/ticket/stop/**").authenticated()
+//            .requestMatchers("/API/ticket/close/**").hasAuthority("ROLE_Manager")
+//            .requestMatchers("/API/ticket/resolve/**").hasAuthority("ROLE_Manager")
+//            .requestMatchers("/API/ticket/reopen/**").hasAuthority("ROLE_Manager")
+            .anyRequest().permitAll()
             .and()
             .oauth2ResourceServer()
             .jwt()

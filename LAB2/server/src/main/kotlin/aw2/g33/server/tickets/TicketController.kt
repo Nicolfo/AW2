@@ -15,11 +15,20 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 class TicketController(private val ticketService: TicketService) {
 
+    var mockUser:ProfileDTO = ProfileDTO("test@email.com","Test Prova")
+
     @PostMapping("/API/ticket/create/{description}")
     @ResponseStatus(HttpStatus.OK)
 
     fun createIssue(@PathVariable description:String, @RequestBody customer: ProfileDTO):TicketDTO{
         return ticketService.createIssue(description,customer)
+    }
+
+    @PostMapping("/API/ticket/create2/{description}")
+    @ResponseStatus(HttpStatus.OK)
+
+    fun createIssue2(@PathVariable description:String):TicketDTO{
+        return ticketService.createIssue(description,mockUser)
     }
     @PostMapping("/API/ticket/create/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)

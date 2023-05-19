@@ -97,7 +97,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
-    @PreAuthorize("hasAuthority('ROLE_Manager')")
+    @PreAuthorize("isAuthenticated()")
     override fun stopProgress(ticket: TicketDTO): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
