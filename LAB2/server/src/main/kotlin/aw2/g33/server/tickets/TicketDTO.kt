@@ -7,13 +7,13 @@ data class TicketDTO (
     val description:String,
     val priority: Int,
     val status:String,
-    val customerEmail:String?,
-    val workerEmail:String?
+    val customerUsername:String?,
+    val workerUsername:String?
 )
 
 
 fun Ticket.toDTO(): TicketDTO {
-    return TicketDTO(this.ticketId,this.description,this.priority,this.status,this.customer?.email,this.worker?.email)
+    return TicketDTO(this.ticketId,this.description,this.priority,this.status,this.customer?.username,this.worker?.username)
 }
 
 

@@ -14,41 +14,41 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @CrossOrigin
 class ProfileController(private val profileService: ProfileService) {
-    @GetMapping("/API/profiles/{email}")
+    @GetMapping("/API/profiles/{username}")
     @ResponseStatus(HttpStatus.OK)
-    fun getProfile(@PathVariable email:String):ProfileDTO?{
-        return profileService.getProfileInfo(email)
+    fun getProfile(@PathVariable username:String):ProfileDTO?{
+        return profileService.getProfileInfo(username)
     }
 
     @GetMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun getProfileWithNoParam(){
-        throw RequestParamException("GET request at /API/profiles/ must include an email as param")
+        throw RequestParamException("GET request at /API/profiles/ must include a username as param")
     }
 
 
     @PostMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.CREATED)
     fun insertProfile(@RequestBody profileToAdd:ProfileDTO): ProfileDTO {
-        if(profileToAdd.email=="" || profileToAdd.name==""){
-            throw RequestBodyException("Name and mail field cannot be empty!")
+        if( profileToAdd.username==""|| profileToAdd.role==""){
+            throw RequestBodyException("username and role field cannot be empty!")
         }
         return profileService.addProfile(profileToAdd)
     }
 
-    @PutMapping("/API/profiles/{email}")
+    @PutMapping("/API/profiles/{username}")
     @ResponseStatus(HttpStatus.OK)
-    fun updateProfile(@PathVariable email:String,@RequestBody profileToUpdate:ProfileDTO): ProfileDTO {
+    fun updateProfile(@PathVariable username:String,@RequestBody profileToUpdate:ProfileDTO): ProfileDTO {
 
-        if(profileToUpdate.email=="" || profileToUpdate.name==""){
-            throw RequestBodyException("Name and email field cannot be empty!")
+        if(profileToUpdate.role=="" || profileToUpdate.username==""){
+            throw RequestBodyException("role and usernmae field cannot be empty!")
         }
-        return profileService.updateProfile(email,profileToUpdate)
+        return profileService.updateProfile(username,profileToUpdate)
     }
     @PutMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun updateProfileWithNoParam(){
-        throw RequestParamException("PUT request at /API/profiles/ must include an email as param")
+        throw RequestParamException("PUT request at /API/profiles/ must include an username as param")
     }
 
 }

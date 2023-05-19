@@ -28,7 +28,7 @@ class TicketException : ResponseEntityExceptionHandler(){
     @ExceptionHandler(ServiceWithNullParams::class)
     fun handleServiceWithNullParams(e:ServiceWithNullParams) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
-    @ExceptionHandler(ServiceWithNullParams::class)
+    @ExceptionHandler(CredentialNotMatching::class)
     fun handleCredentialNotMatching(e:CredentialNotMatching) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
 
