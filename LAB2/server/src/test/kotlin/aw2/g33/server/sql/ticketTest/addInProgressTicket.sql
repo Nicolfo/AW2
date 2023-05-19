@@ -1,1 +1,1 @@
-INSERT INTO public.ticket (ticket_id, description,priority,status,customer_email,worker_email) VALUES (gen_random_uuid(),'test',5,'IN PROGRESS','jacopo@studenti.polito.it','jacopo@studenti.polito.it');
+INSERT INTO public.ticket (ticket_id, description,priority,status,customer_username,worker_username) VALUES (gen_random_uuid(),'test',5,'IN PROGRESS','jacopoclient','jacopoexpert');

@@ -15,9 +15,5 @@ n
 >LAB2/server/src/main/kotlin/aw2/g33/server/products/Product.kt,e/5/e53cd098e306b805195c082ca895d21f7f7a2dbf
 t
 DLAB2/server/src/test/kotlin/aw2/g33/server/ServerApplicationTests.kt,1/4/141a49aa6eac588a47503b9a5691d35426570465
-w
-GLAB2/server/src/test/kotlin/aw2/g33/server/MessageAndAttachmentTests.kt,b/8/b80b2a211164227f196d2e676a137a39ba8e7941
 s
 CLAB2/server/src/main/kotlin/aw2/g33/server/attachment/Attachment.kt,6/c/6cd49887b3af0f304dcbebccca94e14c02038568
-N
-LAB2/server/docker-compose.yml,7/a/7ac12b2ce77a4bb67713511d8a89ba157850260c
