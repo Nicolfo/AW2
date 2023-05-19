@@ -33,7 +33,7 @@ function LoginForm(props){
     if(response==="")
     return  <>
         <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
             <Form.Label>Username</Form.Label>
             <Form.Control type="text" placeholder="Username" onChange={ev=>setUsername(ev.target.value)}/>
             <Form.Label>Password</Form.Label>

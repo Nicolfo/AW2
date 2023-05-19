@@ -25,7 +25,7 @@ function SingleProductForm(props){
     }
     if(!isSubmitted && errMsg==="")
     return  <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
             <Form.Label>ProductId</Form.Label>
             <Form.Control type="text" placeholder="Enter productId" onChange={ev=>setIdToSearch(ev.target.value)}/>
             <Form.Text className="text-muted">

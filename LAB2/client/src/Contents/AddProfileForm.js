@@ -21,7 +21,7 @@ function AddProfileForm(props){
     }
     if(!isSubmitted)
     return (<Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control type="text" placeholder="Enter email " onChange={ev=>setEmail(ev.target.value)}/>
             <Form.Text className="text-muted">
