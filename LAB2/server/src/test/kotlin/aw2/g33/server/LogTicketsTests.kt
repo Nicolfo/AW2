@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.jdbc.Sql
@@ -54,17 +55,18 @@ class LogTicketsTests {
     @Autowired
     lateinit var ticketLogRepository: TicketLogRepository
 
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client","ROLE_Manager"), value = "jacopoclient")
     @Test
     @Order(1)
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     fun checkLogInfoSwitchStatusTicket(){
-        var custumer: ProfileDTO = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
+        var custumer: ProfileDTO = profileRepository.findById("jacopoclient").get().toDTO()
         var currentTicketStatus:String
         lateinit var response : MvcResult;
 
-        response = mockMvc.post("/API/ticket/create/testLogTickets"){
+        response = mockMvc.post("/API/ticket/create"){
             contentType = MediaType.APPLICATION_JSON
-            content = jacksonObjectMapper().writeValueAsString(custumer)
+            content = "testLogTickets"
             accept = MediaType.APPLICATION_JSON
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
@@ -73,11 +75,11 @@ class LogTicketsTests {
         var logsTicket:MutableList<TicketLog> = ticketLogRepository.getTicketLogsByTickedIdAndStatus(ticketCreated.ticketId,"OPEN").toMutableList()
         assert(logsTicket.size>0 && logsTicket.get(0).ticket?.ticketId==ticketCreated.ticketId && logsTicket.get(0).ticket?.status.equals(currentTicketStatus)  )
 
-        var workerTicket:ProfileDTO? = custumer
+        var workerTicket:ProfileDTO? = profileRepository.findById("jacopoexpert").get().toDTO()
         var bodyRequest:MutableMap<String,Any?>? = mutableMapOf<String,Any?>()
 
         bodyRequest?.set("ticket",ticketCreated)
-        bodyRequest?.set("worker",workerTicket)
+        bodyRequest?.set("workerUsername",workerTicket?.username)
 
         response = mockMvc.post("/API/ticket/start/"+4){
             contentType = MediaType.APPLICATION_JSON

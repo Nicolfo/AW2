@@ -40,7 +40,7 @@ class TicketController(private val ticketService: TicketService) {
             throw RequestBodyException("POST request must contain a worker and a ticket field")
         }
         val ticket:TicketDTO
-        val worker:String
+        val workerUsername:String
         try{
             ticket=jacksonObjectMapper().readValue(json.get("ticket").toString())
         }
@@ -48,12 +48,12 @@ class TicketController(private val ticketService: TicketService) {
             throw RequestBodyException("ticket field must contain all the ticket info")
         }
         try {
-            worker = jacksonObjectMapper().readValue(json.get("workerUsername").toString())
+            workerUsername = jacksonObjectMapper().readValue(json.get("workerUsername").toString())
         }catch (ex:Exception){
             throw RequestBodyException("worker field must contain all the profile info")
         }
 
-        return ticketService.startProgress(ticket, worker ,priority)
+        return ticketService.startProgress(ticket, workerUsername ,priority)
     }
     @PostMapping("/API/ticket/start/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)

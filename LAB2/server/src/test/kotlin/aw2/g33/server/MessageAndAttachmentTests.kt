@@ -19,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.jdbc.Sql
@@ -33,6 +35,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 class MessageAndAttachmentTests {
     companion object {
@@ -66,6 +69,7 @@ class MessageAndAttachmentTests {
     @Autowired
     lateinit var messageRepository: MessageRepository
 
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client","ROLE_Manager"), value = "jacopoclient")
     @Test
     @Order(1)
     @Sql(
@@ -76,7 +80,7 @@ class MessageAndAttachmentTests {
 
         var ticketMessage: Ticket? = ticketRepository.findAll()?.get(0)
         var ticketMessageDTO: TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
-        var custmerTicket: ProfileDTO? = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
+        var custmerTicket: ProfileDTO? = profileRepository.findById("jacopoclient").get().toDTO()
         var bodyRequest: MutableMap<String, Any?>? = mutableMapOf<String, Any?>()
         var textMessage: String = "Test message ..."
         var numberOfAttachment: Int = 0
@@ -101,6 +105,7 @@ class MessageAndAttachmentTests {
 
     }
 
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client","ROLE_Manager"), value = "jacopoclient")
     @Test
     @Order(2)
     @Sql(
@@ -111,7 +116,7 @@ class MessageAndAttachmentTests {
 
         var ticketMessage: Ticket? = ticketRepository.findAll()?.get(0)
         var ticketMessageDTO: TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
-        var custmerTicket: ProfileDTO? = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
+        var custmerTicket: ProfileDTO? = profileRepository.findById("jacopoclient").get().toDTO()
         var bodyRequest: MutableMap<String, Any?>? = mutableMapOf<String, Any?>()
         var textMessage1: String = "Test message ... #1"
         var numberOfAttachment: Int = 0

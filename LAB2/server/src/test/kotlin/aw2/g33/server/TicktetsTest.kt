@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.jdbc.Sql
@@ -31,6 +32,7 @@ import java.util.*
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace=AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 class TicketsTests {
     companion object {
@@ -58,13 +60,12 @@ class TicketsTests {
 
     @WithMockUser(authorities = arrayOf<String>("ROLE_Client"), value = "jacopoclient")
     @Test
-    @Order(1)
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql"])
-    fun openNewTicket(){
+    fun openNewTicketWithClient(){
         var custumer:ProfileDTO = profileRepository.findById("jacopoclient").get().toDTO()
         var bodyJSON:String = "Test Ticket"
 
-        var response = mockMvc.post("/API/ticket/create/test"){
+        var response = mockMvc.post("/API/ticket/create"){
             contentType = MediaType.APPLICATION_JSON
             content = bodyJSON
             accept = MediaType.APPLICATION_JSON
@@ -74,12 +75,25 @@ class TicketsTests {
         assert(ticketCreated.ticketId!=null)
         assert(ticketCreated.description!=null && ticketCreated.description.length>0)
         assert(ticketCreated.customerUsername.equals(custumer.username))
-        }
+    }
 
-    @Order(2)
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopoclient")
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql"])
+    fun openNewTicketWithManager(){
+        var bodyJSON:String = "Test Ticket"
+
+        mockMvc.post("/API/ticket/create"){
+            contentType = MediaType.APPLICATION_JSON
+            content = bodyJSON
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect { status { is4xxClientError() } }
+    }
+
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopomanager")
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     @Test
-    fun closeTicket(){
+    fun closeTicketWithManager(){
 
         var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
 
@@ -89,18 +103,29 @@ class TicketsTests {
             accept = MediaType.APPLICATION_JSON
         }.andExpect { status { is2xxSuccessful() } }.andReturn()
 
-//        var response = mockMvc.get("/API/ticket/close"){
-//            contentType = MediaType.APPLICATION_JSON
-//        }.andExpect { status { is2xxSuccessful() } }.andReturn()
-
         assertDoesNotThrow { response.response.getContentAsString()!=null}
         assert(ticketPresent!=null && ticketPresent.ticketId!=null && ticketRepository.existsById(ticketPresent.ticketId!!))
     }
 
-    @Order(3)
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client"), value = "jacopoclient")
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     @Test
-    fun resolveTicket(){
+    fun closeTicketWithClient(){
+
+        var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
+
+        mockMvc.post("/API/ticket/close"){
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(ticketPresent)
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect { status { is4xxClientError() } }
+
+    }
+
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopomanager")
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Test
+    fun resolveTicketWithManager(){
 
         var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
 
@@ -115,18 +140,45 @@ class TicketsTests {
         assert(ticketResponse!=null && ticketResponse.ticketId!=null && ticketResponse.ticketId == ticketPresent?.ticketId && ticketResponse.status.equals("RESOLVED"))
     }
 
-    @Order(4)
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
     @Test
-    fun startProgressTickt(){
+    fun resolveTicketWithUnAuthenticatedUser(){
+
+        var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
+
+        var response = mockMvc.post("/API/ticket/resolve"){
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(ticketPresent)
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect { status { is4xxClientError() } }
+    }
+
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client"), value = "jacopoclient")
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Test
+    fun resolveTicketWithClient(){
+
+        var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
+
+        var response = mockMvc.post("/API/ticket/resolve"){
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(ticketPresent)
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect { status { is4xxClientError() } }
+    }
+
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopomanager")
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Test
+    fun startProgressTicktWithManager(){
 
         var priorityTicket: Int = 4
         var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
-        var workerTicket:ProfileDTO? = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
+        var workerTicket:ProfileDTO? = profileRepository.findById("jacopoexpert").get().toDTO()
         var bodyRequest:MutableMap<String,Any?>? = mutableMapOf<String,Any?>()
 
         bodyRequest?.set("ticket",ticketPresent)
-        bodyRequest?.set("worker",workerTicket)
+        bodyRequest?.set("workerUsername",workerTicket?.username)
 
         var response = mockMvc.post("/API/ticket/start/"+priorityTicket){
             contentType = MediaType.APPLICATION_JSON
@@ -142,10 +194,50 @@ class TicketsTests {
         assert(ticketResponse!=null && ticketResponse.workerUsername.equals(workerTicket?.username))
     }
 
-    @Order(5)
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client"), value = "jacopoclient")
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Test
+    fun startProgressTicktWithClient(){
+
+        var priorityTicket: Int = 4
+        var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
+        var workerTicket:ProfileDTO? = profileRepository.findById("jacopoexpert").get().toDTO()
+        var bodyRequest:MutableMap<String,Any?>? = mutableMapOf<String,Any?>()
+
+        bodyRequest?.set("ticket",ticketPresent)
+        bodyRequest?.set("workerUsername",workerTicket?.username)
+
+        mockMvc.post("/API/ticket/start/"+priorityTicket){
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(bodyRequest)
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect { status { is4xxClientError() } }
+    }
+
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopomanager")
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addTicket.sql"])
+    @Test
+    fun startProgressTicktWithWorkerTicketNotExpert(){
+
+        var priorityTicket: Int = 4
+        var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
+        var workerTicket:ProfileDTO? = profileRepository.findById("jacopoclient").get().toDTO()
+        var bodyRequest:MutableMap<String,Any?>? = mutableMapOf<String,Any?>()
+
+        bodyRequest?.set("ticket",ticketPresent)
+        bodyRequest?.set("workerUsername",workerTicket?.username)
+
+        mockMvc.post("/API/ticket/start/"+priorityTicket){
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(bodyRequest)
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect { status { is4xxClientError() } }
+    }
+
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopomanager")
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addInProgressTicket.sql"])
     @Test
-    fun stopProgressTickt(){
+    fun stopProgressTicktWithManager(){
 
         var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
 
@@ -161,10 +253,10 @@ class TicketsTests {
         assert(ticketResponse!=null && ticketPresent?.status.equals("IN PROGRESS") && ticketResponse.status.equals("OPEN"))
     }
 
-    @Order(6)
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Manager"), value = "jacopomanager")
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql","file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addClosedTicket.sql"])
     @Test
-    fun reOpenProgressTickt(){
+    fun reOpenProgressTicktWithManager(){
 
         var ticketPresent:TicketDTO? = ticketRepository.findAll()?.get(0)?.toDTO()
 
