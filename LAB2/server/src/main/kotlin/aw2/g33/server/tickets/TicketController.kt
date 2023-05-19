@@ -15,20 +15,11 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 class TicketController(private val ticketService: TicketService) {
 
-    var mockUser:ProfileDTO = ProfileDTO("test@email.com","Test Prova")
-
     @PostMapping("/API/ticket/create/{description}")
     @ResponseStatus(HttpStatus.OK)
 
     fun createIssue(@RequestBody description:String):TicketDTO{
         return ticketService.createIssue(description)
-    }
-
-    @PostMapping("/API/ticket/create2/{description}")
-    @ResponseStatus(HttpStatus.OK)
-
-    fun createIssue2(@PathVariable description:String):TicketDTO{
-        return ticketService.createIssue(description,mockUser)
     }
     @PostMapping("/API/ticket/create/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,11 +40,11 @@ class TicketController(private val ticketService: TicketService) {
     @PostMapping("/API/ticket/start/{priority}")
     @ResponseStatus(HttpStatus.OK)
     fun startProgress(@RequestBody json:ObjectNode, @PathVariable priority:Int):TicketDTO{
-         if(!json.contains("ticket")||!json.contains("worker")) {
+         if(!json.contains("ticket")||!json.contains("workerUsername")) {
             throw RequestBodyException("POST request must contain a worker and a ticket field")
         }
         val ticket:TicketDTO
-        val worker:ProfileDTO
+        val worker:String
         try{
             ticket=jacksonObjectMapper().readValue(json.get("ticket").toString())
         }
@@ -61,12 +52,12 @@ class TicketController(private val ticketService: TicketService) {
             throw RequestBodyException("ticket field must contain all the ticket info")
         }
         try {
-            worker = jacksonObjectMapper().readValue(json.get("worker").toString())
+            worker = jacksonObjectMapper().readValue(json.get("workerUsername").toString())
         }catch (ex:Exception){
             throw RequestBodyException("worker field must contain all the profile info")
         }
 
-        return ticketService.startProgress(ticket,worker,priority)
+        return ticketService.startProgress(ticket, worker ,priority)
     }
     @PostMapping("/API/ticket/start/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -70,10 +70,13 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
     }
     @Transactional
     @PreAuthorize("hasAuthority('ROLE_Manager')")
-    override fun startProgress(ticket: TicketDTO, worker: ProfileDTO, priority: Int): TicketDTO {
+    override fun startProgress(ticket: TicketDTO, workerUsername: String, priority: Int): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
 
+        val worker:ProfileDTO = profileService.getProfileInfo(workerUsername);
+        if(!worker.role.equals("Expert"))
+            throw InvalidPermsssionUser("Worker not found...")
 
         val ticketOptional = ticketRepository.findById(ticket.ticketId)
         if(!ticketOptional.isEmpty){

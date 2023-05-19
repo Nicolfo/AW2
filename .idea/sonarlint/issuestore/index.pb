@@ -13,8 +13,6 @@ n
 NLAB2/server/src/main/kotlin/aw2/g33/server/attachment/AttachmentServiceImpl.kt,1/2/1297eda1255414065b87939e89df7f51f4468ef7
 n
 >LAB2/server/src/main/kotlin/aw2/g33/server/products/Product.kt,e/5/e53cd098e306b805195c082ca895d21f7f7a2dbf
-l
-<LAB2/server/src/main/kotlin/aw2/g33/server/tickets/Ticket.kt,c/2/c2ad131a5adf8ae72157f122c614982a7b6dfe5e
 t
 DLAB2/server/src/test/kotlin/aw2/g33/server/ServerApplicationTests.kt,1/4/141a49aa6eac588a47503b9a5691d35426570465
 w

@@ -7,7 +7,7 @@ interface TicketService {
     fun createIssue(description:String):TicketDTO
     fun closeIssue(ticket: TicketDTO):TicketDTO
     fun resolveIssue(ticket:TicketDTO):TicketDTO
-    fun startProgress(ticket: TicketDTO, worker: ProfileDTO, priority:Int):TicketDTO
+    fun startProgress(ticket: TicketDTO, workerUsername: String, priority:Int):TicketDTO
     fun stopProgress(ticket: TicketDTO):TicketDTO
     fun reopenIssue(ticket:TicketDTO):TicketDTO
     fun ticketDTOToTicket(ticketDTO: TicketDTO):Ticket

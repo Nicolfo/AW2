@@ -31,7 +31,9 @@ class TicketException : ResponseEntityExceptionHandler(){
     @ExceptionHandler(CredentialNotMatching::class)
     fun handleCredentialNotMatching(e:CredentialNotMatching) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
-
+    @ExceptionHandler(InvalidPermsssionUser::class)
+    fun handleInvalidPermssionUser(e:InvalidPermsssionUser) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
 
 }
 class PrimaryKeyNotFoundException(message: String?) : Throwable(message)
@@ -40,3 +42,4 @@ class RequestBodyException(message: String?) : Throwable(message)
 class RequestParamException(message: String?) : Throwable(message)
 class ServiceWithNullParams(message: String?):Throwable(message)
 class CredentialNotMatching(message: String?):Throwable(message)
+class InvalidPermsssionUser(message: String?):Throwable(message)

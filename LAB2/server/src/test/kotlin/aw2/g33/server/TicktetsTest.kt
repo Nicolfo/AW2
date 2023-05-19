@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.jdbc.Sql
@@ -55,12 +56,13 @@ class TicketsTests {
     @Autowired
     lateinit var ticketRepository: TicketRepository
 
+    @WithMockUser(authorities = arrayOf<String>("ROLE_Client"), value = "jacopoclient")
     @Test
     @Order(1)
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = ["file:src/test/kotlin/aw2/g33/server/sql/ticketTest/addProfile.sql"])
     fun openNewTicket(){
-        var custumer:ProfileDTO = profileRepository.findById("jacopo@studenti.polito.it").get().toDTO()
-        var bodyJSON:String = jacksonObjectMapper().writeValueAsString(custumer)
+        var custumer:ProfileDTO = profileRepository.findById("jacopoclient").get().toDTO()
+        var bodyJSON:String = "Test Ticket"
 
         var response = mockMvc.post("/API/ticket/create/test"){
             contentType = MediaType.APPLICATION_JSON
@@ -71,7 +73,7 @@ class TicketsTests {
         var ticketCreated:TicketDTO = jacksonObjectMapper().readValue<TicketDTO>(response.response.getContentAsString())
         assert(ticketCreated.ticketId!=null)
         assert(ticketCreated.description!=null && ticketCreated.description.length>0)
-        assert(ticketCreated.customerEmail.equals(custumer.email))
+        assert(ticketCreated.customerUsername.equals(custumer.username))
         }
 
     @Order(2)
@@ -137,7 +139,7 @@ class TicketsTests {
         assert(ticketResponse!=null && ticketResponse.ticketId!=null && ticketResponse.ticketId == ticketPresent?.ticketId)
         assert(ticketResponse!=null && ticketResponse.priority==priorityTicket)
         assert(ticketResponse!=null && ticketResponse.status.equals("IN PROGRESS") && ticketPresent?.status.equals("OPEN"))
-        assert(ticketResponse!=null && ticketResponse.workerEmail.equals(workerTicket?.email))
+        assert(ticketResponse!=null && ticketResponse.workerUsername.equals(workerTicket?.username))
     }
 
     @Order(5)
