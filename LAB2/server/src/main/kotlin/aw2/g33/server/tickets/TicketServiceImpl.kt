@@ -2,6 +2,7 @@ package aw2.g33.server.tickets
 
 
 import aw2.g33.server.profiles.ProfileDTO
+import aw2.g33.server.profiles.ProfileService
 import aw2.g33.server.profiles.toProfile
 import aw2.g33.server.ticket_logs.TicketLogService
 import jakarta.transaction.Transactional
@@ -11,14 +12,12 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService):TicketService {
+class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService,private val profileService: ProfileService):TicketService {
     @Transactional
     @PreAuthorize("hasAuthority('ROLE_Client')")
-    override fun createIssue(description: String, customer: ProfileDTO): TicketDTO {
+    override fun createIssue(description: String): TicketDTO {
         val username= SecurityContextHolder.getContext().authentication.name
-        if(username!=customer.email){
-            throw CredentialNotMatching("Logged user different from customer profileDTO received")
-        }
+        val customer=profileService.getProfileInfo(username)
         val ticketToCreate=Ticket(description,customer.toProfile())
         ticketLogService.addToLog(ticketToCreate,ticketToCreate.status)
         ticketRepository.save(ticketToCreate)

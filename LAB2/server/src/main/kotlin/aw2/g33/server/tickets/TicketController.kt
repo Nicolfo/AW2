@@ -20,8 +20,8 @@ class TicketController(private val ticketService: TicketService) {
     @PostMapping("/API/ticket/create/{description}")
     @ResponseStatus(HttpStatus.OK)
 
-    fun createIssue(@PathVariable description:String, @RequestBody customer: ProfileDTO):TicketDTO{
-        return ticketService.createIssue(description,customer)
+    fun createIssue(@RequestBody description:String):TicketDTO{
+        return ticketService.createIssue(description)
     }
 
     @PostMapping("/API/ticket/create2/{description}")

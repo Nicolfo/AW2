@@ -10,7 +10,7 @@ class Ticket (
 
     var description:String="",
     @OneToOne
-    @JoinColumn(name = "customer_email", referencedColumnName = "email")
+    @JoinColumn(name = "customer_username", referencedColumnName = "username")
     val customer: Profile? = null,
     var status:String="OPEN",
     var priority:Int=-1
@@ -20,7 +20,7 @@ class Ticket (
     var ticketId:UUID?=null
 
     @OneToOne
-    @JoinColumn(name = "worker_email", referencedColumnName = "email")
+    @JoinColumn(name = "worker_username", referencedColumnName = "username")
     var worker:Profile?=null
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "ticket")

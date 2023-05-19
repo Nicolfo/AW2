@@ -13,7 +13,7 @@ class Message (
     val ticket: Ticket? = null,
     val text:String="",
     @OneToOne
-    @JoinColumn(name = "writer_email", referencedColumnName = "email")
+    @JoinColumn(name = "writer_username", referencedColumnName = "username")
     val writer: Profile? = null,
     val numberOfAttachment:Int
 ){

@@ -1,8 +1,8 @@
-email,name
-john.doe@polito.it,John
-mario.rossi@polito.it,Mario
-paul@studenti.polito.it,Paul
-nico@studenti.polito.it,Nico
-mauro@studenti.polito.it,Mauro
-jacopo@studenti.polito.it,Jacopo
-giuseppe@studenti.polito.it,Giuseppe
+email,username,role
+john.doe@polito.it,John,customer
+mario.rossi@polito.it,Mario,manager
+paul@studenti.polito.it,Paul,expert
+nico@studenti.polito.it,Nico,customer
+mauro@studenti.polito.it,Mauro,customer
+jacopo@studenti.polito.it,Jacopo,expert
+giuseppe@studenti.polito.it,Giuseppe,customer
