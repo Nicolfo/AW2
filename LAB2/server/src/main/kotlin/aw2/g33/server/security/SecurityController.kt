@@ -1,6 +1,8 @@
 package aw2.g33.server.security
 
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -19,12 +21,16 @@ import java.util.stream.Collectors
 @RestController
 @CrossOrigin
 class SecurityController (){
+    @Value("\${KEYCLOAK_IP}")
+    lateinit var ip :String
+
     @PostMapping("/user/validate/")
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{
 
+        println(ip);
         println(userDTO.toString())
-        val url = "http://localhost:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
+        val url = "http://${ip}:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
 
 
         //con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")

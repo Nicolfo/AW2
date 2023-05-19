@@ -51,7 +51,7 @@ tasks.withType<Test> {
 
 jib{
     container{
-        ports= mutableListOf("8080")
+        ports= mutableListOf("8081")
     }
-to{image="nicolfo/aw2.g33.lab3"}
+to{image="nicolfo/aw2.g33.lab4"}
 }

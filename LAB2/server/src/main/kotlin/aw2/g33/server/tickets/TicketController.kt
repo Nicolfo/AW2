@@ -15,17 +15,13 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 class TicketController(private val ticketService: TicketService) {
 
-    @PostMapping("/API/ticket/create/{description}")
+    @PostMapping("/API/ticket/create")
     @ResponseStatus(HttpStatus.OK)
 
     fun createIssue(@RequestBody description:String):TicketDTO{
         return ticketService.createIssue(description)
     }
-    @PostMapping("/API/ticket/create/")
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun createIssueWithNoParam(){
-        throw RequestParamException("POST request at /API/ticket/create/ must include a description as param")
-    }
+
     @PostMapping("/API/ticket/close")
     @ResponseStatus(HttpStatus.OK)
     fun closeIssue(@RequestBody ticket: TicketDTO):TicketDTO{
