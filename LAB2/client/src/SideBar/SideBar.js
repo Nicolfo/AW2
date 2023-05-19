@@ -31,6 +31,11 @@ return (
                                 Update Profile
                             </button>
                         </li>
+                        <li className="nav-item">
+                            <button className={path==='/login' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/login')}}>
+                                Login
+                            </button>
+                        </li>
 
                     </ul>
                 </aside>

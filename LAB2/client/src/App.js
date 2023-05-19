@@ -6,6 +6,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import NavBar from "./Navbar/NavBar";
 import API_Products from "./API/API_Products/API_Products";
 import API_Profile from "./API/API_Profile/API_Profile";
+import API_Login from "./API/API_Login/API_Login";
 import ShowProductsTable from "./Contents/ShowProductsTable";
 import {useEffect, useState} from "react";
 import SingleProductForm from "./Contents/SingleProductForm";
@@ -13,6 +14,8 @@ import SingleProfileForm from "./Contents/SingleProfileForm";
 import AddProfileForm from "./Contents/AddProfileForm";
 import { useLocation } from 'react-router-dom'
 import UpdateProfileForm from "./Contents/UpdateProfileForm";
+import LoginForm from "./Contents/LoginForm";
+
 
 
 
@@ -71,6 +74,13 @@ function Layout(){
                     </div>
                 </div>}>
             </Route>
+            <Route path='/login' element={
+                <div className="container-fluid" style={{height: '90vh'}}>
+                    <div className="row align-items-start">
+                        <NavBar ></NavBar><SideBar></SideBar><Content></Content>
+                    </div>
+                </div>}>
+            </Route>
             <Route path='*' element={<h1>Path Not Found</h1>}></Route>
         </Routes>
     )
@@ -105,6 +115,8 @@ function Content(){
             return (<div className="col-9"><AddProfileForm addProfile={API_Profile.addProfile}></AddProfileForm></div>);
         case '/update-profile':
             return (<div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div>);
+        case '/login':
+            return (<div className="col-9"><LoginForm login={API_Login.login}></LoginForm></div>);
         default:
             if(errorMsg!=="")
                 return (<div className="col-9">{errorMsg}</div>)
