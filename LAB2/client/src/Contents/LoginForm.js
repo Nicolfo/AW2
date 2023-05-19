@@ -18,13 +18,13 @@ function LoginForm(props){
                 setErrorMsg((JSON.stringify(response)));
         })
             .catch((err)=>{
-                setErrorMsg(err);
+                setErrorMsg(err.detail?err.detail:JSON.stringify(err));
 
             })
     }
     if(errorMsg!==""){
         return <>
-            Login was unsuccessful, founded error on API call:{errorMsg}<br/>
+            Login was unsuccessful: {errorMsg}<br/>
             <Button variant="primary" type="submit" onClick={()=>{setErrorMsg("");}}>
                 Try Again
             </Button>
@@ -48,8 +48,7 @@ function LoginForm(props){
     </Form>
         </>
     else
-       return <>Your token is {response}
-            <br/>
+        return <><div className="col-12 text-break"> Your token is {response}</div>
             <Button variant="primary" type="submit" onClick={()=>{setResponse("");}}>
                 Log Out
             </Button>

@@ -3,15 +3,17 @@ import Button from "react-bootstrap/Button";
 import {useState} from "react";
 
 function UpdateProfileForm(props){
-    const [email,setEmail]=useState("");
-    const [oldEmail,setOldEmail]=useState("");
+
+    const [oldUsername,setOldUsername]=useState("");
     const [isSubmitted,setIsSubmitted]=useState(false);
-    const [name,setName]=useState("");
+    const [email,setEmail]=useState("");
+    const [username,setUsername]=useState("");
+    const [role,setRole]=useState("");
     const [resultMessage,setResultMessage]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
         setIsSubmitted(true);
-        props.updateProfile(oldEmail,{email,name}).then(()=>{
+        props.updateProfile(oldUsername,{username,email,role: role}).then(()=>{
             setResultMessage("Profile updated correctly");
 
         })
@@ -21,9 +23,14 @@ function UpdateProfileForm(props){
     }
     if(!isSubmitted)
     return (<Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Old Email</Form.Label>
-            <Form.Control type="text" placeholder="Enter old email " onChange={ev=>setOldEmail(ev.target.value)}/>
+        <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
+            <Form.Label>Old Username</Form.Label>
+            <Form.Control type="text" placeholder="Enter username to update " onChange={ev=>setOldUsername(ev.target.value)}/>
+            <Form.Text className="text-muted">
+            </Form.Text>
+
+            <Form.Label>New Username</Form.Label>
+            <Form.Control type="text" placeholder="Enter new username " onChange={ev=>setUsername(ev.target.value)}/>
             <Form.Text className="text-muted">
             </Form.Text>
 
@@ -32,8 +39,12 @@ function UpdateProfileForm(props){
             <Form.Text className="text-muted">
             </Form.Text>
 
-            <Form.Label>New Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter new name " onChange={ev=>setName(ev.target.value)}/>
+            <Form.Label>New Role</Form.Label>
+            <Form.Control  as="select" onChange={ev=>setRole(ev.target.value)}>
+                <option value="Client">Client</option>
+                <option value="Expert">Expert</option>
+                <option value="Manager">Manager</option>
+            </Form.Control>
             <Form.Text className="text-muted">
             </Form.Text>
         </Form.Group>
@@ -48,7 +59,7 @@ function UpdateProfileForm(props){
             <br/>
             <Button variant="primary" type="submit" onClick={()=>{
                 setResultMessage("");
-                setName("");
+                setRole("");
                 setIsSubmitted(false);
                 setEmail("");
             }

@@ -5,12 +5,13 @@ import {useState} from "react";
 function AddProfileForm(props){
     const [email,setEmail]=useState("");
     const [isSubmitted,setIsSubmitted]=useState(false);
-    const [name,setName]=useState("");
+    const [username,setUsername]=useState("");
+    const [role,setRole]=useState("");
     const [resultMessage,setResultMessage]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
         setIsSubmitted(true);
-        props.addProfile({email,name}).then(()=>{
+        props.addProfile({username,email,role}).then(()=>{
             setResultMessage("Profile added correctly");
 
         })
@@ -26,9 +27,17 @@ function AddProfileForm(props){
             <Form.Text className="text-muted">
             </Form.Text>
 
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter name " onChange={ev=>setName(ev.target.value)}/>
+            <Form.Label>Username</Form.Label>
+            <Form.Control type="text" placeholder="Enter username " onChange={ev=>setUsername(ev.target.value)}/>
             <Form.Text className="text-muted">
+            </Form.Text>
+
+            <Form.Label>Role</Form.Label>
+            <Form.Control  as="select" onChange={ev=>setRole(ev.target.value)}>
+                <option value="Client">Client</option>
+                <option value="Expert">Expert</option>
+                <option value="Manager">Manager</option>
+            </Form.Control><Form.Text className="text-muted">
             </Form.Text>
         </Form.Group>
 
@@ -42,7 +51,7 @@ function AddProfileForm(props){
             <br></br>
             <Button variant="primary" type="submit" onClick={()=>{
                 setResultMessage("");
-                setName("");
+                setUsername("");
                 setIsSubmitted(false);
                 setEmail("");
             }

@@ -1,14 +1,14 @@
 const url = 'http://localhost:8081/';
 
-async function getProfile(email=undefined){
+async function getProfile(username=undefined){
 
     let tmpUser = null ;
     let response;
     try{
-        response = await fetch(url+"API/profiles/"+email);
+        response = await fetch(url+"API/profiles/"+username);
         tmpUser = await response.json();
     }catch (e) {
-        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/{"+email+"}"}
+        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/{"+username+"}"}
     }
 
 
@@ -26,7 +26,7 @@ async function addProfile(addedUser=null){
         response = await fetch(url+"API/profiles/", {
             method: 'POST',
             headers : { 'Content-Type' : 'application/json'},
-            body: JSON.stringify({ "name" : addedUser.name, "email" :addedUser.email}),
+            body: JSON.stringify({ "username" : addedUser.username, "email" :addedUser.email,"role":addedUser.role}),
         });
         tmpUser = await response.json();
     }catch (e) {
@@ -49,7 +49,7 @@ async function updateProfile(oldMail,updatedUser){
         response = await fetch(url + "API/profiles/" + oldMail, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({"name": updatedUser.name, "email": updatedUser.email}),
+            body: JSON.stringify({"username": updatedUser.username, "email": updatedUser.email,"role": updatedUser.role}),
         });
         tmpUser = await response.json();
     }catch (e) {

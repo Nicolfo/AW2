@@ -4,17 +4,18 @@ import {useState} from "react";
 import Table from "react-bootstrap/Table";
 
 function SingleProfileForm(props){
-    const [emailToSearch,setEmailToSearch]=useState("");
+    const [usernameToSearch,setUsernameToSearch]=useState("");
     const [isSubmitted,setIsSubmitted]=useState(false);
-    const [name,setName]=useState("");
+    const [email,setEmail]=useState("");
+    const [role,setRole]=useState("");
     const [errMsg,setErrMsg]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
         setIsSubmitted(true);
-        props.getProfile(emailToSearch).then((profile)=>{
+        props.getProfile(usernameToSearch).then((profile)=>{
             setErrMsg("");
-            setName(profile.name);
-
+            setEmail(profile.email);
+            setRole(profile.role);
         })
             .catch((err)=>{
                 setErrMsg("Error "+err.status+" "+err.detail+" on API call "+err.instance)
@@ -23,15 +24,15 @@ function SingleProfileForm(props){
     }
     if(!isSubmitted && errMsg==="")
         return  <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="text" placeholder="Enter email " onChange={ev=>setEmailToSearch(ev.target.value)}/>
+            <Form.Group className="mb-3">
+                <Form.Label>Username</Form.Label>
+                <Form.Control type="text" placeholder="Enter username to search " onChange={ev=>setUsernameToSearch(ev.target.value)}/>
                 <Form.Text className="text-muted">
                 </Form.Text>
             </Form.Group>
 
             <Button variant="primary" type="submit">
-                Submit
+                Search
             </Button>
         </Form>
 
@@ -42,16 +43,17 @@ function SingleProfileForm(props){
                 <br/>
                 <Button variant="primary" type="submit" onClick={()=>{
                     setErrMsg("");
-                    setName("");
+                    setEmail("");
+                    setRole("");
                     setIsSubmitted(false);
-                    setEmailToSearch("");
+                    setUsernameToSearch("");
                 }
                 }>
                     Search another
                 </Button>
             </div>)
     }
-    if(isSubmitted && name===""){
+    if(isSubmitted && email===""){
         return <div>Waiting Server Response ...</div>
     }
 
@@ -62,23 +64,25 @@ function SingleProfileForm(props){
                 <Table striped bordered hover>
                 <thead>
                 <tr>
+                    <th>Username</th>
                     <th>Email</th>
-                    <th>Name</th>
+                    <th>Role</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr key={emailToSearch}>
-                    <td>{emailToSearch}</td>
-                    <td>{name}</td>
+                <tr key={usernameToSearch}>
+                    <td>{usernameToSearch}</td>
+                    <td>{email}</td>
+                    <td>{role}</td>
                 </tr>
                 </tbody>
             </Table>
 
                 <Button variant="primary" type="submit" onClick={()=>{
                     setErrMsg("");
-                    setName("");
+                    setEmail("");
                     setIsSubmitted(false);
-                    setEmailToSearch("");
+                    setUsernameToSearch("");
                 }
                 }>
                     Search another

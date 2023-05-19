@@ -18,7 +18,7 @@ return (
                         >Get a Single Product</button></li>
                         <li className="nav-item">
                             <button className={path==='/get-profile-by-mail' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}   onClick={()=>{navigate('/get-profile-by-mail')}}>
-                                Get Profile By Mail
+                                Get Profile By Username
                             </button>
                         </li>
                         <li className="nav-item">
