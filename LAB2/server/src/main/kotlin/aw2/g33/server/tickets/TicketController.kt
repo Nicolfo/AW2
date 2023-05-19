@@ -17,7 +17,7 @@ class TicketController(private val ticketService: TicketService) {
 
     @PostMapping("/API/ticket/create/{description}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ROLE_Client')")
+
     fun createIssue(@PathVariable description:String, @RequestBody customer: ProfileDTO):TicketDTO{
         return ticketService.createIssue(description,customer)
     }
