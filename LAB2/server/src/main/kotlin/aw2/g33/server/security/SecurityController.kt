@@ -1,9 +1,13 @@
 package aw2.g33.server.security
 
 
+import aw2.g33.server.profiles.ProfileService
+import org.keycloak.representations.idm.CredentialRepresentation
+import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
@@ -20,7 +24,7 @@ import java.util.stream.Collectors
 
 @RestController
 @CrossOrigin
-class SecurityController (){
+class SecurityController (private val userService: UserService){
     @Value("\${KEYCLOAK_IP}")
     lateinit var ip :String
 
@@ -57,26 +61,48 @@ class SecurityController (){
         return response.body()
 
     }
-    /*@GetMapping("/user/get_info")
+
+    @PostMapping("/user/signup/")
     @ResponseStatus(HttpStatus.OK)
-    fun userInfoByAccessToken( ):Any{
+    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
-        val roles = SecurityContextHolder.getContext().authentication.authorities.filter { it.authority.contains("ROLE") }
-        val username= SecurityContextHolder.getContext().authentication.name
-        return username
+        val response = userService.create(userDTO)
 
-        /*val resourceAccess: Map<String, Any> = userDetails.getClaim("realm_access")
-        var resourceRoles: Collection<String> = resourceAccess["roles"] as Collection<String>;
-        return resourceRoles.first()*/
-
-       // return jwtAuthConverter.convert(userDetails).authorities.contains(SimpleGrantedAuthority("ROLE_Client")
-
-        //return userDetails
-        //jwtAuthConverter.extractResourceRoles(userDetails)
-
-        //val ret=jwtAuthConverter.convert( userDetails)
+        if (response.status != 201)
+            return ResponseEntity.internalServerError().build()
+        else {
+            val role = userService.findRoleByName("ROLE_Client")
+            userService.assignRole(userDTO.username, role)
+            return ResponseEntity.created(response.location).build()
+        }
 
 
-       // return jwtAuthConverter.extractResourceRoles(userDetails).toString()
-    }*/
+        //aggiungere anche altri userdetails (email) e salvare user nel nostro database dei profile??
+
+    }
+
+
+
+        /*@GetMapping("/user/get_info")
+        @ResponseStatus(HttpStatus.OK)
+        fun userInfoByAccessToken( ):Any{
+
+            val roles = SecurityContextHolder.getContext().authentication.authorities.filter { it.authority.contains("ROLE") }
+            val username= SecurityContextHolder.getContext().authentication.name
+            return username
+
+            /*val resourceAccess: Map<String, Any> = userDetails.getClaim("realm_access")
+            var resourceRoles: Collection<String> = resourceAccess["roles"] as Collection<String>;
+            return resourceRoles.first()*/
+
+           // return jwtAuthConverter.convert(userDetails).authorities.contains(SimpleGrantedAuthority("ROLE_Client")
+
+            //return userDetails
+            //jwtAuthConverter.extractResourceRoles(userDetails)
+
+            //val ret=jwtAuthConverter.convert( userDetails)
+
+
+           // return jwtAuthConverter.extractResourceRoles(userDetails).toString()
+        }*/
 }

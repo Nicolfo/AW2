@@ -26,6 +26,7 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
 
         http.authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
+            .requestMatchers("/user/signup").permitAll()
             //.requestMatchers("/user/get_info").permitAll()
             //.requestMatchers("/API/ticket/start/**").hasAuthority("ROLE_Manager")
             //.requestMatchers("/API/ticket/stop/**").authenticated()
