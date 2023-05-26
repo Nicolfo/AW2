@@ -1,0 +1,8 @@
+providers:
+  - name: dashboards
+    type: file
+    disableDeletion: true
+    editable: true
+    options:
+      path: /etc/grafana/dashboard
+      foldersFromFilesStructure: true
