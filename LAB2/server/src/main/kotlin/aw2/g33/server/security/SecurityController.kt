@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
@@ -64,8 +65,11 @@ class SecurityController (private val userService: UserService,private val profi
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
-    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> { //per gestire le transazioni muovere tutto su UserService
+    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
+        // aggiungiamo controllo per vedere se esiste già prima di provare a creare?
+        // (per farlo c'è la findById commentata in UserService)
+        // oppure lasciamo che ritorni 409 Conflict al client? (stessa cosa per la createExpert)
         val response = userService.create(userDTO)
 
         if (response.status != 201)
@@ -81,6 +85,7 @@ class SecurityController (private val userService: UserService,private val profi
 
     @PostMapping("/user/createExpert")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_Manager')")  // serve? o basta la restrizione in SecurityConfiguration?
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
