@@ -5,6 +5,7 @@ import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.RoleRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import javax.ws.rs.core.Response
 
@@ -60,6 +61,8 @@ class UserService(
             .create(user)
     }
 
+
+
     private fun preparePasswordRepresentation(
         password: String
     ): CredentialRepresentation {
@@ -76,6 +79,8 @@ class UserService(
     ): UserRepresentation {
         val newUser = UserRepresentation()
         newUser.username = request.username
+        if(request.email!=null)
+            newUser.email=request.email
         newUser.credentials = listOf(cR)
         newUser.isEnabled = true
         return newUser

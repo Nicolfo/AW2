@@ -1,7 +1,9 @@
 package aw2.g33.server.security
 
 
+import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
+import jakarta.transaction.Transactional
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,16 +26,13 @@ import java.util.stream.Collectors
 
 @RestController
 @CrossOrigin
-class SecurityController (private val userService: UserService){
+class SecurityController (private val userService: UserService,private val profileService: ProfileService){
     @Value("\${KEYCLOAK_IP}")
     lateinit var ip :String
 
     @PostMapping("/user/validate/")
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{
-
-        println(ip);
-        println(userDTO.toString())
         val url = "http://${ip}:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
 
 
@@ -62,25 +61,41 @@ class SecurityController (private val userService: UserService){
 
     }
 
-    @PostMapping("/user/signup/")
+    @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.OK)
-    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
+    @Transactional
+    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> { //per gestire le transazioni muovere tutto su UserService
 
         val response = userService.create(userDTO)
 
         if (response.status != 201)
             return ResponseEntity.internalServerError().build()
         else {
-            val role = userService.findRoleByName("ROLE_Client")
+            val role = userService.findRoleByName("Client")
             userService.assignRole(userDTO.username, role)
+            profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
             return ResponseEntity.created(response.location).build()
         }
 
-
-        //aggiungere anche altri userdetails (email) e salvare user nel nostro database dei profile??
-
     }
 
+    @PostMapping("/user/createExpert")
+    @ResponseStatus(HttpStatus.OK)
+    @Transactional
+    fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
+
+        val response = userService.create(userDTO)
+
+        if (response.status != 201)
+            return ResponseEntity.internalServerError().build()
+        else {
+            val role = userService.findRoleByName("Expert")
+            userService.assignRole(userDTO.username, role)
+            profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
+            return ResponseEntity.created(response.location).build()
+        }
+
+    }
 
 
         /*@GetMapping("/user/get_info")
