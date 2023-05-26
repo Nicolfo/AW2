@@ -9,7 +9,7 @@ services:
       - "8081"
     build:
       context: .
-    container_name: lab4
+    container_name: lab5
     depends_on:
       - db
       - keycloak
