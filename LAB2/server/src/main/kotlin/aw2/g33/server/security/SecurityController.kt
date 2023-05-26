@@ -69,10 +69,10 @@ class SecurityController (private val userService: UserService,private val profi
         val response = userService.create(userDTO)
 
         if (response.status != 201)
-            return ResponseEntity.internalServerError().build()
+            throw UsernameAlreadyExistException("Cannot add user")
         else {
             val role = userService.findRoleByName("Client")
-            userService.assignRole(userDTO.username, role)
+            userService.assignRoleWithUsername(userDTO.username, role)
             profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
             return ResponseEntity.created(response.location).build()
         }
@@ -87,10 +87,10 @@ class SecurityController (private val userService: UserService,private val profi
         val response = userService.create(userDTO)
 
         if (response.status != 201)
-            return ResponseEntity.internalServerError().build()
+            throw UsernameAlreadyExistException("Cannot add user")
         else {
             val role = userService.findRoleByName("Expert")
-            userService.assignRole(userDTO.username, role)
+            userService.assignRoleWithUsername(userDTO.username, role)
             profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
             return ResponseEntity.created(response.location).build()
         }
