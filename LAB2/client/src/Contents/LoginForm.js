@@ -2,6 +2,7 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 function LoginForm(props){
     const [username,setUsername]=useState("");
@@ -45,6 +46,12 @@ function LoginForm(props){
         <Button variant="primary" type="submit">
             Login
         </Button>
+
+        <p>Not registered yet?
+            <Link to="/signup"> <b>SignUp</b>  </Link>
+        </p>
+
+
     </Form>
         </>
     else

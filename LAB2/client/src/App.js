@@ -15,6 +15,7 @@ import AddProfileForm from "./Contents/AddProfileForm";
 import { useLocation } from 'react-router-dom'
 import UpdateProfileForm from "./Contents/UpdateProfileForm";
 import LoginForm from "./Contents/LoginForm";
+import SignupForm from "./Contents/SignupForm";
 
 
 
@@ -81,6 +82,13 @@ function Layout(){
                     </div>
                 </div>}>
             </Route>
+            <Route path='/signup' element={
+                <div className="container-fluid" style={{height: '90vh'}}>
+                    <div className="row align-items-start">
+                        <NavBar ></NavBar><SideBar></SideBar><Content></Content>
+                    </div>
+                </div>}>
+            </Route>
             <Route path='*' element={<h1>Path Not Found</h1>}></Route>
         </Routes>
     )
@@ -117,6 +125,9 @@ function Content(){
             return (<div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div>);
         case '/login':
             return (<div className="col-9"><LoginForm login={API_Login.login}></LoginForm></div>);
+        case '/signup':
+            return (<div className="col-9"><SignupForm signup={API_Login.signup}></SignupForm></div>);
+
         default:
             if(errorMsg!=="")
                 return (<div className="col-9">{errorMsg}</div>)

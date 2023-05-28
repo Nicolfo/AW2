@@ -11,7 +11,7 @@ async function login(username,password){
         });
         userJwt = await response.json();
     }catch (e) {
-        throw {status:404,detail:"Cannot communicate with server",instance:"/API/profiles/"}
+        throw {status:404,detail:"Cannot communicate with server",instance:"/user/validate/"}
     }
 
 
@@ -20,4 +20,25 @@ async function login(username,password){
     else
         throw userJwt;
 }
-export default {login}
+
+async function signup(username,email,password){
+    let response = false;
+    try{
+        response = await fetch(url+"user/signup", {
+            method: 'POST',
+            headers : { 'Content-Type' : 'application/json'},
+            body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),
+        });
+        response = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"/user/signup"}
+    }
+
+    if(response.ok)
+        return true;
+    else
+        throw response;
+}
+
+
+export default {login, signup}

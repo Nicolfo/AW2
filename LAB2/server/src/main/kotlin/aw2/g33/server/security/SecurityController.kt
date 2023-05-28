@@ -67,13 +67,16 @@ class SecurityController (private val userService: UserService,private val profi
     @Transactional
     fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
-        // aggiungiamo controllo per vedere se esiste già prima di provare a creare?
-        // (per farlo c'è la findById commentata in UserService)
-        // oppure lasciamo che ritorni 409 Conflict al client? (stessa cosa per la createExpert)
         val response = userService.create(userDTO)
 
-        if (response.status != 201)
-            throw UsernameAlreadyExistException("Cannot add user")
+        if (response.status != 201) {
+            if (response.status == 409) {
+                throw UsernameAlreadyExistException("Username already exists, cannot create")
+                // oppure direttamente al client:
+                // return ResponseEntity.status(HttpStatus.CONFLICT).build()
+            }
+            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
+        }
         else {
             val role = userService.findRoleByName("Client")
             userService.assignRoleWithUsername(userDTO.username, role)
@@ -91,8 +94,14 @@ class SecurityController (private val userService: UserService,private val profi
 
         val response = userService.create(userDTO)
 
-        if (response.status != 201)
-            throw UsernameAlreadyExistException("Cannot add user")
+        if (response.status != 201) {
+            if (response.status == 409) {
+                throw UsernameAlreadyExistException("Username already exists, cannot create")
+                // oppure direttamente al client:
+                // return ResponseEntity.status(HttpStatus.CONFLICT).build()
+            }
+            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
+        }
         else {
             val role = userService.findRoleByName("Expert")
             userService.assignRoleWithUsername(userDTO.username, role)
