@@ -145,7 +145,7 @@ function Content(){
 
     const doSignup = async (username,email,password) => {  //fa anche il login per l'user appena creato
         try {
-            await API_User.signup(username,email,password,false);
+            await API_User.signup(username,email,password);
             setSignedUp(true);
             await doLogIn(username,password);
         }
@@ -154,9 +154,9 @@ function Content(){
         }
     }
 
-    const createExpert = async (username,email,password) => { //questa crea soltanto
+    const createExpert = async (username,email,password,jwtToken) => { //questa crea soltanto
         try {
-            await API_User.signup(username,email,password,true);
+            await API_User.createExpert(username,email,password,jwtToken);
             setSignedUp(true);
         }
         catch (err) {

@@ -20,23 +20,38 @@ async function login(username,password){
         throw respJson;
 }
 
-async function signup(username,email,password,isManager){
+async function signup(username,email,password){
     let response = false;
-    const targetURL =
-        isManager ?
-        url + '/user/createExpert'
-        :
-        url + '/user/signup';
 
     try{
-        response = await fetch(targetURL, {
+        response = await fetch("/user/signup", {
             method: 'POST',
             headers : { 'Content-Type' : 'application/json'},
             body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),
         });
         response = await response.json();
     }catch (e) {
-        throw {status:404,detail:"Cannot communicate with server",instance:targetURL}
+        throw {status:404,detail:"Cannot communicate with server",instance:'/user/signup'}
+    }
+
+    if(response.ok)
+        return true;
+    else
+        throw response;
+}
+
+async function createExpert(username,email,password,jwt){
+    let response = false;
+
+    try{
+        response = await fetch("user/createExpert", {
+            method: 'POST',
+            headers : { 'Content-Type' : 'application/json', 'Authentication': `Bearer ${jwt}}`},
+            body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),
+        });
+        response = await response.json();
+    }catch (e) {
+        throw {status:404,detail:"Cannot communicate with server",instance:"user/createExpert"}
     }
 
     if(response.ok)
@@ -47,4 +62,4 @@ async function signup(username,email,password,isManager){
 
 
 
-export default {login, signup}
+export default {login, signup, createExpert}
