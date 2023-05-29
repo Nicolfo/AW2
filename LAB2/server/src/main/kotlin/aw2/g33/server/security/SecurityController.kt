@@ -80,7 +80,7 @@ class SecurityController (private val userService: UserService,private val profi
         else {
             val role = userService.findRoleByName("Client")
             userService.assignRoleWithUsername(userDTO.username, role)
-            profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
+            val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
             return ResponseEntity.created(response.location).build()
         }
 

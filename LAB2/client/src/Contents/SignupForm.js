@@ -4,24 +4,25 @@ import {useState} from "react";
 import {Link} from "react-router-dom";
 
 function SignupForm(props){
+
+    //const { signup, signedUp } = props;
+
     const [username,setUsername]=useState("");
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
-    const [response,setResponse]=useState("");
     const [errorMsg,setErrorMsg]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
-        props.signup(username,email,password).then((response)=>{
-            if(response)
-               setResponse("New user correctly registered");
-            else
-                setErrorMsg((JSON.stringify(response)));
-        })
-            .catch((err)=>{
-                setErrorMsg(err.detail?err.detail:JSON.stringify(err));
 
+        // eventualmente aggiungere qui validation dell'input
+
+        let funToCall = props.signup? props.signup : props.createExpert
+        funToCall(username,email,password)
+            .catch((err) => {
+                setErrorMsg(err.detail?err.detail:JSON.stringify(err));
             })
     }
+
     if(errorMsg!==""){
         return <>
             Signup was unsuccessful: {errorMsg}<br/>
@@ -30,7 +31,7 @@ function SignupForm(props){
             </Button>
         </>
     }
-    if(response==="")
+    if(props.signedUp===false)
         return  <>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
@@ -44,19 +45,20 @@ function SignupForm(props){
                     </Form.Text>
                 </Form.Group>
 
-                <p style={{ fontSize: 10}}>
-                    <Link to="/login"> back to login </Link>
-                </p>
-
+                { props.signup &&
+                    <p style={{ fontSize: 10}}>
+                        <Link to="/login"> back to login </Link>
+                    </p>
+                }
 
                 <Button variant="primary" type="submit">
-                    Signup
+                    {props.signup ? "Signup" : "Create" }
                 </Button>
             </Form>
         </>
     else
-        return <><div className="col-12 text-break"> {response}</div>
-            <p>Go back to
+        return <><div className="col-12 text-break"> New user correctly registered!</div>
+            <p> -> Go back to
                 <Link to="/"> <b>HomePage</b>  </Link>
             </p>
         </>

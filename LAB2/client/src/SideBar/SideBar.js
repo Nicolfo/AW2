@@ -1,7 +1,9 @@
 import {useNavigate,useLocation} from 'react-router-dom';
-function SideBar(){
+function SideBar(props){
     const path = useLocation().pathname;
     const navigate = useNavigate();
+
+    //const { loggedIn, user } = props;
 
 return (
         <div className="d-flex flex-column flex-shrink-0 bg-light col-3 p-2">
@@ -36,6 +38,13 @@ return (
                                 Login
                             </button>
                         </li>
+                        {props.loggedIn && props.user.role==="Manager" &&
+                            <li className="nav-item">
+                                <button className={path==='/createExpert' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/createExpert')}}>
+                                    Create Expert
+                                </button>
+                            </li>
+                        }
 
                     </ul>
                 </aside>
