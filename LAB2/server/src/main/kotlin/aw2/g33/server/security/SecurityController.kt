@@ -3,6 +3,7 @@ package aw2.g33.server.security
 
 import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
+import io.micrometer.observation.annotation.Observed
 import jakarta.transaction.Transactional
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
@@ -27,6 +28,7 @@ import java.util.stream.Collectors
 
 @RestController
 @CrossOrigin
+@Observed
 class SecurityController (private val userService: UserService,private val profileService: ProfileService){
     @Value("\${KEYCLOAK_IP}")
     lateinit var ip :String
