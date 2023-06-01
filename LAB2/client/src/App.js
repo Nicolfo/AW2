@@ -36,63 +36,63 @@ function Layout(){
             <Route path='/' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/list-products' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/get-product' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/get-profile-by-mail' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/add-profile' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/update-profile' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar ></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/login' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar ></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/signup' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar ></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
             <Route path='/createExpert' element={
                 <div className="container-fluid" style={{height: '90vh'}}>
                     <div className="row align-items-start">
-                        <NavBar ></NavBar><Content></Content>
+                        <Content></Content>
                     </div>
                 </div>}>
             </Route>
@@ -169,26 +169,26 @@ function Content(){
         case '/list-products':
             if(errorMsg!=="")
                 return (<div className="col-9">{errorMsg}</div>)
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div></>)
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div></>)
         case '/get-product':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProductForm getProduct={API_Products.getProduct}></SingleProductForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProductForm getProduct={API_Products.getProduct}></SingleProductForm></div></>);
         case '/get-profile-by-mail':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProfileForm getProfile={API_Profile.getProfile}></SingleProfileForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProfileForm getProfile={API_Profile.getProfile}></SingleProfileForm></div></>);
         case '/add-profile':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddProfileForm addProfile={API_Profile.addProfile}></AddProfileForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddProfileForm addProfile={API_Profile.addProfile}></AddProfileForm></div></>);
         case '/update-profile':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);
         case '/login':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><LoginForm login={doLogIn} loggedIn={loggedIn} jwtToken={jwtToken} logout={doLogout}></LoginForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><LoginForm login={doLogIn} loggedIn={loggedIn} jwtToken={jwtToken} logout={doLogout}></LoginForm></div></>);
         case '/signup':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp}></SignupForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp}></SignupForm></div></>);
         case '/createExpert':
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
 
         default:
             if(errorMsg!=="")
-                return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">{errorMsg}</div></>)
-            return (<><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div></>)
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">{errorMsg}</div></>)
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div></>)
     }
 }
 

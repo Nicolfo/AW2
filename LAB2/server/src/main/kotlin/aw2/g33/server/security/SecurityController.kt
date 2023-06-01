@@ -88,7 +88,7 @@ class SecurityController (private val userService: UserService,private val profi
 
     @PostMapping("/user/createExpert")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ROLE_Manager')")  // serve? o basta la restrizione in SecurityConfiguration?
+    @PreAuthorize("hasAuthority('ROLE_Manager')") 
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 

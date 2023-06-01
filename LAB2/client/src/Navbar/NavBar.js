@@ -2,7 +2,15 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-function NavBar() {
+import {Dropdown} from "react-bootstrap";
+import { PersonCircle } from 'react-bootstrap-icons';
+import {Link} from "react-router-dom";
+import Button from "react-bootstrap/Button";
+
+function NavBar(props) {
+
+    const {user, loggedIn, logout} = props;
+
     return (
         <Navbar bg="light" expand="lg">
             <Container fluid className="ms-2 me-2">
@@ -19,7 +27,7 @@ function NavBar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link >Web Application 2- 2023</Nav.Link>
-                        <Nav.Link >Lab 2</Nav.Link>
+                        <Nav.Link >Lab 5</Nav.Link>
                         <Nav.Link >Group 33</Nav.Link>
                         <NavDropdown title="Members" id="basic-nav-dropdown">
                             <NavDropdown.Item >Matteo Fontana S292567</NavDropdown.Item>
@@ -29,6 +37,35 @@ function NavBar() {
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
+
+                <Nav >
+                    <Dropdown drop='down' >
+                        <Navbar.Text className="text-warning font-weight-bold pr-4" style={{ fontSize: "1rem" }}>
+                            {user && user.username && `Welcome, ${user?.username}!`}
+                        </Navbar.Text>
+
+                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                            <PersonCircle size="30" />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="bg-warning">
+                            {!loggedIn &&
+                                <Dropdown.Item>
+                                    <Link to="/login">
+                                        <Button variant="outline-primary"> Login </Button>
+                                    </Link>
+                                </Dropdown.Item>}
+                            {loggedIn &&
+                                <Dropdown.Item>
+                                    <Link to="/">
+                                        <Button variant="outline-secondary" onClick={logout}> Logout </Button>
+                                    </Link>
+                                </Dropdown.Item>
+                            }
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Nav>
+
             </Container>
         </Navbar>
     );

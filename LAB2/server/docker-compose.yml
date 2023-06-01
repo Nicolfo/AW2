@@ -28,7 +28,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
   keycloak:
-    image: 'nicolfo/keycloak-lab4'
+    image: 'nicolfo/keycloak-lab5'
     container_name: keycloak
     ports:
       - "8080:8080"
