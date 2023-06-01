@@ -1,13 +1,16 @@
 package aw2.g33.server.security
 
 import org.keycloak.admin.client.Keycloak
+import org.keycloak.admin.client.resource.UserResource
+import org.keycloak.admin.client.resource.UsersResource
+import org.keycloak.representations.idm.ClientRepresentation
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.RoleRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import javax.ws.rs.core.Response
+
 
 @Service
 class UserService(
@@ -21,11 +24,7 @@ class UserService(
             .realm(realm)
             .users()
             .list()
-    fun findByUsername(username: String): List<UserRepresentation> =
-        keycloak
-            .realm(realm)
-            .users()
-            .search(username)
+
     fun findById(id: String): UserRepresentation =
         keycloak
             .realm(realm)
@@ -33,7 +32,11 @@ class UserService(
             .get(id)
             .toRepresentation()
     */
-
+    fun findByUsername(username: String): List<UserRepresentation> =
+        keycloak
+            .realm(realm)
+            .users()
+            .search(username)
     fun findRoleByName(roleName: String): RoleRepresentation =
         keycloak
             .realm(realm)
@@ -41,15 +44,22 @@ class UserService(
             .get(roleName)
             .toRepresentation()
 
-    fun assignRole(userId: String, roleRepresentation: RoleRepresentation) {
+    fun assignRoleWithUsername(username: String, roleRepresentation: RoleRepresentation) {
+        var resultSearch= findByUsername(username)
+        if (resultSearch.isEmpty()){
+            //throw exception
+        }
+        val user=resultSearch.first()
         keycloak
             .realm(realm)
             .users()
-            .get(userId)
+            .get(user.id)
             .roles()
             .realmLevel()
             .add(listOf(roleRepresentation))
     }
+
+
 
 
     fun create(request: UserDTO): Response {

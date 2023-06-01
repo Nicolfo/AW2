@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
@@ -64,16 +65,22 @@ class SecurityController (private val userService: UserService,private val profi
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
-    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> { //per gestire le transazioni muovere tutto su UserService
+    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
         val response = userService.create(userDTO)
 
-        if (response.status != 201)
-            return ResponseEntity.internalServerError().build()
+        if (response.status != 201) {
+            if (response.status == 409) {
+                throw UsernameAlreadyExistException("Username already exists, cannot create")
+                // oppure direttamente al client:
+                // return ResponseEntity.status(HttpStatus.CONFLICT).build()
+            }
+            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
+        }
         else {
             val role = userService.findRoleByName("Client")
-            userService.assignRole(userDTO.username, role)
-            profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
+            userService.assignRoleWithUsername(userDTO.username, role)
+            val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
             return ResponseEntity.created(response.location).build()
         }
 
@@ -81,16 +88,23 @@ class SecurityController (private val userService: UserService,private val profi
 
     @PostMapping("/user/createExpert")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_Manager')")  // serve? o basta la restrizione in SecurityConfiguration?
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
         val response = userService.create(userDTO)
 
-        if (response.status != 201)
-            return ResponseEntity.internalServerError().build()
+        if (response.status != 201) {
+            if (response.status == 409) {
+                throw UsernameAlreadyExistException("Username already exists, cannot create")
+                // oppure direttamente al client:
+                // return ResponseEntity.status(HttpStatus.CONFLICT).build()
+            }
+            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
+        }
         else {
             val role = userService.findRoleByName("Expert")
-            userService.assignRole(userDTO.username, role)
+            userService.assignRoleWithUsername(userDTO.username, role)
             profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
             return ResponseEntity.created(response.location).build()
         }

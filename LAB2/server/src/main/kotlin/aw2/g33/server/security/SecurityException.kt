@@ -13,8 +13,13 @@ class SecurityException: ResponseEntityExceptionHandler() {
     @ExceptionHandler(WrongCredentialsExceptions::class)
     fun handleWrongCredentialsExceptions(e: WrongCredentialsExceptions) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+    @ExceptionHandler(UsernameAlreadyExistException::class)
+    fun handleUsernameAlreadyExist(e: UsernameAlreadyExistException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.CONFLICT,  e.message!! )
 
 }
 
 class WrongCredentialsExceptions(message: String?) : Throwable(message)
+class UsernameAlreadyExistException(message: String?) : Throwable(message)
+
 

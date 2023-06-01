@@ -2,26 +2,26 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 function LoginForm(props){
+
+    //const { login, loggedIn, jwtToken, logout } = props;
+
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
-    const [response,setResponse]=useState("");
     const [errorMsg,setErrorMsg]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
-        props.login(username,password).then((response)=>{
-            //facci qualcosa poi, ora te lo mostro
-            if(response.error==null)
-            setResponse(response.access_token);
-            else
-                setErrorMsg((JSON.stringify(response)));
-        })
-            .catch((err)=>{
-                setErrorMsg(err.detail?err.detail:JSON.stringify(err));
 
+        // eventualmente aggiungere qui validation dell'input
+
+        props.login(username,password)
+            .catch((err) => {
+                setErrorMsg(err.detail?err.detail:JSON.stringify(err));
             })
     }
+
     if(errorMsg!==""){
         return <>
             Login was unsuccessful: {errorMsg}<br/>
@@ -30,7 +30,7 @@ function LoginForm(props){
             </Button>
             </>
     }
-    if(response==="")
+    if(props.jwtToken==="")
     return  <>
         <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
@@ -45,11 +45,17 @@ function LoginForm(props){
         <Button variant="primary" type="submit">
             Login
         </Button>
+
+        <p>Not registered yet?
+            <Link to="/signup"> <b>SignUp</b>  </Link>
+        </p>
+
+
     </Form>
         </>
     else
-        return <><div className="col-12 text-break"> Your token is {response}</div>
-            <Button variant="primary" type="submit" onClick={()=>{setResponse("");}}>
+        return <><div className="col-12 text-break"> Your token is {props.jwtToken}</div>
+            <Button variant="primary" type="submit" onClick={props.logout()}>
                 Log Out
             </Button>
        </>
