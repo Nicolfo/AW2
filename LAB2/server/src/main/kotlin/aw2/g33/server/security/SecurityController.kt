@@ -67,6 +67,7 @@ class SecurityController (private val userService: UserService,private val profi
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
+    @Observed
     fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
 
         val response = userService.create(userDTO)
