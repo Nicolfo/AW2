@@ -66,6 +66,7 @@ function Content(){
 
             API_User.login(username,password).then((token)=>{
                 setJwtToken(token);
+                console.log(token)
                 setLoggedIn(true);
                 API_Profile.getProfile(username).then((loggedUser)=>{
                     setUser(loggedUser);
@@ -95,6 +96,7 @@ function Content(){
         setUser('');
         setLoggedIn(false);
         setSignedUp(false);
+        navigate("/");
     }
 
     const doSignup = async (username,email,password) => {  //fa anche il login per l'user appena creato
@@ -108,7 +110,7 @@ function Content(){
         }
     }
 
-    const createExpert = async (username,email,password,jwtToken) => { //questa crea soltanto
+    const createExpert = async (username,email,password) => { //questa crea soltanto
         try {
             await API_User.createExpert(username,email,password,jwtToken);
             setSignedUp(true);
