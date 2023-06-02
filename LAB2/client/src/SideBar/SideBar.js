@@ -33,12 +33,23 @@ return (
                                 Update Profile
                             </button>
                         </li>
-                        {props.loggedIn && props.user.role==="Manager" &&
+                        {props.loggedIn && props.user.role==="Manager" ?
                             <li className="nav-item">
                                 <button className={path==='/createExpert' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/createExpert')}}>
                                     Create Expert
                                 </button>
                             </li>
+                            :
+                            <></>
+                        }
+                        {path==='/login' ?
+                            <li className="nav-item">
+                                <button className="nav-link active link-light text-start" >
+                                    Login
+                                </button>
+                            </li>
+                            :
+                            <></>
                         }
 
                     </ul>

@@ -1,6 +1,7 @@
 const url = 'http://localhost:8081/';
 
 async function login(username,password){
+
     let respJson;
     let response;
     try{
@@ -24,7 +25,7 @@ async function signup(username,email,password){
     let response = false;
 
     try{
-        response = await fetch("/user/signup", {
+        response = await fetch(url +"user/signup", {
             method: 'POST',
             headers : { 'Content-Type' : 'application/json'},
             body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),
@@ -44,7 +45,7 @@ async function createExpert(username,email,password,jwt){
     let response = false;
 
     try{
-        response = await fetch("user/createExpert", {
+        response = await fetch(url+"user/createExpert", {
             method: 'POST',
             headers : { 'Content-Type' : 'application/json', 'Authentication': `Bearer ${jwt}}`},
             body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),

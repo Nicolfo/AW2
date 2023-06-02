@@ -6,11 +6,9 @@ import {Link} from "react-router-dom";
 
 function LoginForm(props){
 
-    //const { login, loggedIn, jwtToken, logout } = props;
-
+    const {errorMsg,setErrorMsg} = props;
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
-    const [errorMsg,setErrorMsg]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
 
@@ -22,18 +20,12 @@ function LoginForm(props){
             })
     }
 
-    if(errorMsg!==""){
-        return <>
-            Login was unsuccessful: {errorMsg}<br/>
-            <Button variant="primary" type="submit" onClick={()=>{setErrorMsg("");}}>
-                Try Again
-            </Button>
-            </>
+    if(props.isLoggedIn){
+        return <div>You are already logged in!</div>
     }
-    if(props.jwtToken==="")
     return  <>
         <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
+        <Form.Group className="mb-3 col-5" >
             <Form.Label>Username</Form.Label>
             <Form.Control type="text" placeholder="Username" onChange={ev=>setUsername(ev.target.value)}/>
             <Form.Label>Password</Form.Label>
@@ -41,7 +33,7 @@ function LoginForm(props){
             <Form.Text className="text-muted">
             </Form.Text>
         </Form.Group>
-
+            {errorMsg? <div className="col-5" style={{color: "red"}}>Login was unsuccessful: {errorMsg}</div>:<></>}
         <Button variant="primary" type="submit">
             Login
         </Button>
@@ -53,12 +45,7 @@ function LoginForm(props){
 
     </Form>
         </>
-    else
-        return <><div className="col-12 text-break"> Your token is {props.jwtToken}</div>
-            <Button variant="primary" type="submit" onClick={props.logout()}>
-                Log Out
-            </Button>
-       </>
+
 
 }
 

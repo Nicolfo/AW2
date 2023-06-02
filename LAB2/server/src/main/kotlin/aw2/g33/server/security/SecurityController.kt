@@ -35,7 +35,7 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{
         val url = "http://${ip}:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
-
+        println("url "+url+" username "+userDTO.username+" password "+userDTO.password)
 
         //con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
 
@@ -91,7 +91,7 @@ class SecurityController (private val userService: UserService,private val profi
     @PreAuthorize("hasAuthority('ROLE_Manager')") 
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
-
+        println("richiesta ricevuta")
         val response = userService.create(userDTO)
 
         if (response.status != 201) {
