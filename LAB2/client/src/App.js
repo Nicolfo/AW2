@@ -84,7 +84,7 @@ function Content(){
             if(username!==null){
                 API_Profile.getProfile(username).then((loggedUser)=>{
                     setUser(loggedUser);
-                    if(path=='/login')
+                    if(path=='/login' ||path=='/signup')
                         navigate('/');
                 }).catch((err)=>{
                     setErrorMsg(err.detail)
@@ -98,7 +98,7 @@ function Content(){
         }
 
 
-    },[jwtToken,user,loggedIn])
+    },[jwtToken,user])
 
 
     const doLogIn = async (username,password) => {
@@ -108,7 +108,7 @@ function Content(){
                 setLoggedIn(true);
                 API_Profile.getProfile(username).then((loggedUser)=>{
                     setUser(loggedUser);
-                    if(path=='/login')
+                    if(path=='/login' ||path=='/signup')
                         navigate('/');
                 }).catch((err)=>{
                     setErrorMsg(err.detail)
@@ -177,18 +177,20 @@ function Content(){
         case '/update-profile':
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);
         case '/login':
+            if(loggedIn && errorMsg!=="")
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">{errorMsg}</div></>)
             if(loggedIn)
-                return (<>You are already logged in!</>)
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You are already logged in!</div></>)
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><LoginForm login={doLogIn} loggedIn={loggedIn} logout={doLogout} errorMsg={errorMsg} setErrorMsg={setErrorMsg} isLoggedIn={loggedIn}></LoginForm></div></>);
         case '/signup':
             if(loggedIn)
-                return (<>You are already logged in!</>)
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You are already logged in!</div></>)
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp}></SignupForm></div></>);
         case '/createExpert':
             if(user!=null && user.role==="Manager" )
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
             else
-                return (<>You have to be a logged in manager to use that function</>)
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)
 
         default:
             return <h1>Path not found</h1>

@@ -67,7 +67,7 @@ class SecurityController (private val userService: UserService,private val profi
     @PostMapping("/user/signup")
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    fun userSignup(@RequestBody userDTO: UserDTO){
+    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI>{
         val role = userService.findRoleByName("Client")
         val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
 
@@ -82,6 +82,8 @@ class SecurityController (private val userService: UserService,private val profi
         }
         else {
             userService.assignRoleWithUsername(userDTO.username, role)
+
+            return ResponseEntity.created(response.location).build()
         }
 
     }
