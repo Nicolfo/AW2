@@ -66,22 +66,20 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     fun userSignup(@RequestBody userDTO: UserDTO){
+        val role = userService.findRoleByName("Client")
+        val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
 
         val response = userService.create(userDTO)
 
         if (response.status != 201) {
+            profileService.removeProfile(userDTO.username)
             if (response.status == 409) {
                 throw UsernameAlreadyExistException("Username already exists, cannot create")
-                // oppure direttamente al client:
-                // return ResponseEntity.status(HttpStatus.CONFLICT).build()
             }
             else throw RuntimeException("User was not created") //o altre eccezioni specifiche
         }
         else {
-            val role = userService.findRoleByName("Client")
             userService.assignRoleWithUsername(userDTO.username, role)
-            val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
-
         }
 
     }
@@ -90,49 +88,29 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('ROLE_Manager')") 
     @Transactional
-    @CrossOrigin
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
-        println("richiesta ricevuta")
+        val role = userService.findRoleByName("Expert")
+        profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
+
         val response = userService.create(userDTO)
 
         if (response.status != 201) {
+            profileService.removeProfile(userDTO.username)
             if (response.status == 409) {
+
                 throw UsernameAlreadyExistException("Username already exists, cannot create")
-                // oppure direttamente al client:
-                // return ResponseEntity.status(HttpStatus.CONFLICT).build()
             }
             else throw RuntimeException("User was not created") //o altre eccezioni specifiche
         }
         else {
-            val role = userService.findRoleByName("Expert")
+
             userService.assignRoleWithUsername(userDTO.username, role)
-            profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
+
             return ResponseEntity.created(response.location).build()
         }
 
     }
 
 
-        /*@GetMapping("/user/get_info")
-        @ResponseStatus(HttpStatus.OK)
-        fun userInfoByAccessToken( ):Any{
 
-            val roles = SecurityContextHolder.getContext().authentication.authorities.filter { it.authority.contains("ROLE") }
-            val username= SecurityContextHolder.getContext().authentication.name
-            return username
-
-            /*val resourceAccess: Map<String, Any> = userDetails.getClaim("realm_access")
-            var resourceRoles: Collection<String> = resourceAccess["roles"] as Collection<String>;
-            return resourceRoles.first()*/
-
-           // return jwtAuthConverter.convert(userDetails).authorities.contains(SimpleGrantedAuthority("ROLE_Client")
-
-            //return userDetails
-            //jwtAuthConverter.extractResourceRoles(userDetails)
-
-            //val ret=jwtAuthConverter.convert( userDetails)
-
-
-           // return jwtAuthConverter.extractResourceRoles(userDetails).toString()
-        }*/
 }

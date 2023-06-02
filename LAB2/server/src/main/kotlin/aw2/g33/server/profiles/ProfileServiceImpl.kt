@@ -20,6 +20,10 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository):Profi
             throw EmailConflictException("Username already used")
     }
 
+    override fun removeProfile(username: String) {
+        profileRepository.deleteById(username)
+    }
+
     override fun getProfileInfo(username: String): ProfileDTO {
         return profileRepository.findByIdOrNull(username)?.toDTO() ?: throw PrimaryKeyNotFoundException("username not found in DB")
     }

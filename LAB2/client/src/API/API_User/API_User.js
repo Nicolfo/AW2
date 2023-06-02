@@ -40,7 +40,7 @@ async function signup(username,email,password){
     }
 
     else
-        throw response;
+        throw {status:500,detail:"Internal Server Error",instance:'/user/signup'};
 }
 
 async function createExpert(username,email,password,jwt){
@@ -61,7 +61,7 @@ async function createExpert(username,email,password,jwt){
     if(response.ok)
         return true;
     else
-        throw response;
+        throw {status:500,detail:"Internal Server Error",instance:'/user/signup'};
 }
 
 
