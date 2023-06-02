@@ -1,22 +1,47 @@
-PUT HTTP://127.0.0.1:8080/API/profiles/prova4@polito.it
+PUT 127.0.0.1:8080/API/profiles/prova3@polito.it
 content-type: application/json
 
 {
     "email": "prova3@polito.it",
-    "name": "prova1" 
+    "name": "prova1"
 }
 
 ###
-POST HTTP://127.0.0.1:8080/API/profiles/
+POST 127.0.0.1:8080/API/profiles/
 content-type: application/json
 
 {
-    "email": "prova3@polito.it",
-    "name": "prova2" 
+    "email": "prova2@polito.it",
+    "name": "prova2"
 }
 
 ###
-GET HTTP://127.0.0.1:8080/API/profiles/prova3@polito.it
+GET 127.0.0.1:8080/API/profiles/prova3@polito.it
 
 
 ###
+POST 127.0.0.1:8080/API/ticket/create/ciao
+content-type: application/json
+
+{
+    "email": "prova2@polito.it",
+    "name": "prova2"
+}
+###
+POST 127.0.0.1:8081/API/ticket/start/5
+content-tyoe: application/json
+
+{
+    "ticket": {"ticket_id": "ade28676-0459-4822-ab28-a5b75c655fb0","description": "ciao","priority": -1,"status": "OPEN","customer_email": "prova2@polito.it"},
+    "worker": {"email": "prova2@polito.it","name": "prova2"}
+}
+
+###
+POST 127.0.0.1:8081/user/validate/
+content-type: application/json
+
+{
+  "username": "u1",
+  "password": "p1"
+}
+

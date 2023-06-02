@@ -1,19 +1,149 @@
-import logo from './logo.svg';
+
 import './App.css';
-import './UserInfo/AddUser'
-import AddUser from "./UserInfo/AddUser";
 import 'bootstrap/dist/css/bootstrap.css';
-import NavBar from "./NavBar/NavBar";
-import Page from "./MainPage/Page";
+import SideBar from "./SideBar/SideBar";
+import {BrowserRouter as Router, Routes, Route, useNavigate} from "react-router-dom";
+import NavBar from "./Navbar/NavBar";
+import API_Products from "./API/API_Products/API_Products";
+import API_Profile from "./API/API_Profile/API_Profile";
+import API_User from "./API/API_User/API_User";
+import ShowProductsTable from "./Contents/ShowProductsTable";
+import {useEffect, useState} from "react";
+import SingleProductForm from "./Contents/SingleProductForm";
+import SingleProfileForm from "./Contents/SingleProfileForm";
+import AddProfileForm from "./Contents/AddProfileForm";
+import { useLocation } from 'react-router-dom'
+import UpdateProfileForm from "./Contents/UpdateProfileForm";
+import LoginForm from "./Contents/LoginForm";
+import SignupForm from "./Contents/SignupForm";
+
+
+
 
 function App() {
-  return (
-<><NavBar></NavBar>
-  <Page></Page></>
+  return (<Router>
+            <Layout></Layout>
 
-
+        </Router>
 
   );
+}
+
+
+function Layout(){
+    return (
+        <div className="container-fluid" style={{height: '90vh'}}>
+            <div className="row align-items-start">
+                <Content></Content>
+            </div>
+        </div>
+    )
+}
+function Content(){
+
+    const [listOfProducts,setListOfProducts]=useState([]);
+    const [errorMsg,setErrorMsg]=useState("");
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState("");
+    const [jwtToken, setJwtToken] = useState('');
+    const [signedUp, setSignedUp] = useState(false);
+    const navigate = useNavigate();
+
+    const path = useLocation().pathname.toString();
+    useEffect(()=>{
+        if(path==='/list-products' || path ==='/' || path === '')
+        API_Products.getAllProducts().then((products)=>{
+            setListOfProducts(((old) => old=products))
+            setErrorMsg("");
+        })
+            .catch((err)=>{
+                setErrorMsg("Error " + err.status + " " + err.detail + " on API call " + err.instance);
+            });
+
+    },[path])
+
+    const doLogIn = async (username,password) => {
+
+            API_User.login(username,password).then((token)=>{
+                setJwtToken(token);
+                setLoggedIn(true);
+                API_Profile.getProfile(username).then((loggedUser)=>{
+                    setUser(loggedUser);
+                    if(path=='/login')
+                        navigate('/');
+                }).catch((err)=>{
+                    setErrorMsg(err.detail)
+                    setJwtToken('');
+                    setUser('');
+                    setLoggedIn(false);
+                    setSignedUp(false);
+                    navigate("login");
+                });
+
+            })
+                .catch((err)=>{
+                    setErrorMsg(err.detail)
+                    navigate("login");
+            })
+
+
+
+    }
+
+    const doLogout = () => {
+        setJwtToken('');
+        setUser('');
+        setLoggedIn(false);
+        setSignedUp(false);
+    }
+
+    const doSignup = async (username,email,password) => {  //fa anche il login per l'user appena creato
+        try {
+            await API_User.signup(username,email,password);
+            setSignedUp(true);
+            await doLogIn(username,password);
+        }
+        catch (err) {
+            throw err; // error handled in SignupForm
+        }
+    }
+
+    const createExpert = async (username,email,password,jwtToken) => { //questa crea soltanto
+        try {
+            await API_User.createExpert(username,email,password,jwtToken);
+            setSignedUp(true);
+        }
+        catch (err) {
+            throw err; // error handled in SignupForm
+        }
+    }
+
+
+    switch (path){
+        case '':
+        case '/':
+        case '/list-products':
+            if(errorMsg!=="")
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">{errorMsg}</div></>)
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><ShowProductsTable listOfProducts={listOfProducts}></ShowProductsTable></div></>)
+        case '/get-product':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProductForm getProduct={API_Products.getProduct}></SingleProductForm></div></>);
+        case '/get-profile-by-mail':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProfileForm getProfile={API_Profile.getProfile}></SingleProfileForm></div></>);
+        case '/add-profile':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddProfileForm addProfile={API_Profile.addProfile}></AddProfileForm></div></>);
+        case '/update-profile':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);
+        case '/login':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><LoginForm login={doLogIn} loggedIn={loggedIn} logout={doLogout} errorMsg={errorMsg} setErrorMsg={setErrorMsg} isLoggedIn={loggedIn}></LoginForm></div></>);
+        case '/signup':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp}></SignupForm></div></>);
+        case '/createExpert':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
+
+        default:
+            return <h1>Path not found</h1>
+    }
 }
 
 export default App;

@@ -13,7 +13,9 @@
     "bootstrap": "^5.2.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
+    "react-bootstrap-icons": "^1.10.3",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.9",
     "web-vitals": "^2.1.4"
@@ -46,5 +48,5 @@
   "main": "index.js",
   "author": "",
   "license": "ISC",
-  "proxy": "http://localhost:8080"
+  "proxy": "http://localhost:8081"
 }
