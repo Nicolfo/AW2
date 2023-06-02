@@ -1,4 +1,4 @@
-# WA2 - LAB4 -G33
+# WA2 - LAB5 -G33
 We have created a docker image starting from the base image of keycloak containing
 our security configuration.
 Three users are already present in the realm "AW2-Auth-Realm"
