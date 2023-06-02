@@ -37,10 +37,6 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{
         val url = "http://${ip}:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
-        println("url "+url+" username "+userDTO.username+" password "+userDTO.password)
-
-        //con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-
 
         val bodyMap=mapOf(
             "grant_type" to "password",
@@ -104,7 +100,7 @@ class SecurityController (private val userService: UserService,private val profi
 
                 throw UsernameAlreadyExistException("Username already exists, cannot create")
             }
-            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
+            else throw RuntimeException("User was not created")
         }
         else {
 

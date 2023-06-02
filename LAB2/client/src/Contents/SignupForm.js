@@ -13,9 +13,6 @@ function SignupForm(props){
     const [errorMsg,setErrorMsg]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
-
-        // eventualmente aggiungere qui validation dell'input
-
         let funToCall = props.signup? props.signup : props.createExpert
         funToCall(username,email,password)
             .catch((err) => {
@@ -61,6 +58,7 @@ function SignupForm(props){
             <p> -> Go back to
                 <Link to="/"> <b>HomePage</b>  </Link>
             </p>
+
         </>
 
 }

@@ -8,6 +8,7 @@ import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.RoleRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import javax.ws.rs.core.Response
 
@@ -18,20 +19,7 @@ class UserService(
     @Value("\${keycloak.realm}")
     private val realm: String
 ) {
-    /*
-    fun findAll(): List<UserRepresentation> =
-        keycloak
-            .realm(realm)
-            .users()
-            .list()
 
-    fun findById(id: String): UserRepresentation =
-        keycloak
-            .realm(realm)
-            .users()
-            .get(id)
-            .toRepresentation()
-    */
     fun findByUsername(username: String): List<UserRepresentation> =
         keycloak
             .realm(realm)
@@ -47,7 +35,7 @@ class UserService(
     fun assignRoleWithUsername(username: String, roleRepresentation: RoleRepresentation) {
         var resultSearch= findByUsername(username)
         if (resultSearch.isEmpty()){
-            //throw exception
+            throw UsernameNotFoundException("Cannot find the username")
         }
         val user=resultSearch.first()
         keycloak

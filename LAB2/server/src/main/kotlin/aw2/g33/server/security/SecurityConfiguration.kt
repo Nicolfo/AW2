@@ -26,16 +26,9 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
 
         http.cors().and()
             .authorizeHttpRequests()
-            .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
+            .requestMatchers("/user/validate/").permitAll()
             .requestMatchers("/user/signup").anonymous()
             .requestMatchers("/user/createExpert").hasRole("Manager")
-            //.requestMatchers("/user/get_info").permitAll()
-            //.requestMatchers("/API/ticket/start/**").hasAuthority("ROLE_Manager")
-            //.requestMatchers("/API/ticket/stop/**").authenticated(dpo)
-
-//            .requestMatchers("/API/ticket/close/**").hasAuthority("ROLE_Manager")
-//            .requestMatchers("/API/ticket/resolve/**").hasAuthority("ROLE_Manager")
-//            .requestMatchers("/API/ticket/reopen/**").hasAuthority("ROLE_Manager")
             .anyRequest().permitAll()
             .and()
             .oauth2ResourceServer()

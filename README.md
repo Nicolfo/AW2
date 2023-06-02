@@ -56,3 +56,6 @@ These are the user api we used to provide the login, signup and createExpert // 
 * POST user/validate/ need a userDTO and provide a jwt token that can be used to authenticate to the services
 * POST user/signup need a userDTO and create a entry in the profile table of postgres and register the user to the keycloak server
 * POST user/createExpert need a userDTO and a manager level user, create an expert in the profile table of postgres and in the keycloak server
+
+# Graphana
+We have created a dashboard that can be found in port 3000 menu->dashboard->general->Spring Boot Observability
