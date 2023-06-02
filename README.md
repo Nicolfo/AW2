@@ -7,8 +7,7 @@ Three users are already present in the realm "AW2-Auth-Realm"
 * u3 with role customer and password="password"
 
 
-Since the postgres database is empty, profiles must be added (only inside the profile table)
-one by one in the frontend by compiling the addProfile form
+These users are added on the postgres database only after their login, so using the GetProfile by Name and update profile cannot be used on them until they log in. The product are not loaded into the postgres database.
 
 The port in which each service is exposed are:
 * keycloak server port 8080
