@@ -110,6 +110,7 @@ function Content(){
                     setUser(loggedUser);
                     if(path=='/login' ||path=='/signup')
                         navigate('/');
+
                 }).catch((err)=>{
                     setErrorMsg(err.detail)
                     setJwtToken('');
@@ -185,10 +186,10 @@ function Content(){
         case '/signup':
             if(loggedIn)
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You are already logged in!</div></>)
-            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp}></SignupForm></div></>);
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp} createExp={false}></SignupForm></div></>);
         case '/createExpert':
             if(user!=null && user.role==="Manager" )
-                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp} createExp={true} setSignedUp={setSignedUp}></SignupForm></div></>);
             else
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)
 

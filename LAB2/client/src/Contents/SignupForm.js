@@ -11,6 +11,9 @@ function SignupForm(props){
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const [errorMsg,setErrorMsg]=useState("");
+    const insertAnother=()=>{
+        props.setSignedUp(false);
+    }
     const handleSubmit=(event)=>{
         event.preventDefault();
 
@@ -31,7 +34,8 @@ function SignupForm(props){
             </Button>
         </>
     }
-    if(props.signedUp===false)
+
+    if(props.signedUp===false )
         return  <>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3 col-5" controlId="formBasicEmail">
@@ -57,6 +61,12 @@ function SignupForm(props){
             </Form>
         </>
     else
+        if(props.createExp)
+            return <><div className="col-12 text-break"> New user correctly registered!</div>
+                <Button variant="primary" type="submit" onClick={()=>{insertAnother();}}>
+                    Insert another
+                </Button>
+            </>
         return <><div className="col-12 text-break"> New user correctly registered!</div>
             <p> -> Go back to
                 <Link to="/"> <b>HomePage</b>  </Link>
