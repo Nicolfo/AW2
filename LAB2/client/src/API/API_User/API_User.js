@@ -28,29 +28,33 @@ async function signup(username,email,password){
         response = await fetch(url +"user/signup", {
             method: 'POST',
             headers : { 'Content-Type' : 'application/json'},
-            body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),
+            body: JSON.stringify({ "username" : username, "email" :email, "password" :password})
         });
-        response = await response.json();
+
     }catch (e) {
         throw {status:404,detail:"Cannot communicate with server",instance:'/user/signup'}
     }
 
-    if(response.ok)
+    if(response.ok){
         return true;
+    }
+
     else
         throw response;
 }
 
 async function createExpert(username,email,password,jwt){
     let response = false;
-
+    console.log(jwt);
     try{
         response = await fetch(url+"user/createExpert", {
             method: 'POST',
-            headers : { 'Content-Type' : 'application/json', 'Authentication': `Bearer ${jwt}}`},
-            body: JSON.stringify({ "username" : username, "email" :email, "password" :password}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`
+            },
+            body: JSON.stringify({ "username" : username, "email" :email, "password" :password})
         });
-        response = await response.json();
     }catch (e) {
         throw {status:404,detail:"Cannot communicate with server",instance:"user/createExpert"}
     }

@@ -63,9 +63,9 @@ class SecurityController (private val userService: UserService,private val profi
     }
 
     @PostMapping("/user/signup")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
+    fun userSignup(@RequestBody userDTO: UserDTO){
 
         val response = userService.create(userDTO)
 
@@ -81,7 +81,7 @@ class SecurityController (private val userService: UserService,private val profi
             val role = userService.findRoleByName("Client")
             userService.assignRoleWithUsername(userDTO.username, role)
             val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
-            return ResponseEntity.created(response.location).build()
+
         }
 
     }
@@ -90,6 +90,7 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('ROLE_Manager')") 
     @Transactional
+    @CrossOrigin
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
         println("richiesta ricevuta")
         val response = userService.create(userDTO)
