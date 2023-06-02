@@ -1,6 +1,7 @@
 package aw2.g33.server.security
 
 
+import aw2.g33.server.profiles.PrimaryKeyNotFoundException
 import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
 import io.micrometer.observation.annotation.Observed
@@ -37,10 +38,6 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.OK)
     fun userValidate(@RequestBody userDTO: UserDTO):String{
         val url = "http://${ip}:8080/realms/AW2-Auth-Realm/protocol/openid-connect/token"
-        println("url "+url+" username "+userDTO.username+" password "+userDTO.password)
-
-        //con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-
 
         val bodyMap=mapOf(
             "grant_type" to "password",
@@ -60,6 +57,13 @@ class SecurityController (private val userService: UserService,private val profi
         if(!response.body().contains("access_token")){
             throw WrongCredentialsExceptions("Cannot log in, username or password incorrect")
         }
+        try{
+            profileService.getProfileInfo(userDTO.username)
+        }
+            catch(ex:PrimaryKeyNotFoundException){
+                var profileinfo=userService.findByUsername(userDTO.username).first()
+                profileService.addProfile(ProfileDTO(profileinfo.email,profileinfo.username,userService.getRoleById(profileinfo.id).find { it=="Expert" || it=="Client" || it=="Manager" }.toString()))
+            }
         return response.body()
 
     }
@@ -104,7 +108,7 @@ class SecurityController (private val userService: UserService,private val profi
 
                 throw UsernameAlreadyExistException("Username already exists, cannot create")
             }
-            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
+            else throw RuntimeException("User was not created")
         }
         else {
 

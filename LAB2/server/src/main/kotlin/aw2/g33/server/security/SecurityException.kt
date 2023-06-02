@@ -12,14 +12,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class SecurityException: ResponseEntityExceptionHandler() {
     @ExceptionHandler(WrongCredentialsExceptions::class)
     fun handleWrongCredentialsExceptions(e: WrongCredentialsExceptions) = ProblemDetail
-        .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+        .forStatusAndDetail(HttpStatus.UNAUTHORIZED,  e.message!! )
     @ExceptionHandler(UsernameAlreadyExistException::class)
     fun handleUsernameAlreadyExist(e: UsernameAlreadyExistException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.CONFLICT,  e.message!! )
+
+    @ExceptionHandler(CannotFindUsernameException::class)
+    fun handleCannotFindUsernameException(e: CannotFindUsernameException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.NOT_FOUND,  e.message!! )
 
 }
 
 class WrongCredentialsExceptions(message: String?) : Throwable(message)
 class UsernameAlreadyExistException(message: String?) : Throwable(message)
+
+class CannotFindUsernameException(message:String?): Throwable(message)
 
 
