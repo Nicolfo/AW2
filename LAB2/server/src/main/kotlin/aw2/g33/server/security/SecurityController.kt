@@ -1,6 +1,7 @@
 package aw2.g33.server.security
 
 
+import aw2.g33.server.profiles.PrimaryKeyNotFoundException
 import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
 import io.micrometer.observation.annotation.Observed
@@ -56,6 +57,13 @@ class SecurityController (private val userService: UserService,private val profi
         if(!response.body().contains("access_token")){
             throw WrongCredentialsExceptions("Cannot log in, username or password incorrect")
         }
+        try{
+            profileService.getProfileInfo(userDTO.username)
+        }
+            catch(ex:PrimaryKeyNotFoundException){
+                var profileinfo=userService.findByUsername(userDTO.username).first()
+                profileService.addProfile(ProfileDTO(profileinfo.email,profileinfo.username,userService.getRoleById(profileinfo.id).find { it=="Expert" || it=="Client" || it=="Manager" }.toString()))
+            }
         return response.body()
 
     }

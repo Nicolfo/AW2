@@ -32,6 +32,22 @@ class UserService(
             .get(roleName)
             .toRepresentation()
 
+    fun getRoleById(id:String): List<String> {
+
+
+
+        return keycloak
+            .realm(realm)
+            .users()
+            .get(id)
+            .roles()
+            .realmLevel()
+            .listAll()
+            .map { it.toString() }
+    }
+
+
+
     fun assignRoleWithUsername(username: String, roleRepresentation: RoleRepresentation) {
         var resultSearch= findByUsername(username)
         if (resultSearch.isEmpty()){
