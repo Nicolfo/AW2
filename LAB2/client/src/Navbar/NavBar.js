@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {Dropdown} from "react-bootstrap";
 import { PersonCircle } from 'react-bootstrap-icons';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import {useState} from "react";
 
@@ -13,7 +13,7 @@ function NavBar(props) {
     const {user, loggedIn, logout,login} = props;
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
-
+    const navigate=useNavigate();
     const handleLogoutClick = (event) => {
         event.preventDefault();
         setUsername("");
@@ -72,7 +72,8 @@ function NavBar(props) {
                         <form className="d-flex" style={{marginRight: "15px"}} >
                             <input className="form-control me-2" type="text" placeholder="Username" value={username} onChange={ev => setUsername(ev.target.value)}/>
                             <input className="form-control me-2" type="password" placeholder="Password" value={password} onChange={ev => setPassword(ev.target.value)}/>
-                            <Button type="submit" className="btn btn-warning" onClick={handleLoginClick}>SingIn</Button>
+                            <Button type="submit" className="btn btn-warning me-2" onClick={handleLoginClick}>SignIn</Button>
+                            <Button className="mr-2 btn btn-warning" onClick={()=>{navigate("/signup")}}>SignUp</Button>
                         </form>
 
                     }

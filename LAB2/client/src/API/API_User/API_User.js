@@ -45,7 +45,6 @@ async function signup(username,email,password){
 
 async function createExpert(username,email,password,jwt){
     let response = false;
-    console.log(jwt);
     try{
         response = await fetch(url+"user/createExpert", {
             method: 'POST',

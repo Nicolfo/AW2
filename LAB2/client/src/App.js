@@ -60,13 +60,51 @@ function Content(){
                 setErrorMsg("Error " + err.status + " " + err.detail + " on API call " + err.instance);
             });
 
+
+
+
     },[path])
+    useEffect(()=>{
+        if(jwtToken!==""){
+            localStorage.setItem("jwt", jwtToken)
+        }
+
+        else {
+            const jwt=localStorage.getItem("jwt");
+            if(jwt!==null){
+                setJwtToken(jwt);
+                setLoggedIn(true);
+            }
+
+        }
+        if(user!==""){
+            localStorage.setItem("username",user.username);
+        }else{
+            const username=localStorage.getItem("username");
+            if(username!==null){
+                API_Profile.getProfile(username).then((loggedUser)=>{
+                    setUser(loggedUser);
+                    if(path=='/login')
+                        navigate('/');
+                }).catch((err)=>{
+                    setErrorMsg(err.detail)
+                    setJwtToken('');
+                    setUser('');
+                    setLoggedIn(false);
+                    setSignedUp(false);
+                    navigate("login");
+                });
+            }
+        }
+
+
+    },[jwtToken,user,loggedIn])
+
 
     const doLogIn = async (username,password) => {
 
             API_User.login(username,password).then((token)=>{
                 setJwtToken(token);
-                console.log(token)
                 setLoggedIn(true);
                 API_Profile.getProfile(username).then((loggedUser)=>{
                     setUser(loggedUser);
@@ -92,6 +130,8 @@ function Content(){
     }
 
     const doLogout = () => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("jwt")
         setJwtToken('');
         setUser('');
         setLoggedIn(false);
@@ -137,11 +177,18 @@ function Content(){
         case '/update-profile':
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);
         case '/login':
+            if(loggedIn)
+                return (<>You are already logged in!</>)
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><LoginForm login={doLogIn} loggedIn={loggedIn} logout={doLogout} errorMsg={errorMsg} setErrorMsg={setErrorMsg} isLoggedIn={loggedIn}></LoginForm></div></>);
         case '/signup':
+            if(loggedIn)
+                return (<>You are already logged in!</>)
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp}></SignupForm></div></>);
         case '/createExpert':
-            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
+            if(user!=null && user.role==="Manager" )
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp}></SignupForm></div></>);
+            else
+                return (<>You have to be a logged in manager to use that function</>)
 
         default:
             return <h1>Path not found</h1>
