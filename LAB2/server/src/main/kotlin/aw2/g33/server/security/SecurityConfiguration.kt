@@ -24,7 +24,8 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
         http.csrf().disable()
             .formLogin().disable()
 
-        http.authorizeHttpRequests()
+        http.cors().and()
+            .authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()//mettere url da garantire a tutti
             .requestMatchers("/user/signup").anonymous()
             .requestMatchers("/user/createExpert").hasRole("Manager")
