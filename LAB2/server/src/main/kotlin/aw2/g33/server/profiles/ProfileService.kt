@@ -5,4 +5,5 @@ interface ProfileService {
     fun removeProfile(username: String)
     fun getProfileInfo(username:String):ProfileDTO
     fun updateProfile(username: String,profile: ProfileDTO):ProfileDTO
+    fun getAllProfiles(): List<ProfileDTO>
 }

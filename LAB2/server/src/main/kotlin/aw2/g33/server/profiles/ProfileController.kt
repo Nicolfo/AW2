@@ -1,7 +1,9 @@
 package aw2.g33.server.profiles
 
+import aw2.g33.server.security.UserService
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -21,22 +23,23 @@ class ProfileController(private val profileService: ProfileService) {
     }
 
     @GetMapping("/API/profiles/")
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun getProfileWithNoParam(){
-        throw RequestParamException("GET request at /API/profiles/ must include a username as param")
+    @ResponseStatus(HttpStatus.OK)
+    fun getProfileWithNoParam():List<ProfileDTO>{
+        return profileService.getAllProfiles()
     }
 
 
-    @PostMapping("/API/profiles/")
+ /*   @PostMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.CREATED)
     fun insertProfile(@RequestBody profileToAdd:ProfileDTO): ProfileDTO {
         if( profileToAdd.username==""|| profileToAdd.role==""){
             throw RequestBodyException("username and role field cannot be empty!")
         }
+
         return profileService.addProfile(profileToAdd)
     }
-
-    @PutMapping("/API/profiles/{username}")
+*/
+    /*@PutMapping("/API/profiles/{username}")
     @ResponseStatus(HttpStatus.OK)
     fun updateProfile(@PathVariable username:String,@RequestBody profileToUpdate:ProfileDTO): ProfileDTO {
 
@@ -44,11 +47,11 @@ class ProfileController(private val profileService: ProfileService) {
             throw RequestBodyException("role and usernmae field cannot be empty!")
         }
         return profileService.updateProfile(username,profileToUpdate)
-    }
-    @PutMapping("/API/profiles/")
+    }*/
+    /*@PutMapping("/API/profiles/")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun updateProfileWithNoParam(){
         throw RequestParamException("PUT request at /API/profiles/ must include an username as param")
-    }
+    }*/
 
 }

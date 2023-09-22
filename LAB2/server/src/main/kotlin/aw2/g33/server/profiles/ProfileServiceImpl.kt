@@ -44,4 +44,8 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository):Profi
         return profile;
     }
 
+    override fun getAllProfiles() : List<ProfileDTO>{
+        return profileRepository.findAll().map { it.toDTO() }
+    }
+
 }

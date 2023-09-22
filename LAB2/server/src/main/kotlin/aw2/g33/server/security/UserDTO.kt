@@ -1,10 +1,12 @@
 package aw2.g33.server.security
 
-data class UserDTO(
+import aw2.g33.server.profiles.ProfileDTO
+
+data class UserDTO (
     val email:String?,
     val username:String,
     val password:String
-) {
+){
     override fun toString():String{
         val email:String;
         if(this.email!=null)

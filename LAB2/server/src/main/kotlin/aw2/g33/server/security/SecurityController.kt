@@ -6,6 +6,7 @@ import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
 import io.micrometer.observation.annotation.Observed
 import jakarta.transaction.Transactional
+import org.keycloak.jose.jwk.JWK.Use
 import org.keycloak.representations.idm.CredentialRepresentation
 import org.keycloak.representations.idm.UserRepresentation
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +26,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse.BodyHandlers
 import java.security.Principal
 import java.util.stream.Collectors
+import javax.management.relation.Role
 
 
 @RestController
@@ -72,23 +74,7 @@ class SecurityController (private val userService: UserService,private val profi
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     fun userSignup(@RequestBody userDTO: UserDTO): ResponseEntity<URI>{
-        val role = userService.findRoleByName("Client")
-        val profile = profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
-
-        val response = userService.create(userDTO)
-
-        if (response.status != 201) {
-            profileService.removeProfile(userDTO.username)
-            if (response.status == 409) {
-                throw UsernameAlreadyExistException("Username already exists, cannot create")
-            }
-            else throw RuntimeException("User was not created") //o altre eccezioni specifiche
-        }
-        else {
-            userService.assignRoleWithUsername(userDTO.username, role)
-
-            return ResponseEntity.created(response.location).build()
-        }
+       return userCreationByDTOAndRole(userDTO,"Client")
 
     }
 
@@ -97,8 +83,39 @@ class SecurityController (private val userService: UserService,private val profi
     @PreAuthorize("hasAuthority('ROLE_Manager')") 
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
-        val role = userService.findRoleByName("Expert")
-        profileService.addProfile(ProfileDTO(userDTO.email,userDTO.username,role.name))
+        return userCreationByDTOAndRole(userDTO,"Expert")
+    }
+    @PostMapping("/user/createUser")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_Manager')")
+    @Transactional
+    fun createUser(@RequestBody userDTO: UserDTO,roleName: String): ResponseEntity<URI> {
+
+       return userCreationByDTOAndRole(userDTO,roleName)
+
+    }
+    @PostMapping("/user/updateUser/")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_Manager')")
+    @Transactional
+    fun updateUser(@RequestBody userDTO: UserDTO,usernameOld:String, rolename: String):UserDTO{      //da vedere se è corretto, non mi piace return value
+        val role = userService.findRoleByName(rolename)
+        val profile=ProfileDTO(userDTO.email,userDTO.username,rolename)
+
+        try {
+            userService.updateUser(usernameOld,userDTO,rolename)
+            profileService.updateProfile(usernameOld, profile)
+        }
+        catch (err:Error){
+             throw RuntimeException("User was not updated");
+        }
+        return userDTO;
+
+    }
+
+    private fun userCreationByDTOAndRole(userDTO: UserDTO,roleName:String) :ResponseEntity<URI> {
+        val role = userService.findRoleByName(roleName)
+        profileService.addProfile(ProfileDTO(userDTO.email, userDTO.username, role.name))
 
         val response = userService.create(userDTO)
 
@@ -107,18 +124,12 @@ class SecurityController (private val userService: UserService,private val profi
             if (response.status == 409) {
 
                 throw UsernameAlreadyExistException("Username already exists, cannot create")
-            }
-            else throw RuntimeException("User was not created")
-        }
-        else {
+            } else throw RuntimeException("User was not created")
+        } else {
 
             userService.assignRoleWithUsername(userDTO.username, role)
 
             return ResponseEntity.created(response.location).build()
         }
-
     }
-
-
-
 }

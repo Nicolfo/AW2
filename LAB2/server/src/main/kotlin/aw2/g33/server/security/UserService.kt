@@ -34,8 +34,6 @@ class UserService(
 
     fun getRoleById(id:String): List<String> {
 
-
-
         return keycloak
             .realm(realm)
             .users()
@@ -53,7 +51,9 @@ class UserService(
         if (resultSearch.isEmpty()){
             throw UsernameNotFoundException("Cannot find the username")
         }
+
         val user=resultSearch.first()
+
         keycloak
             .realm(realm)
             .users()
@@ -63,7 +63,39 @@ class UserService(
             .add(listOf(roleRepresentation))
     }
 
+    fun updateUser(usernameOld:String,userDTO: UserDTO, roleName: String) {         //da vedere
+        var resultSearch= findByUsername(usernameOld)
+        if (resultSearch.isEmpty()){
+            throw UsernameNotFoundException("Cannot find the username")
+        }
+        val role = findRoleByName(roleName);
+        val user=resultSearch.first()
 
+        keycloak
+            .realm(realm)
+            .users()
+            .get(user.id)
+            .update(prepareUserRepresentation(userDTO, preparePasswordRepresentation(userDTO.password)));
+
+        keycloak
+            .realm(realm)
+            .users()
+            .get(user.id)
+            .roles()
+            .realmLevel()
+            .listAll()
+            .clear()
+        keycloak
+            .realm(realm)
+            .users()
+            .get(user.id)
+            .roles()
+            .realmLevel()
+            .add(listOf(findRoleByName(roleName)))
+
+    }
+
+    
 
 
     fun create(request: UserDTO): Response {
