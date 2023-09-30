@@ -11,11 +11,11 @@ class Message (
     @ManyToOne
     @JoinColumn(name = "ticketId", referencedColumnName = "ticketId")
     val ticket: Ticket? = null,
-    val text:String="",
+    val content:String="",
     @OneToOne
     @JoinColumn(name = "writer_username", referencedColumnName = "username")
-    val writer: Profile? = null,
-    val numberOfAttachment:Int
+    val sender: Profile? = null,
+    val type:String,
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,5 +24,14 @@ class Message (
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "message")
     val attachments = mutableListOf<Attachment>()
 
+    fun getContent():String{
+        return content;
+    }
+    fun getSender():Profile?{
+        return sender;
+    }
+    fun getType():String{
+        return type;
+    }
 
 }
