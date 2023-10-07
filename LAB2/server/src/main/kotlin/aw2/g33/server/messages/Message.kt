@@ -21,17 +21,10 @@ class Message (
     @GeneratedValue(strategy = GenerationType.AUTO)
     var messageId:Long?=null
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "message")
+    @OneToMany(fetch = FetchType.LAZY)
     val attachments = mutableListOf<Attachment>()
 
-    fun getContent():String{
-        return content;
-    }
-    fun getSender():Profile?{
-        return sender;
-    }
-    fun getType():String{
-        return type;
-    }
+
+
 
 }

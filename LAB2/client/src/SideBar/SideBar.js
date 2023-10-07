@@ -11,6 +11,11 @@ return (
                 <aside>
                     <ul className="nav nav-pills flex-column mb-auto nav-fill ">
                         <li className="nav-item">
+                            <button className={path==='/chat' ? "nav-link active link-light text-start":"nav-link link-dark text-start"} onClick={()=>{navigate('/chat')}} >
+                                Test Chat
+                            </button>
+                        </li>
+                        <li className="nav-item">
                             <button className={path==='/list-products' || path==='/' ? "nav-link active link-light text-start":"nav-link link-dark text-start"} onClick={()=>{navigate('/list-products')}} >
                                 List All Products
                             </button>

@@ -16,37 +16,31 @@ import java.util.UUID
 class MessageWebSocketController (var messagingTemplate: SimpMessagingTemplate, var messageService: MessageService,var ticketService: TicketService){
     //var oldMessages:MutableMap<String,MutableList<Message>> = hashMapOf()
 
-    @MessageMapping("/chat.register/{chatId}")
-    @SendTo("/topic/{chatId}")
+    @MessageMapping("/chat.register/{ticketID}")
+    @SendTo("/topic/{ticketID}")
     fun register(@DestinationVariable ticketID:UUID, @Payload messageDTO: MessageDTO, headerAccessor: SimpMessageHeaderAccessor): MessageDTO? {
-        headerAccessor.sessionAttributes!!["username"] = messageDTO.getSender()
+        //headerAccessor.sessionAttributes!!["username"] = messageDTO.sender
         //controllare se username matcha il logged in user e se l'user può far parte della chat (appartiene al ticket)
         //controllare se ticket esiste
 
-        println("Register/Cancel of ${messageDTO.getSender()}, with message ${messageDTO.getType()}")
-        messageService.sendMessage(ticketID,messageDTO)
-        return messageDTO;
+        println("Register/Cancel of ${messageDTO.sender}, with message ${messageDTO.type}")
+
+        if(messageService.sendMessage(ticketID,messageDTO)!==null) {
+            return messageDTO;
+        }else{
+            return MessageDTO("Error cannot register to this chat!","SYSTEM",MessageDTO.MessageType.ERROR,listOf());
+        }
     }
 
-    @MessageMapping("/chat.send/{chatId}")
-    @SendTo("/topic/{chatId}")
+    @MessageMapping("/chat.send/{ticketID}")
+    @SendTo("/topic/{ticketID}")
     fun sendMessage(@DestinationVariable ticketID:UUID,@Payload messageDTO: MessageDTO ): MessageDTO? {
 
-        messageService.sendMessage(ticketID,messageDTO)
-        //save old messages to DB
+           if( messageService.sendMessage(ticketID,messageDTO)!=null){
+               return messageDTO
+           }
+        return MessageDTO("Error cannot register to this chat!","SYSTEM",MessageDTO.MessageType.ERROR,listOf());
 
-
-        return messageDTO
     }
-
-
-    /*@MessageMapping("/chat.old/{chatId}")
-
-    fun getOldMessages(@DestinationVariable chatId:String,@Payload chatMessage:ChatMessage?){
-        println("Message received")
-        oldMessages[chatId]?.forEach { chatMessage -> messagingTemplate.convertAndSend("/topic/$chatId", chatMessage) }
-
-    }*/
-
 
 }

@@ -7,7 +7,7 @@ import java.util.UUID
 
 
 interface MessageService {
-    fun sendMessage(ticketDTO: UUID,messageDTO: MessageDTO):Message
+    fun sendMessage(ticketDTO: UUID,messageDTO: MessageDTO): Message?
     fun receiveAllMessagesByTicket(ticketDTO: UUID):List<MessageDTO>
 
 }

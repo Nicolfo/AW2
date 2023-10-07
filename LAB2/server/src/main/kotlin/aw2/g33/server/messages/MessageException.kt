@@ -22,8 +22,14 @@ class MessageException : ResponseEntityExceptionHandler(){
     fun handleEmptyChatException(e:EmptyChatException) = ProblemDetail
         .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
 
+    @ExceptionHandler(TicketIDNotFoundException::class)
+    fun handleEmptyChatException(e:TicketIDNotFoundException) = ProblemDetail
+        .forStatusAndDetail(HttpStatus.NOT_FOUND,  e.message!! )
+
+
 }
 class TicketStatusError(message: String?) : Throwable(message)
 class MessageParamException(message:String?):Throwable(message)
 class MessageBodyException(message: String?) : Throwable(message)
 class EmptyChatException(message: String?) : Throwable(message)
+class TicketIDNotFoundException(message: String?) : Throwable(message)

@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import Form from "react-bootstrap/Form";
-import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {Button, Col, Container, FormControl, InputGroup, Row} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.css';
@@ -23,7 +22,7 @@ function Chat() {
         if (userName && userName.length > 0) {
             setStompClient((client) => {
                 client.beforeConnect=getOldMessages;
-                client.brokerURL = "ws://localhost:8080/websocket"
+                client.brokerURL = "ws://localhost:8081/websocket"
                 client.onConnect = onConnected;
                 client.onStompError = onError;
                 console.log("starting connection")
@@ -92,7 +91,7 @@ function Chat() {
         let respJson;
         let response;
         try {
-            response = await fetch("http://127.0.0.1:8080/uploadFile", {
+            response = await fetch("http://127.0.0.1:8081/uploadFile", {
                 method: "PUT",
                 body: formData,
             });
@@ -127,7 +126,7 @@ function Chat() {
 
 
     async function getOldMessages() {
-        let response = await fetch("http://127.0.0.1:8080/chat.old/" + chatId);
+        let response = await fetch("http://127.0.0.1:8081/API/Message/" + chatId);
         try{
             if(response.data!=='' && response.ok){
 
@@ -178,17 +177,17 @@ function Chat() {
                             className="card-header d-flex justify-content-between align-items-center p-3"
                             style={{borderTop: "4px solid #ffa900"}}
                         >
-                            <h5 className="mb-0">Chat ID {chatId}</h5>
+                            <div className="mb-0">Chat ID {chatId}</div>
 
                         </div>
                         <div className="card-body overflow-auto scrollbar" style={{position: "relative", height: 400}}>
 
 
-                            {messages.map((elem) => {
+                            {messages.map((elem,key) => {
                                 if (elem.type === 'CHAT')
                                     if (elem.sender !== old || old == null) {
                                         old = elem.sender;
-                                        return <>
+                                        return <div key={key}>
                                             <div className={elem.sender!==userName?"d-flex justify-content-between":"d-flex justify-content-end pt-1"}>
                                                 <p className="small mb-1">{elem.sender}</p>
                                             </div>
@@ -199,7 +198,7 @@ function Chat() {
                                                          style={{backgroundColor: "#f5f6f7"}}>
                                                         {elem.content}
                                                         <div style={{fontSize:"0.6rem"}}>{elem.files.map((it)=>{
-                                                            return <a href={"http://127.0.0.1:8080/getFile/"+it.id} download>{it.fileName} </a>
+                                                            return <a href={"http://127.0.0.1:8081/getFile/"+it.id} download>{it.fileName} </a>
                                                         })
                                                         }</div>
                                                     </div>
@@ -207,24 +206,24 @@ function Chat() {
                                                 </div>
 
                                             </div>
-                                        </>;
+                                        </div>;
                                     } else
-                                        return <>
+                                        return <div key={key}>
                                             <div className={elem.sender!==userName?"d-flex flex-row justify-content-start":"d-flex flex-row justify-content-end pt-1"}>
                                                 <div>
                                                     <div className={elem.sender!==userName?"small p-2 ms-3 mb-3 rounded-3":"small p-2 me-3 mb-3 text-white rounded-3 bg-warning"}
                                                          style={{backgroundColor: "#f5f6f7"}}>
                                                         {elem.content}
                                                         <div style={{fontSize:"0.6rem"}}>{elem.files.map((it)=>{
-                                                            return <><a href={"http://127.0.0.1:8080/getFile/"+it.id} download>{it.fileName}</a><br/></>
+                                                            return <><a href={"http://127.0.0.1:8081/getFile/"+it.id} download>{it.fileName}</a><br/></>
                                                         })
                                                         }</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </>
+                                        </div>
                                 else
-                                    return <div>{elem.content}</div>
+                                    return <div key={key}>{elem.content}</div>
                             })
                             }
 

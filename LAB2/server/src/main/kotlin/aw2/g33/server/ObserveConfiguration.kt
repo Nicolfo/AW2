@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 
-@Configuration(proxyBeanMethods = false)
+//@Configuration(proxyBeanMethods = false)
 class ObserveConfiguration {
-    @Bean
+   /* @Bean
     fun observedAspect(observationRegistry: ObservationRegistry?): ObservedAspect {
         return ObservedAspect(observationRegistry!!)
-    }
+    }*/
 }

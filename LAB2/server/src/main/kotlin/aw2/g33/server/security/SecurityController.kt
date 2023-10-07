@@ -31,7 +31,7 @@ import javax.management.relation.Role
 
 @RestController
 @CrossOrigin
-@Observed
+//@Observed
 class SecurityController (private val userService: UserService,private val profileService: ProfileService){
     @Value("\${KEYCLOAK_IP}")
     lateinit var ip :String

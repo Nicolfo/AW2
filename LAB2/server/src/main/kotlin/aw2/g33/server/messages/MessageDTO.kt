@@ -12,36 +12,10 @@ class MessageDTO( var content: String? ,
 
 
     enum class MessageType {
-        CHAT, LEAVE, JOIN
+        CHAT, LEAVE, JOIN,ERROR
     }
 
-    fun getContent(): String? {
-        return content
-    }
 
-    fun setContent(content: String?) {
-        this.content = content
-    }
-
-    fun getSender(): String? {
-        return sender
-    }
-
-    fun setSender(sender: String?) {
-        this.sender = sender
-    }
-
-    fun getType(): MessageType? {
-        return type
-    }
-
-    fun setType(type: MessageType?) {
-        this.type = type
-    }
-
-    fun getFiles():List<AttachmentDTO>?{
-        return this.files;
-    }
 
     override fun toString(): String {
         return super.toString() + this.sender + this.content + this.files
@@ -53,6 +27,7 @@ fun Message.toDTO(): MessageDTO {
         "CHAT" -> MessageDTO.MessageType.CHAT
         "LEAVE" -> MessageDTO.MessageType.LEAVE
         "JOIN" ->  MessageDTO.MessageType.JOIN
+        "ERROR" ->  MessageDTO.MessageType.ERROR
         else -> {
             MessageDTO.MessageType.CHAT
         }

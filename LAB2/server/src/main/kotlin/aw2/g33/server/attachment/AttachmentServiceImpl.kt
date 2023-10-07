@@ -13,7 +13,7 @@ import java.util.*
 class AttachmentServiceImpl (var attachmentRepository: AttachmentRepository):AttachmentService{
     override fun addAttachment(file: MultipartFile): AttachmentDTO {
 
-        var toAdd=Attachment(file.bytes,file.contentType!!,file.name)
+        var toAdd=Attachment(file.bytes,file.contentType!!,file.originalFilename!!)
         return attachmentRepository.save(toAdd).toDTO()
 
     }
