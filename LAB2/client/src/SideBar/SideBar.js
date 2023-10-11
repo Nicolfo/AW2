@@ -23,22 +23,41 @@ return (
                                 Get Profile By Username
                             </button>
                         </li>
-                        <li className="nav-item">
-                            <button className={path==='/add-profile' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/add-profile')}}>
-                                Add Profile
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button className={path==='/update-profile' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/update-profile')}}>
-                                Update Profile
-                            </button>
-                        </li>
                         {props.loggedIn && props.user.role==="Manager" ?
+                            <>
                             <li className="nav-item">
-                                <button className={path==='/createExpert' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/createExpert')}}>
-                                    Create Expert
+                                <button className={path==='/createExpert' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/add-profile')}}>
+                                    Add Profile
                                 </button>
                             </li>
+                            <li className="nav-item">
+                                <button className={path==='/update-profile' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/update-profile')}}>
+                                    Update Profile
+                                </button>
+                            </li>
+                            </>
+                            :
+                            <></>
+                        }
+                        {props.loggedIn && (props.user.role==="Manager" || props.user.role=="Client") ?
+                            <>
+                                <li className="nav-item">
+                                    <button className={path==='/add-new-ticket' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}   onClick={()=>{navigate('/add-new-ticket')}}>
+                                        Add {props.user.role==="Manager" ? "Priority and Expert for" : "New"} Ticket
+                                    </button>
+                                </li>
+                            </>
+                            :
+                            <></>
+                        }
+                        {props.loggedIn && (props.user.role==="Manager" || props.user.role=="Client" || props.user.role=="Expert") ?
+                            <>
+                                <li className="nav-item">
+                                    <button className={path==='/display-ticket' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}   onClick={()=>{navigate('/display-ticket')}}>
+                                        List Ticket
+                                    </button>
+                                </li>
+                            </>
                             :
                             <></>
                         }

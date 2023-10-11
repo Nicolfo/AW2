@@ -80,7 +80,7 @@ class SecurityController (private val userService: UserService,private val profi
 
     @PostMapping("/user/createExpert")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ROLE_Manager')") 
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
         return userCreationByDTOAndRole(userDTO,"Expert")
@@ -94,6 +94,15 @@ class SecurityController (private val userService: UserService,private val profi
        return userCreationByDTOAndRole(userDTO,roleName)
 
     }
+
+    @GetMapping("/user/getUsersByRole")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
+    @Transactional
+    fun getUsersByRole(@RequestParam(required = true, defaultValue = "Client") roleName:String):List<UserDTO>{
+        return userService.getListUserByRole(roleName);
+    }
+
     @PostMapping("/user/updateUser/")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('ROLE_Manager')")

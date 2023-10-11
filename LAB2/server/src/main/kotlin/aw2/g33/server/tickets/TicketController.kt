@@ -1,15 +1,15 @@
 package aw2.g33.server.tickets
 
 
-import aw2.g33.server.profiles.ProfileDTO
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.contains
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.http.HttpStatus
-import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @CrossOrigin
@@ -17,7 +17,6 @@ class TicketController(private val ticketService: TicketService) {
 
     @PostMapping("/API/ticket/create")
     @ResponseStatus(HttpStatus.OK)
-
     fun createIssue(@RequestBody description:String):TicketDTO{
         return ticketService.createIssue(description)
     }
@@ -33,9 +32,9 @@ class TicketController(private val ticketService: TicketService) {
     fun resolveIssue(@RequestBody ticket:TicketDTO):TicketDTO{
         return ticketService.resolveIssue(ticket)
     }
-    @PostMapping("/API/ticket/start/{priority}")
+    @PostMapping("/API/ticket/start")
     @ResponseStatus(HttpStatus.OK)
-    fun startProgress(@RequestBody json:ObjectNode, @PathVariable priority:Int):TicketDTO{
+    fun startProgress(@RequestBody json:ObjectNode, @RequestParam(defaultValue = "0") priority:Int):TicketDTO{
          if(!json.contains("ticket")||!json.contains("workerUsername")) {
             throw RequestBodyException("POST request must contain a worker and a ticket field")
         }
@@ -70,6 +69,19 @@ class TicketController(private val ticketService: TicketService) {
     fun reopenIssue(@RequestBody ticket:TicketDTO):TicketDTO{
         return ticketService.reopenIssue(ticket)
     }
+
+    @GetMapping("/API/ticket/getListTicketByStatus")
+    @ResponseStatus(HttpStatus.OK)
+    fun getListTicketByStatus(@RequestParam(defaultValue = "open") status:String):List<TicketDTO>{
+        return ticketService.getListTicketByStatus(status.uppercase(Locale.getDefault()))
+    }
+
+    @GetMapping("/API/ticket/getListTicketByUsername")
+    @ResponseStatus(HttpStatus.OK)
+    fun getListTicketByUsername():List<TicketDTO>{
+        return ticketService.getListTicketByUsername();
+    }
+
 }
 
 
