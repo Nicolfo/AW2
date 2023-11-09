@@ -43,10 +43,11 @@ async function signup(username,email,password){
         throw {status:500,detail:"Internal Server Error",instance:'/user/signup'};
 }
 
-async function createExpert(username,email,password,jwt){
+async function managerCreateUser(username,email,password,role,jwt){
+    console.log(jwt)
     let response = false;
     try{
-        response = await fetch(url+"user/createExpert", {
+        response = await fetch(url+"user/createUser/"+role, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,15 +56,15 @@ async function createExpert(username,email,password,jwt){
             body: JSON.stringify({ "username" : username, "email" :email, "password" :password})
         });
     }catch (e) {
-        throw {status:404,detail:"Cannot communicate with server",instance:"user/createExpert"}
+        throw {status:404,detail:"Cannot communicate with server",instance:"user/createUser"}
     }
 
     if(response.ok)
         return true;
     else
-        throw {status:500,detail:"Internal Server Error",instance:'/user/signup'};
+        throw {status:response.status,detail:"Internal Server Error",instance:'user/createUser'};
 }
 
 
 
-export default {login, signup, createExpert}
+export default {login, signup, managerCreateUser}

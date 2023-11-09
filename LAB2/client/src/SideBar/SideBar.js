@@ -26,15 +26,11 @@ return (
                         {props.loggedIn && props.user.role==="Manager" ?
                             <>
                             <li className="nav-item">
-                                <button className={path==='/createExpert' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/add-profile')}}>
+                                <button className={path==='/add-profile' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/add-profile')}}>
                                     Add Profile
                                 </button>
                             </li>
-                            <li className="nav-item">
-                                <button className={path==='/update-profile' ? "nav-link active link-light text-start":"nav-link link-dark text-start"}  onClick={()=>{navigate('/update-profile')}}>
-                                    Update Profile
-                                </button>
-                            </li>
+
                             </>
                             :
                             <></>
