@@ -25,7 +25,6 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository):Profi
     }
 
     override fun getProfileInfo(username: String): ProfileDTO {
-        println(username);
         return profileRepository.findByIdOrNull(username)?.toDTO() ?: throw PrimaryKeyNotFoundException("username not found in DB")
     }
 

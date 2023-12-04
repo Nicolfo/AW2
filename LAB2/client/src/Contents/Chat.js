@@ -13,15 +13,15 @@ function Chat(props) {
     let [newMessage, setNewMessage] = useState("");
     let [stompClient, setStompClient] = useState(new Client());
     let [files, setFiles] = useState([]);
-    let userName=props.username;
+    let userName=props.user.username;
     let chatId=props.ticketID;
 
     useEffect(() => {
-        console.log("username ="+ props.username);
+        console.log("username ="+ props.user.username);
         console.log("chatId ="+props.ticketID);
 
         try {
-            if(props.username && props.ticketID){
+            if(props.user.username && props.ticketID){
                 connect();
             }
 
@@ -29,7 +29,7 @@ function Chat(props) {
         catch (e) {
             console.error(e)
         }
-    }, [props.username,props.ticketID]);
+    }, [props.user,props.ticketID]);
 
     const connect = () => {
         console.log("connectCalled")
@@ -163,7 +163,21 @@ function Chat(props) {
         if(!isConnected){
             return <>Conencting to chat server</>;
         }
-        return <div className="container">
+
+        return <>
+
+    <div className="container">
+        {props.user.role !== "Client" ? <>
+    <div style={{ display: 'flex', alignItems: 'center', verticalAlign:'bottom'}} >
+            <Form.Label >Set Status to:</Form.Label>
+            <Form.Control as="select" onChange={ev => {}} style={{ marginRight: '5%',width:'15%', marginBottom: '1%' }}>
+            {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
+                <option key={status} value={status}> {status}</option>
+            )}
+        </Form.Control>
+        <Button className="btn btn-warning" onClick={()=>console.log("setNewStatus") }>Set new status</Button>
+    </div>
+            </> : <></>}
             <div className="row d-flex justify-content-center">
                 <div >
                     <div className="card">
@@ -273,7 +287,7 @@ function Chat(props) {
                 </div>
             </div>
         </div>
-
+        </>
 
 
 }

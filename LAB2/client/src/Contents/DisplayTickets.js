@@ -65,7 +65,7 @@ function DisplayTickets(props) {
             }
 
             if(chatDisplayed){
-                return (<><Chat username={currentUser.username} ticketID={ticketIDChat}/></>)
+                return (<><Chat user={currentUser} ticketID={ticketIDChat}/></>)
             }
             else {
 
