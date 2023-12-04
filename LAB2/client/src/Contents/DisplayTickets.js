@@ -5,12 +5,13 @@ import API_Ticket from "../API/API_TICKET/API_Ticket";
 import Slider from "@mui/joy/Slider";
 import Button from '@mui/joy/Button';
 import {Divider} from "@mui/joy";
+import Chat from "./Chat";
 
 function DisplayTickets(props) {
     const [listTicket,setListTicket] = useState([])
     const [listTicketToDisplay,setListTicketToDisplay] = useState([])
     const [currentUser,setCurrentUser] = useState(null);
-    const [ticktIDChat,setTicketIDChat] = useState(null);
+    const [ticketIDChat,setTicketIDChat] = useState(null);
     const [chatDisplayed,setChatDisplayed] = useState(false);
     const [search,setSearch] = useState("")
     const [errorMessage,setErrorMessage] = useState("")
@@ -64,7 +65,7 @@ function DisplayTickets(props) {
             }
 
             if(chatDisplayed){
-                return (<><Chat username={currentUser.username} ticketID={ticktIDChat}/></>)
+                return (<><Chat username={currentUser.username} ticketID={ticketIDChat}/></>)
             }
             else {
 
@@ -259,7 +260,8 @@ function DisplayTickets(props) {
                                             <Button variant="primary" type="submit"
                                                     style={{backgroundColor: "blue", color: "white", width: "30%"}}
                                                     onClick={() => {
-                                                        setTicketIDChat(ticket.id);
+                                                        console.log(ticket.ticketId);
+                                                        setTicketIDChat(ticket.ticketId);
                                                         setChatDisplayed(true)
                                                     }}>CHAT</Button>
                                         </div>

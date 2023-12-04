@@ -9,19 +9,19 @@ import {BsFillFileEarmarkPlusFill,BsFillTrashFill} from "react-icons/bs";
 function Chat(props) {
     let [isConnected,setConnected] = useState(false);
     let [errorMessage, setErrorMessage] = useState("");
-    let [userName, setUserName] = useState("");
-    let [chatId, setChatId] = useState("");
     let [messages, setMessages] = useState([]);
     let [newMessage, setNewMessage] = useState("");
     let [stompClient, setStompClient] = useState(new Client());
     let [files, setFiles] = useState([]);
-
+    let userName=props.username;
+    let chatId=props.ticketID;
 
     useEffect(() => {
+        console.log("username ="+ props.username);
+        console.log("chatId ="+props.ticketID);
+
         try {
             if(props.username && props.ticketID){
-                setUserName(props.username);
-                setChatId(props.ticketID);
                 connect();
             }
 
@@ -32,7 +32,7 @@ function Chat(props) {
     }, [props.username,props.ticketID]);
 
     const connect = () => {
-
+        console.log("connectCalled")
         if (userName && userName.length > 0) {
             setStompClient((client) => {
                 client.beforeConnect=getOldMessages;
