@@ -10,6 +10,8 @@ function DisplayTickets(props) {
     const [listTicket,setListTicket] = useState([])
     const [listTicketToDisplay,setListTicketToDisplay] = useState([])
     const [currentUser,setCurrentUser] = useState(null);
+    const [ticktIDChat,setTicketIDChat] = useState(null);
+    const [chatDisplayed,setChatDisplayed] = useState(false);
     const [search,setSearch] = useState("")
     const [errorMessage,setErrorMessage] = useState("")
     let isLoadingData = false;
@@ -18,6 +20,7 @@ function DisplayTickets(props) {
         try {
                 if(!isLoadingData){
                     isLoadingData = true
+                    setTicketIDChat(false) ;
                     setCurrentUser(props.currentUser)
                     API_Ticket.getTicketByUsername().then(result => {
                         setListTicket(result);
@@ -60,78 +63,212 @@ function DisplayTickets(props) {
                 setListTicketToDisplay(listTicket);
             }
 
-            return (
-                <>
-                    <div style={{width:"100%",height:"100%",overflowY:"scroll", marginTop:"2rem"}}>
-                        <div style={{display:"flex",alignItems:"center",flexDirection:"row",height:"10vh"}}>
-                        <div style={{display:"flex",alignItems:"center",flexDirection:"row",marginRight:"5%", width:"20%"}}>
-                            <Form.Group className="mb-3 col-5" controlId="formBasicEmail" style={{width:"100%"}}>
-                                <Form.Control type="text" placeholder="Search Ticket" onChange={ev=>onChangeSearchBar(ev.target.value)}/>
-                                <Form.Text className="text-muted">
-                                </Form.Text>
-                            </Form.Group>
-                            <SearchIcon style={{position:"relative", right:"30px",bottom:"8px"}} onClick={()=>onChangeSearchBar(search)}/>
-                        </div>
-                        <Form.Control as="select" onChange={ev => {onChangeStatusTicket(ev.target.value)}} style={{width:"15%",height:"30%",marginRight:"5%",marginBottom:"1%"}}>
-                                <option key={"-"}  value={null}>-</option>
-                                {["OPEN","IN PROGRESS","RESOLVED","REOPENED","CLOSED"].map((status,index) =>
-                                    <option key={status} value={status}> {status}</option>
-                                )}
-                        </Form.Control>
-                            <Slider
-                                min={0}
-                                max={5}
-                                marks
-                                style={{width:"15%", marginRight:"5%"}}
-                                size="lg"
-                                onChange={ev => onChangePriorityTicket(ev.target.value)}
-                                valueLabelDisplay="on"
-                                variant="solid"
-                            />
-                            <Button variant="primary" type="submit" style={{backgroundColor:"blue",color:"white",width:"10%",marginBottom:"15px"}} onClick={()=> onResetButtonClicked()}>Reset</Button>
-                        </div>
-                        <Divider style={{height:"3px" ,width:"75%",backgroundColor:"black"}}/>
-                        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",justifyContent:"flex-start",height:"80vh",overflowY:"scroll" }}>
-                            {errorMessage!=="" ? (<> <span style={{color: "red", fontSize: "18px", fontWeight: "bold"}}>{errorMessage}</span> </>) : ""}
-                            {errorMessage==="" ?  listTicketToDisplay.map(ticket =>
-                                <div style={{width:"75%",height:"auto", paddingTop :"1rem",border:"1px solid black",borderRadius:"10px",display:"flex",flexDirection:"row", alignItems:"start",marginTop:"1rem"}}>
-                                    <div style={{width:"30%",height:"auto",display:"flex",flexDirection:"column", alignItems:"start",marginLeft:"15px",marginRight:"1rem"}}>
-                                            <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                                <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Ticket:</span>
-                                                <span>{"Ticket-"+ticket.ticketId.split("-")[2]}</span>
+            if(chatDisplayed){
+                return (<><Chat username={currentUser.username} ticketID={ticktIDChat}/></>)
+            }
+            else {
+
+                return ( <>
+                        <div style={{width: "100%", height: "100%", overflowY: "scroll", marginTop: "2rem"}}>
+                            <div style={{display: "flex", alignItems: "center", flexDirection: "row", height: "10vh"}}>
+                                <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    flexDirection: "row",
+                                    marginRight: "5%",
+                                    width: "20%"
+                                }}>
+                                    <Form.Group className="mb-3 col-5" controlId="formBasicEmail"
+                                                style={{width: "100%"}}>
+                                        <Form.Control type="text" placeholder="Search Ticket"
+                                                      onChange={ev => onChangeSearchBar(ev.target.value)}/>
+                                        <Form.Text className="text-muted">
+                                        </Form.Text>
+                                    </Form.Group>
+                                    <SearchIcon style={{position: "relative", right: "30px", bottom: "8px"}}
+                                                onClick={() => onChangeSearchBar(search)}/>
+                                </div>
+                                <Form.Control as="select" onChange={ev => {
+                                    onChangeStatusTicket(ev.target.value)
+                                }} style={{width: "15%", height: "30%", marginRight: "5%", marginBottom: "1%"}}>
+                                    <option key={"-"} value={null}>-</option>
+                                    {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
+                                        <option key={status} value={status}> {status}</option>
+                                    )}
+                                </Form.Control>
+                                <Slider
+                                    min={0}
+                                    max={5}
+                                    marks
+                                    style={{width: "15%", marginRight: "5%"}}
+                                    size="lg"
+                                    onChange={ev => onChangePriorityTicket(ev.target.value)}
+                                    valueLabelDisplay="on"
+                                    variant="solid"
+                                />
+                                <Button variant="primary" type="submit" style={{
+                                    backgroundColor: "blue",
+                                    color: "white",
+                                    width: "10%",
+                                    marginBottom: "15px"
+                                }} onClick={() => onResetButtonClicked()}>Reset</Button>
+                            </div>
+                            <Divider style={{height: "3px", width: "75%", backgroundColor: "black"}}/>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-start",
+                                justifyContent: "flex-start",
+                                height: "80vh",
+                                overflowY: "scroll"
+                            }}>
+                                {errorMessage !== "" ? (<> <span style={{
+                                    color: "red",
+                                    fontSize: "18px",
+                                    fontWeight: "bold"
+                                }}>{errorMessage}</span> </>) : ""}
+                                {errorMessage === "" ? listTicketToDisplay.map(ticket =>
+                                    <div style={{
+                                        width: "75%",
+                                        height: "auto",
+                                        paddingTop: "1rem",
+                                        border: "1px solid black",
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "start",
+                                        marginTop: "1rem"
+                                    }}>
+                                        <div style={{
+                                            width: "30%",
+                                            height: "auto",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "start",
+                                            marginLeft: "15px",
+                                            marginRight: "1rem"
+                                        }}>
+                                            <div style={{
+                                                width: "100%",
+                                                height: "auto",
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                marginBottom: "2%"
+                                            }}>
+                                                <span style={{
+                                                    width: "25%",
+                                                    height: "auto",
+                                                    fontWeight: "bold",
+                                                    marginLeft: "2%",
+                                                    marginRight: "2%"
+                                                }}>Ticket:</span>
+                                                <span>{"Ticket-" + ticket.ticketId.split("-")[2]}</span>
                                             </div>
-                                            <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                                <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Priority:</span>
+                                            <div style={{
+                                                width: "100%",
+                                                height: "auto",
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                marginBottom: "2%"
+                                            }}>
+                                                <span style={{
+                                                    width: "25%",
+                                                    height: "auto",
+                                                    fontWeight: "bold",
+                                                    marginLeft: "2%",
+                                                    marginRight: "2%"
+                                                }}>Priority:</span>
                                                 <span>{ticket.priority}</span>
                                             </div>
-                                            <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                                <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Status:</span>
+                                            <div style={{
+                                                width: "100%",
+                                                height: "auto",
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                marginBottom: "2%"
+                                            }}>
+                                                <span style={{
+                                                    width: "25%",
+                                                    height: "auto",
+                                                    fontWeight: "bold",
+                                                    marginLeft: "2%",
+                                                    marginRight: "2%"
+                                                }}>Status:</span>
                                                 <span>{ticket.status}</span>
                                             </div>
-                                            <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                                <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Customer:</span>
+                                            <div style={{
+                                                width: "100%",
+                                                height: "auto",
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                marginBottom: "2%"
+                                            }}>
+                                                <span style={{
+                                                    width: "25%",
+                                                    height: "auto",
+                                                    fontWeight: "bold",
+                                                    marginLeft: "2%",
+                                                    marginRight: "2%"
+                                                }}>Customer:</span>
                                                 <span>{ticket.customerUsername}</span>
                                             </div>
                                             {ticket.workerUsername ?
                                                 (<>
-                                                    <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                                        <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Worker:</span>
+                                                    <div style={{
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        display: "flex",
+                                                        flexDirection: "row",
+                                                        marginBottom: "2%"
+                                                    }}>
+                                                        <span style={{
+                                                            width: "25%",
+                                                            height: "auto",
+                                                            fontWeight: "bold",
+                                                            marginLeft: "2%",
+                                                            marginRight: "2%"
+                                                        }}>Worker:</span>
                                                         <span>{ticket.workerUsername}</span>
                                                     </div>
-                                            </>) : ""}
+                                                </>) : ""}
+                                        </div>
+                                        <div style={{
+                                            width: "30%",
+                                            height: "auto",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "start",
+                                            marginLeft: "15px",
+                                            marginRight: "1rem"
+                                        }}>
+                                            <span style={{
+                                                width: "25%",
+                                                height: "auto",
+                                                fontWeight: "bold",
+                                                marginBottom: "1rem"
+                                            }}>{"Description:"}</span>
+                                            <span>{ticket.description}</span>
+                                        </div>
+                                        <div style={{
+                                            width: "30%",
+                                            height: "100%",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center"
+                                        }}>
+                                            <Button variant="primary" type="submit"
+                                                    style={{backgroundColor: "blue", color: "white", width: "30%"}}
+                                                    onClick={() => {
+                                                        setTicketIDChat(ticket.id);
+                                                        setChatDisplayed(true)
+                                                    }}>CHAT</Button>
+                                        </div>
                                     </div>
-                                    <div style={{width:"30%",height:"auto",display:"flex",flexDirection:"column", alignItems:"start",marginLeft:"15px",marginRight:"1rem"}}>
-                                        <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginBottom:"1rem"}}>{"Description:"}</span>
-                                        <span>{ticket.description}</span>
-                                    </div>
-                                    <div style={{width:"30%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                                        <Button variant="primary" type="submit" style={{backgroundColor:"blue",color:"white",width:"30%"}} onClick={()=> {console.log("CHAT") }}>CHAT</Button>
-                                    </div>
-                                </div>
-                            ):""}
+                                ) : ""}
+                            </div>
                         </div>
-                    </div>
-                </>)
+                    </>)
+            }
 
 
 

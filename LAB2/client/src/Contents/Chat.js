@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import {BsFillFileEarmarkPlusFill,BsFillTrashFill} from "react-icons/bs";
 
 
-function Chat() {
+function Chat(props) {
     let [isSubmitted, setSubmitted] = useState(false);
     let [errorMessage, setErrorMessage] = useState("");
     let [userName, setUserName] = useState("");
@@ -15,6 +15,17 @@ function Chat() {
     let [newMessage, setNewMessage] = useState("");
     let [stompClient, setStompClient] = useState(new Client());
     let [files, setFiles] = useState([]);
+
+
+    useEffect(() => {
+        try {
+            setUserName(props.username);
+            setChatId(props.ticketID);
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }, [props.username,props.ticketID]);
 
     const connect = (event) => {
         event.preventDefault();
