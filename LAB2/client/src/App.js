@@ -17,6 +17,9 @@ import UpdateProfileForm from "./Contents/UpdateProfileForm";
 import LoginForm from "./Contents/LoginForm";
 import SignupForm from "./Contents/SignupForm";
 import Chat from "./Contents/Chat";
+import AddNewTicket from "./Contents/AddNewTicket";
+import DisplayTickets from "./Contents/DisplayTickets";
+
 
 
 
@@ -175,9 +178,13 @@ function Content(){
         case '/get-profile-by-mail':
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SingleProfileForm getProfile={API_Profile.getProfile}></SingleProfileForm></div></>);
         case '/add-profile':
-            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddProfileForm addProfile={API_Profile.addProfile}></AddProfileForm></div></>);
-        case '/update-profile':
-            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);
+            if(user!=null && user.role==="Manager")
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddProfileForm addProfile={(username,email,password,role)=>API_User.managerCreateUser(username,email,password,role,jwtToken)}></AddProfileForm></div></>);
+            else
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)
+
+        /*case '/update-profile':
+            return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><UpdateProfileForm updateProfile={API_Profile.updateProfile}></UpdateProfileForm></div></>);*/
         case '/login':
             if(loggedIn && errorMsg!=="")
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">{errorMsg}</div></>)
@@ -188,13 +195,17 @@ function Content(){
             if(loggedIn)
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You are already logged in!</div></>)
             return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm signup={doSignup} signedUp={signedUp} createExp={false}></SignupForm></div></>);
-        case '/createExpert':
-            if(user!=null && user.role==="Manager" )
-                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp} createExp={true} setSignedUp={setSignedUp}></SignupForm></div></>);
-            else
-                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)
-        case '/chat':
+        case '/add-new-ticket':
+            if(user!=null && (user.role==="Manager" || user.role === "Client"))
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddNewTicket roleUser={user.role}></AddNewTicket></div></>);
+        case '/display-ticket':
+            if(loggedIn)
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><DisplayTickets currentUser={user} roleUser={user.role}></DisplayTickets></div></>);
+      case '/chat':
             return <Chat></Chat>
+
+                //return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)*/
+
         default:
             return <h1>Path not found</h1>
     }

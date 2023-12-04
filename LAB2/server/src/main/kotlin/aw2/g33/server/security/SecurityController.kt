@@ -80,30 +80,39 @@ class SecurityController (private val userService: UserService,private val profi
 
     @PostMapping("/user/createExpert")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAuthority('ROLE_Manager')") 
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     @Transactional
     fun createExpert(@RequestBody userDTO: UserDTO): ResponseEntity<URI> {
         return userCreationByDTOAndRole(userDTO,"Expert")
     }
-    @PostMapping("/user/createUser")
+    @PostMapping("/user/createUser/{roleName}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasAnyAuthority('ROLE_Manager')")
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
     @Transactional
-    fun createUser(@RequestBody userDTO: UserDTO,roleName: String): ResponseEntity<URI> {
+    fun createUser(@RequestBody userDTO: UserDTO,@PathVariable roleName: String): ResponseEntity<URI> {
 
        return userCreationByDTOAndRole(userDTO,roleName)
 
     }
-    @PostMapping("/user/updateUser/")
+
+    @GetMapping("/user/getUsersByRole")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ROLE_Manager')")
+    @Transactional
+    fun getUsersByRole(@RequestParam(required = true, defaultValue = "Client") roleName:String):List<UserDTO>{
+        return userService.getListUserByRole(roleName);
+    }
+
+    /*@PostMapping("/user/updateUser/")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('ROLE_Manager')")
     @Transactional
-    fun updateUser(@RequestBody userDTO: UserDTO,usernameOld:String, rolename: String):UserDTO{      //da vedere se è corretto, non mi piace return value
-        val role = userService.findRoleByName(rolename)
-        val profile=ProfileDTO(userDTO.email,userDTO.username,rolename)
+    fun updateUser(@RequestBody userDTO2: UserDTO2):UserDTO{      //da vedere se è corretto, non mi piace return value
+        val role = userService.findRoleByName(userDTO2.newRole)
+        val profile=ProfileDTO(userDTO2.newEmail,userDTO2.newUserName,userDTO2.newRole)
 
         try {
-            userService.updateUser(usernameOld,userDTO,rolename)
+            userService.updateUser(userDTO2.oldUserName,,)
             profileService.updateProfile(usernameOld, profile)
         }
         catch (err:Error){
@@ -111,7 +120,7 @@ class SecurityController (private val userService: UserService,private val profi
         }
         return userDTO;
 
-    }
+    }*/
 
     private fun userCreationByDTOAndRole(userDTO: UserDTO,roleName:String) :ResponseEntity<URI> {
         val role = userService.findRoleByName(roleName)

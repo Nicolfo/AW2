@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response
 
 
 @Service
-class UserService(
+class   UserService(
     private val keycloak: Keycloak,
     @Value("\${keycloak.realm}")
     private val realm: String
@@ -95,7 +95,9 @@ class UserService(
 
     }
 
-    
+    fun getListUserByRole(roleName: String):List<UserDTO>{
+        return keycloak.realm(realm).roles().get(roleName).getUserMembers().filter { user -> user.isEnabled }.map { user -> UserDTO(user.email,user.username,"")};
+    }
 
 
     fun create(request: UserDTO): Response {

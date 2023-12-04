@@ -144,6 +144,27 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
 
     }
 
+    @Transactional
+    @PreAuthorize("hasAnyAuthority('ROLE_Manager')")
+    override fun getListTicketByStatus(statusTicket:String):List<TicketDTO>{
+        return ticketRepository.findTicketsByStatus(statusTicket).map { it -> it.toDTO() }
+    }
+
+    @Transactional
+    @PreAuthorize("isAuthenticated()")
+    override fun getListTicketByUsername():List<TicketDTO>{
+        var isManager = SecurityContextHolder.getContext().authentication.authorities.stream().anyMatch{ it -> it.authority == "ROLE_Manager"};
+        if(isManager)
+            return ticketRepository.findAll().map { it -> it.toDTO() }
+        else{
+            var username:String = SecurityContextHolder.getContext().authentication.name;
+            return ticketRepository.findTicketsByUsername(username).map { it -> it.toDTO() }
+
+        }
+
+    }
+
+
     override fun ticketDTOToTicket(ticketDTO: TicketDTO): Ticket {
 
             if(ticketDTO.ticketId == null)
