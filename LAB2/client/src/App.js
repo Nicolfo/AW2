@@ -16,8 +16,10 @@ import { useLocation } from 'react-router-dom'
 import UpdateProfileForm from "./Contents/UpdateProfileForm";
 import LoginForm from "./Contents/LoginForm";
 import SignupForm from "./Contents/SignupForm";
+import Chat from "./Contents/Chat";
 import AddNewTicket from "./Contents/AddNewTicket";
 import DisplayTickets from "./Contents/DisplayTickets";
+
 
 
 
@@ -199,11 +201,11 @@ function Content(){
         case '/display-ticket':
             if(loggedIn)
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><DisplayTickets currentUser={user} roleUser={user.role}></DisplayTickets></div></>);
-        /*case '/createExpert':
-            if(user!=null && user.role==="Manager")
-                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><SignupForm createExpert={createExpert} signedUp={signedUp} createExp={true} setSignedUp={setSignedUp}></SignupForm></div></>);
-            else
-                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)*/
+      case '/chat':
+            return <Chat></Chat>
+
+                //return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)*/
+
         default:
             return <h1>Path not found</h1>
     }

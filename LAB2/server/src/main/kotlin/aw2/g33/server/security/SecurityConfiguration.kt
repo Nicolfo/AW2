@@ -22,8 +22,8 @@ class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
     @Bean fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()
             .formLogin().disable()
-
-        http.cors().and()
+        http.cors().disable()
+        http
             .authorizeHttpRequests()
             .requestMatchers("/user/validate/").permitAll()
             .requestMatchers("/user/signup").anonymous()
