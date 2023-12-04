@@ -71,7 +71,7 @@ function DisplayTickets(props) {
 
                 return ( <>
                         <div style={{width: "100%", height: "100%", overflowY: "scroll", marginTop: "2rem"}}>
-                            <div style={{display: "flex", alignItems: "center", flexDirection: "row", height: "10vh"}}>
+                            <div style={{display: "flex", alignItems: "center", flexDirection: "row", height: "12vh"}}>
                                 <div style={{
                                     display: "flex",
                                     alignItems: "center",
@@ -91,7 +91,7 @@ function DisplayTickets(props) {
                                 </div>
                                 <Form.Control as="select" onChange={ev => {
                                     onChangeStatusTicket(ev.target.value)
-                                }} style={{width: "15%", height: "30%", marginRight: "5%", marginBottom: "1%"}}>
+                                }} style={{width: "15%", height: "60%", marginRight: "5%", marginBottom: "1%"}}>
                                     <option key={"-"} value={null}>-</option>
                                     {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
                                         <option key={status} value={status}> {status}</option>
@@ -111,7 +111,8 @@ function DisplayTickets(props) {
                                     backgroundColor: "blue",
                                     color: "white",
                                     width: "10%",
-                                    marginBottom: "15px"
+                                    marginBottom: "15px",
+                                    fontSize:"18px"
                                 }} onClick={() => onResetButtonClicked()}>Reset</Button>
                             </div>
                             <Divider style={{height: "3px", width: "75%", backgroundColor: "black"}}/>
