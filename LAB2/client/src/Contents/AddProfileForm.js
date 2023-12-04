@@ -6,12 +6,13 @@ function AddProfileForm(props){
     const [email,setEmail]=useState("");
     const [isSubmitted,setIsSubmitted]=useState(false);
     const [username,setUsername]=useState("");
+    const [password,setPassword]=useState("");
     const [role,setRole]=useState("");
     const [resultMessage,setResultMessage]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
         setIsSubmitted(true);
-        props.addProfile({username,email,role}).then(()=>{
+        props.addProfile(username,email,password,role).then(()=>{
             setResultMessage("Profile added correctly");
 
         })
@@ -31,6 +32,12 @@ function AddProfileForm(props){
             <Form.Control type="text" placeholder="Enter username " onChange={ev=>setUsername(ev.target.value)}/>
             <Form.Text className="text-muted">
             </Form.Text>
+
+            <Form.Label>Username</Form.Label>
+            <Form.Control type="password" placeholder="Enter password " onChange={ev=>setPassword(ev.target.value)}/>
+            <Form.Text className="text-muted">
+            </Form.Text>
+
 
             <Form.Label>Role</Form.Label>
             <Form.Control  as="select" onChange={ev=>setRole(ev.target.value)}>

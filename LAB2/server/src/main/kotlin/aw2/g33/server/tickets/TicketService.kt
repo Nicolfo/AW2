@@ -11,4 +11,7 @@ interface TicketService {
     fun stopProgress(ticket: TicketDTO):TicketDTO
     fun reopenIssue(ticket:TicketDTO):TicketDTO
     fun ticketDTOToTicket(ticketDTO: TicketDTO):Ticket
+    fun getListTicketByStatus(statusTicket:String):List<TicketDTO>
+    fun getListTicketByUsername():List<TicketDTO>
+
 }
