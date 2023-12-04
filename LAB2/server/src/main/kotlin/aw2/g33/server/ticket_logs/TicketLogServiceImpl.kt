@@ -9,4 +9,10 @@ class TicketLogServiceImpl(private val ticketLogRepository: TicketLogRepository)
         val ticketLog=TicketLog(ticket,status)
         ticketLogRepository.save(ticketLog)
     }
+
+    override fun getAll(): List<TicketLogDTO> {
+        return ticketLogRepository
+            .findAll()
+            .map{it.toDTO()}
+    }
 }
