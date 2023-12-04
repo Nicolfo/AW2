@@ -19,3 +19,4 @@ async function getAllTicketLog(){
         return []
     }
 }
+export default {getAllTicketLog}
