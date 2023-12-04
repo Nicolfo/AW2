@@ -7,7 +7,7 @@ import {BsFillFileEarmarkPlusFill,BsFillTrashFill} from "react-icons/bs";
 
 
 function Chat(props) {
-    let [isSubmitted, setSubmitted] = useState(false);
+    let [isConnected,setConnected] = useState(false);
     let [errorMessage, setErrorMessage] = useState("");
     let [userName, setUserName] = useState("");
     let [chatId, setChatId] = useState("");
@@ -19,17 +19,20 @@ function Chat(props) {
 
     useEffect(() => {
         try {
-            setUserName(props.username);
-            setChatId(props.ticketID);
+            if(props.username && props.ticketID){
+                setUserName(props.username);
+                setChatId(props.ticketID);
+                connect();
+            }
+
         }
         catch (e) {
             console.error(e)
         }
     }, [props.username,props.ticketID]);
 
-    const connect = (event) => {
-        event.preventDefault();
-        setSubmitted(true);
+    const connect = () => {
+
         if (userName && userName.length > 0) {
             setStompClient((client) => {
                 client.beforeConnect=getOldMessages;
@@ -52,6 +55,7 @@ function Chat(props) {
                     JSON.stringify({sender: userName, type: 'JOIN',content: userName + ' joined!'})
             }
         );
+        setConnected(true);
 
 
         // Tell your username to the server
@@ -153,33 +157,12 @@ function Chat(props) {
 
 
 
-    if (!isSubmitted) {
 
-
-        return <Form onSubmit={connect}>
-            <Form.Group className="mb-3">
-                <Form.Label>Username</Form.Label>
-                <Form.Control type="text" name="username" placeholder="Enter username "
-                              onChange={ev => setUserName(ev.target.value)}/>
-                <Form.Text className="text-muted">
-                </Form.Text>
-
-                <Form.Label>chatID</Form.Label>
-                <Form.Control type="text" name="chatID" placeholder="Enter chatId "
-                              onChange={ev => setChatId(ev.target.value)}/>
-                <Form.Text className="text-muted">
-                </Form.Text>
-
-
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-
-        </Form>
-    }
-    else {
         let old = null;
+
+        if(!isConnected){
+            return <>Conencting to chat server</>;
+        }
         return <div className="container">
             <div className="row d-flex justify-content-center">
                 <div >
@@ -290,7 +273,7 @@ function Chat(props) {
                 </div>
             </div>
         </div>
-    }
+
 
 
 }
