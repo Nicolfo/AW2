@@ -168,14 +168,18 @@ function Chat(props) {
 
     <div className="container">
         {props.user.role !== "Client" ? <>
-    <div style={{ display: 'flex', alignItems: 'center', verticalAlign:'bottom'}} >
-            <Form.Label >Set Status to:</Form.Label>
-            <Form.Control as="select" onChange={ev => {}} style={{ marginRight: '5%',width:'15%', marginBottom: '1%' }}>
+    <div style={{ display: 'flex', alignItems: 'center', marginBottom:'2px'}} >
+
+
+            <Form.Label className="mt-2 me-2" >Set Status to:</Form.Label>
+            <Form.Control className="me-2" as="select" onChange={ev => {}} style={{ width:'10%'}}>
             {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
                 <option key={status} value={status}> {status}</option>
             )}
         </Form.Control>
         <Button className="btn btn-warning" onClick={()=>console.log("setNewStatus") }>Set new status</Button>
+
+
     </div>
             </> : <></>}
             <div className="row d-flex justify-content-center">
