@@ -19,9 +19,7 @@ import SignupForm from "./Contents/SignupForm";
 import Chat from "./Contents/Chat";
 import AddNewTicket from "./Contents/AddNewTicket";
 import DisplayTickets from "./Contents/DisplayTickets";
-
-
-
+import DisplayLog from "./Contents/DisplayLog";
 
 
 function App() {
