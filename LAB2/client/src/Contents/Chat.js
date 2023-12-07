@@ -6,19 +6,33 @@ import 'bootstrap/dist/css/bootstrap.css';
 import {BsFillFileEarmarkPlusFill,BsFillTrashFill} from "react-icons/bs";
 
 
-function Chat() {
-    let [isSubmitted, setSubmitted] = useState(false);
+function Chat(props) {
+    let [isConnected,setConnected] = useState(false);
     let [errorMessage, setErrorMessage] = useState("");
-    let [userName, setUserName] = useState("");
-    let [chatId, setChatId] = useState("");
     let [messages, setMessages] = useState([]);
     let [newMessage, setNewMessage] = useState("");
     let [stompClient, setStompClient] = useState(new Client());
     let [files, setFiles] = useState([]);
+    let userName=props.user.username;
+    let chatId=props.ticketID;
 
-    const connect = (event) => {
-        event.preventDefault();
-        setSubmitted(true);
+    useEffect(() => {
+        console.log("username ="+ props.user.username);
+        console.log("chatId ="+props.ticketID);
+
+        try {
+            if(props.user.username && props.ticketID){
+                connect();
+            }
+
+        }
+        catch (e) {
+            console.error(e)
+        }
+    }, [props.user,props.ticketID]);
+
+    const connect = () => {
+        console.log("connectCalled")
         if (userName && userName.length > 0) {
             setStompClient((client) => {
                 client.beforeConnect=getOldMessages;
@@ -41,6 +55,7 @@ function Chat() {
                     JSON.stringify({sender: userName, type: 'JOIN',content: userName + ' joined!'})
             }
         );
+        setConnected(true);
 
 
         // Tell your username to the server
@@ -142,34 +157,31 @@ function Chat() {
 
 
 
-    if (!isSubmitted) {
 
-
-        return <Form onSubmit={connect}>
-            <Form.Group className="mb-3">
-                <Form.Label>Username</Form.Label>
-                <Form.Control type="text" name="username" placeholder="Enter username "
-                              onChange={ev => setUserName(ev.target.value)}/>
-                <Form.Text className="text-muted">
-                </Form.Text>
-
-                <Form.Label>chatID</Form.Label>
-                <Form.Control type="text" name="chatID" placeholder="Enter chatId "
-                              onChange={ev => setChatId(ev.target.value)}/>
-                <Form.Text className="text-muted">
-                </Form.Text>
-
-
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-
-        </Form>
-    }
-    else {
         let old = null;
-        return <div className="container">
+
+        if(!isConnected){
+            return <>Conencting to chat server</>;
+        }
+
+        return <>
+
+    <div className="container">
+        {props.user.role !== "Client" ? <>
+    <div style={{ display: 'flex', alignItems: 'center', marginBottom:'2px'}} >
+
+
+            <Form.Label className="mt-2 me-2" >Set Status to:</Form.Label>
+            <Form.Control className="me-2" as="select" onChange={ev => {}} style={{ width:'10%'}}>
+            {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
+                <option key={status} value={status}> {status}</option>
+            )}
+        </Form.Control>
+        <Button className="btn btn-warning" onClick={()=>console.log("setNewStatus") }>Set new status</Button>
+
+
+    </div>
+            </> : <></>}
             <div className="row d-flex justify-content-center">
                 <div >
                     <div className="card">
@@ -279,7 +291,7 @@ function Chat() {
                 </div>
             </div>
         </div>
-    }
+        </>
 
 
 }
