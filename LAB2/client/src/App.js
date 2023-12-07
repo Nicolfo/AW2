@@ -198,6 +198,9 @@ function Content(){
         case '/add-new-ticket':
             if(user!=null && (user.role==="Manager" || user.role === "Client"))
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><AddNewTicket roleUser={user.role}></AddNewTicket></div></>);
+        case '/get-log':
+            if(user!=null && (user.role==="Manager" ))
+                return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><DisplayLog roleUser={user.role}></DisplayLog></div></>);
         case '/display-ticket':
             if(loggedIn)
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><DisplayTickets currentUser={user} roleUser={user.role}></DisplayTickets></div></>);

@@ -21,6 +21,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         val ticketToCreate=Ticket(description,customer.toProfile())
         ticketLogService.addToLog(ticketToCreate,ticketToCreate.status)
         ticketRepository.save(ticketToCreate)
+
         return ticketToCreate.toDTO()
     }
 
