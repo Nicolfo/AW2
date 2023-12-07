@@ -16,17 +16,18 @@ class MessageServiceImpl(
     val ticketRepository: TicketRepository
 ) : MessageService {
     override fun sendMessage(ticketID: UUID, messageDTO: MessageDTO): Message? {
-        try {
+        return try {
             var ticket = ticketRepository.getReferenceById(ticketID);
             var message = Message(
                 ticket,
-                messageDTO.content!!, profileRepository.getReferenceById(messageDTO.sender!!),
+                messageDTO.content!!,
+                profileRepository.getReferenceById(messageDTO.sender!!),
                 messageDTO.type.toString()
             )
-            return messageRepository.save(message)
+            messageRepository.save(message)
         } catch (e: Exception) {
-             //throw TicketIDNotFoundException("Cannot send a message to a chat with this ticketID");
-            return null;
+            //throw TicketIDNotFoundException("Cannot send a message to a chat with this ticketID");
+            null;
         }
     }
 

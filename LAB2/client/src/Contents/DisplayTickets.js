@@ -65,7 +65,7 @@ function DisplayTickets(props) {
             }
 
             if(chatDisplayed){
-                return (<><Chat user={currentUser} ticketID={ticketIDChat}/></>)
+                return (<Chat user={currentUser} ticketID={ticketIDChat}/>)
             }
             else {
 
@@ -261,7 +261,6 @@ function DisplayTickets(props) {
                                             <Button variant="primary" type="submit"
                                                     style={{backgroundColor: "blue", color: "white", width: "30%"}}
                                                     onClick={() => {
-                                                        console.log(ticket.ticketId);
                                                         setTicketIDChat(ticket.ticketId);
                                                         setChatDisplayed(true)
                                                     }}>CHAT</Button>

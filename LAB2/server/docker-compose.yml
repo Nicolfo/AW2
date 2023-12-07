@@ -9,7 +9,6 @@ services:
       - "8081"
     build:
       context: .
-    container_name: lab5
     depends_on:
       - db
       - keycloak
@@ -28,7 +27,6 @@ services:
 
   db:
     image: 'postgres:latest'
-    container_name: db
     ports:
       - "5432:5432"
     environment:
@@ -36,7 +34,6 @@ services:
       - POSTGRES_PASSWORD=password
   keycloak:
     image: 'nicolfo/keycloak-lab5'
-    container_name: keycloak
     ports:
       - "8080:8080"
 #    environment:

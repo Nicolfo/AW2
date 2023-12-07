@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Form from "react-bootstrap/Form";
 import {Client} from '@stomp/stompjs';
 import {Button, Col, Container, FormControl, InputGroup, Row} from "react-bootstrap";
@@ -11,35 +11,50 @@ function Chat(props) {
     let [errorMessage, setErrorMessage] = useState("");
     let [messages, setMessages] = useState([]);
     let [newMessage, setNewMessage] = useState("");
+    let [newStatus, setNewStatus] = useState("OPEN");
     let [stompClient, setStompClient] = useState(new Client());
     let [files, setFiles] = useState([]);
-    let userName=props.user.username;
-    let chatId=props.ticketID;
+    let userName=props.user && props.user.username ?props.user.username:null;
+    let chatId=props.ticketID?props.ticketID:null;
+
+    const messagesContainerRef = useRef(null);
 
     useEffect(() => {
-        console.log("username ="+ props.user.username);
-        console.log("chatId ="+props.ticketID);
+        // Scroll to the bottom of the messages container
+        if (messagesContainerRef.current)
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }, [messages]);
 
+    useEffect(() => {
+        if(!userName || !chatId)
+            return;
         try {
-            if(props.user.username && props.ticketID){
                 connect();
-            }
-
         }
         catch (e) {
             console.error(e)
         }
+
     }, [props.user,props.ticketID]);
 
+    useEffect(() => {
+        return () => {
+            if(stompClient && stompClient.connected)
+            stompClient.publish({
+                    destination: "/app/chat.register/" + chatId, body:
+                        JSON.stringify({sender: userName, type: 'LEAVE', content: userName + ' left!'})
+                }
+            );
+        }
+    }, []);
+
     const connect = () => {
-        console.log("connectCalled")
-        if (userName && userName.length > 0) {
+        if (userName && chatId && userName.length > 0) {
             setStompClient((client) => {
                 client.beforeConnect=getOldMessages;
                 client.brokerURL = "ws://localhost:8081/websocket"
                 client.onConnect = onConnected;
                 client.onStompError = onError;
-                console.log("starting connection")
                 client.activate();
                 return client;
             })
@@ -48,7 +63,6 @@ function Chat(props) {
 
     const onConnected = (frame) => {
 
-        console.log("connected to " + frame)
         stompClient.subscribe('/topic/' + chatId, onMessageReceived);
         stompClient.publish({
                 destination: "/app/chat.register/" + chatId, body:
@@ -90,7 +104,6 @@ function Chat(props) {
 
     const onMessageReceived = (payload) => {
         let message = JSON.parse(payload.body);
-        console.log(message);
         if (message.type === 'JOIN') {
             message.content = message.sender + ' joined!';
         } else if (message.type === 'LEAVE') {
@@ -141,6 +154,8 @@ function Chat(props) {
 
 
     async function getOldMessages() {
+        if(!chatId)
+            return;
         let response = await fetch("http://127.0.0.1:8081/API/Message/" + chatId);
         try{
             if(response.data!=='' && response.ok){
@@ -160,11 +175,9 @@ function Chat(props) {
 
         let old = null;
 
-        if(!isConnected){
-            return <>Conencting to chat server</>;
-        }
 
-        return <>
+
+        return !isConnected?<>Connecting to chat server</>:<>
 
     <div className="container">
         {props.user.role !== "Client" ? <>
@@ -172,12 +185,12 @@ function Chat(props) {
 
 
             <Form.Label className="mt-2 me-2" >Set Status to:</Form.Label>
-            <Form.Control className="me-2" as="select" onChange={ev => {}} style={{ width:'10%'}}>
+            <Form.Control className="me-2" as="select" onChange={ev => {setNewStatus(ev.target.value)}} style={{ width:'10%'}}>
             {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
                 <option key={status} value={status}> {status}</option>
             )}
         </Form.Control>
-        <Button className="btn btn-warning" onClick={()=>console.log("setNewStatus") }>Set new status</Button>
+        <Button className="btn btn-warning" onClick={()=>console.log("status :"+ newStatus) }>Set new status</Button>
 
 
     </div>
@@ -192,7 +205,7 @@ function Chat(props) {
                             <div className="mb-0">Chat ID {chatId}</div>
 
                         </div>
-                        <div className="card-body overflow-auto scrollbar" style={{position: "relative", height: 400}}>
+                        <div className="card-body overflow-auto scrollbar" style={{position: "relative", height: 400}} ref={messagesContainerRef}>
 
 
                             {messages.map((elem,key) => {

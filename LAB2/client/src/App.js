@@ -203,7 +203,7 @@ function Content(){
             if(loggedIn)
                 return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><DisplayTickets currentUser={user} roleUser={user.role}></DisplayTickets></div></>);
       case '/chat':
-            return <Chat></Chat>
+          return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9"><Chat user={user} ticketID="ba1a13a6-000b-450f-bbf0-099d69d561c1"></Chat></div></>);
 
                 //return (<><NavBar loggedIn={loggedIn} user={user} logout={doLogout} login={doLogIn}></NavBar><SideBar loggedIn={loggedIn} user={user}></SideBar><div className="col-9">You have to be a logged in manager to use that function</div></>)*/
 
