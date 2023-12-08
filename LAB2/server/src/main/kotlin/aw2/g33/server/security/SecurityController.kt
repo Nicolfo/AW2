@@ -90,7 +90,7 @@ class SecurityController (private val userService: UserService,private val profi
     @PreAuthorize("hasAuthority('ROLE_Manager')")
     @Transactional
     fun createUser(@RequestBody userDTO: UserDTO,@PathVariable roleName: String): ResponseEntity<URI> {
-
+    println(userDTO)
        return userCreationByDTOAndRole(userDTO,roleName)
 
     }

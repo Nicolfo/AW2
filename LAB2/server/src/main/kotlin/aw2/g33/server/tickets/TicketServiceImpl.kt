@@ -5,11 +5,13 @@ import aw2.g33.server.profiles.ProfileDTO
 import aw2.g33.server.profiles.ProfileService
 import aw2.g33.server.profiles.toProfile
 import aw2.g33.server.ticket_logs.TicketLogService
-import jakarta.transaction.Transactional
+
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class TicketServiceImpl (private val ticketRepository: TicketRepository,private val ticketLogService: TicketLogService,private val profileService: ProfileService):TicketService {
@@ -26,11 +28,11 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
     }
 
    @Transactional
-   @PreAuthorize("hasAuthority('ROLE_Manager')")
-   override fun closeIssue(ticket: TicketDTO): TicketDTO {
-        if(ticket.ticketId==null)
+   override fun closeIssue(ticketID: UUID): TicketDTO {
+
+        if(ticketID==null)
             throw ServiceWithNullParams("ticket value cannot be null")
-        val ticketOptional = ticketRepository.findById(ticket.ticketId)
+        val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
             if(ticketToUpdate.status!=="CLOSED"){
@@ -48,11 +50,10 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
-    @PreAuthorize("hasAuthority('ROLE_Manager')")
-    override fun resolveIssue(ticket: TicketDTO): TicketDTO {
-        if(ticket.ticketId==null)
+    override fun resolveIssue(ticketID: UUID): TicketDTO {
+        if(ticketID==null)
             throw ServiceWithNullParams("ticket value cannot be null")
-        val ticketOptional = ticketRepository.findById(ticket.ticketId)
+        val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
             if(ticketToUpdate.status!=="RESOLVED" && ticketToUpdate.status!=="CLOSED"){
@@ -70,7 +71,6 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
-    @PreAuthorize("hasAuthority('ROLE_Manager')")
     override fun startProgress(ticket: TicketDTO, workerUsername: String, priority: Int): TicketDTO {
         if(ticket.ticketId==null)
             throw ServiceWithNullParams("ticket value cannot be null")
@@ -100,11 +100,10 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
-    @PreAuthorize("isAuthenticated()")
-    override fun stopProgress(ticket: TicketDTO): TicketDTO {
-        if(ticket.ticketId==null)
+    override fun stopProgress(ticketID: UUID): TicketDTO {
+        if(ticketID==null)
             throw ServiceWithNullParams("ticket value cannot be null")
-        val ticketOptional = ticketRepository.findById(ticket.ticketId)
+        val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
             if(ticketToUpdate.status=="IN PROGRESS"){
@@ -122,11 +121,10 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         throw PrimaryKeyNotFoundException("Cannot find ticket in DB, ticket_id not found!")
     }
     @Transactional
-    @PreAuthorize("hasAuthority('ROLE_Manager')")
-    override fun reopenIssue(ticket: TicketDTO): TicketDTO {
-        if(ticket.ticketId==null)
+    override fun reopenIssue(ticketID: UUID): TicketDTO {
+        if(ticketID==null)
             throw ServiceWithNullParams("ticket value cannot be null")
-        val ticketOptional = ticketRepository.findById(ticket.ticketId)
+        val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
             if(ticketToUpdate.status!=="REOPENED" && ticketToUpdate.status!=="IN PROGRESS" && ticketToUpdate.status!=="OPEN"){

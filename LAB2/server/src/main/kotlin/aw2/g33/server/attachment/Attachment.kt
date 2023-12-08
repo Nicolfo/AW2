@@ -7,6 +7,7 @@ import java.util.UUID
 @Entity
 class Attachment(
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     var attachment:ByteArray?=null,
     var contentType:String,
     var fileName:String,

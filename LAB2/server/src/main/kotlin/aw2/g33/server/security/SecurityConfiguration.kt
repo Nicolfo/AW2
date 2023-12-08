@@ -19,7 +19,8 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfiguration (private val jwtAuthConverter: JwtAuthConverter) {
 
 
-    @Bean fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()
             .formLogin().disable()
         http.cors().disable()

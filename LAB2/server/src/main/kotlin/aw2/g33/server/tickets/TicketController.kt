@@ -21,16 +21,18 @@ class TicketController(private val ticketService: TicketService) {
         return ticketService.createIssue(description)
     }
 
-    @PostMapping("/API/ticket/close")
+    @PostMapping("/API/ticket/{ticketID}/close")
+    @PreAuthorize("hasAuthority('ROLE_Manager') || hasAuthority('ROLE_Expert')")
     @ResponseStatus(HttpStatus.OK)
-    fun closeIssue(@RequestBody ticket: TicketDTO):TicketDTO{
-        return ticketService.closeIssue(ticket)
+    fun closeIssue(@PathVariable ticketID: UUID):TicketDTO{
+        return ticketService.closeIssue(ticketID)
     }
 
-    @PostMapping("/API/ticket/resolve")
+    @PostMapping("/API/ticket/{ticketID}/resolve")
+    @PreAuthorize("hasAuthority('ROLE_Manager') || hasAuthority('ROLE_Expert')")
     @ResponseStatus(HttpStatus.OK)
-    fun resolveIssue(@RequestBody ticket:TicketDTO):TicketDTO{
-        return ticketService.resolveIssue(ticket)
+    fun resolveIssue(@PathVariable ticketID: UUID):TicketDTO{
+        return ticketService.resolveIssue(ticketID)
     }
     @PostMapping("/API/ticket/start")
     @ResponseStatus(HttpStatus.OK)
@@ -59,15 +61,17 @@ class TicketController(private val ticketService: TicketService) {
     fun startProgressWithNoParam(){
         throw RequestParamException("POST request at /ticket/start/ must include a Priority as param")
     }
-    @PostMapping("/API/ticket/stop")
+    @PostMapping("/API/ticket/{ticketID}/stop")
+    @PreAuthorize("hasAuthority('ROLE_Manager') || hasAuthority('ROLE_Expert')")
     @ResponseStatus(HttpStatus.OK)
-    fun stopProgress(@RequestBody ticket: TicketDTO):TicketDTO{
-        return ticketService.stopProgress(ticket)
+    fun stopProgress(@PathVariable ticketID: UUID):TicketDTO{
+        return ticketService.stopProgress(ticketID)
     }
-    @PostMapping("/API/ticket/reopen")
+    @PostMapping("/API/ticket/{ticketID}/reopen")
+    @PreAuthorize("hasAuthority('ROLE_Manager') || hasAuthority('ROLE_Expert')")
     @ResponseStatus(HttpStatus.OK)
-    fun reopenIssue(@RequestBody ticket:TicketDTO):TicketDTO{
-        return ticketService.reopenIssue(ticket)
+    fun reopenIssue(@PathVariable ticketID: UUID):TicketDTO{
+        return ticketService.reopenIssue(ticketID)
     }
 
     @GetMapping("/API/ticket/getListTicketByStatus")

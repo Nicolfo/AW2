@@ -7,7 +7,7 @@ function AddProfileForm(props){
     const [isSubmitted,setIsSubmitted]=useState(false);
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
-    const [role,setRole]=useState("");
+    const [role,setRole]=useState("Client");
     const [resultMessage,setResultMessage]=useState("");
     const handleSubmit=(event)=>{
         event.preventDefault();
@@ -33,7 +33,7 @@ function AddProfileForm(props){
             <Form.Text className="text-muted">
             </Form.Text>
 
-            <Form.Label>Username</Form.Label>
+            <Form.Label>Password</Form.Label>
             <Form.Control type="password" placeholder="Enter password " onChange={ev=>setPassword(ev.target.value)}/>
             <Form.Text className="text-muted">
             </Form.Text>

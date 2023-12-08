@@ -8,7 +8,7 @@ import aw2.g33.server.profiles.ProfileDTO
 class MessageDTO( var content: String? ,
         var sender: String? ,
         var type: MessageType? ,
-        var files:List<AttachmentDTO>?) {
+        var files:List<AttachmentDTO> = listOf()) {
 
 
     enum class MessageType {
@@ -32,5 +32,5 @@ fun Message.toDTO(): MessageDTO {
             MessageDTO.MessageType.CHAT
         }
     }
-    return MessageDTO(this.content,this.sender?.username,type,this.attachments.map(){it.toDTO()})
+    return MessageDTO(this.content,this.sender?.username,type,this.attachments.map{it.toDTO()})
 }

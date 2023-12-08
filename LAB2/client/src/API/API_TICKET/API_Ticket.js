@@ -67,6 +67,37 @@ async function getListTicketByStatus(status){
     }
 }
 
+function changeStatus(ticketID,status) {
+    return new Promise((resolve, reject) => {
+
+        const apiUrl = `API/ticket/${ticketID}/`+status.toLowerCase();
+
+        fetch(url+apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ localStorage.getItem("jwt")
+            },
+        })
+            .then((response) => {
+                // Check if the response status is OK (200)
+                if (response.ok) {
+                    return response.json(); // Assuming the response is in JSON format
+                } else {
+                    throw new Error(`Error closing ticket: ${response.status}`);
+                }
+            })
+            .then((data) => {
+                // Resolve the promise with the returned data
+                resolve(data);
+            })
+            .catch((error) => {
+                // Reject the promise with the error information
+                reject(error);
+            });
+    });
+}
+
 async function getTicketByUsername(username=""){
     try{
         let response =await fetch(url + "API/ticket/getListTicketByUsername", {
@@ -145,4 +176,5 @@ async function updateProfile(oldMail,updatedUser){
         throw tmpUser;
 }
 
-export default {addTicket,getListUserByRole,getListTicketByStatus,updateTicketPriorityAndWorker,getTicketByUsername};
+
+export default {addTicket,getListUserByRole,getListTicketByStatus,updateTicketPriorityAndWorker,getTicketByUsername,changeStatus};
