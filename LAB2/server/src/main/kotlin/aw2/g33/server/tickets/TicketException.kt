@@ -4,11 +4,13 @@ package aw2.g33.server.tickets
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @RestControllerAdvice
+@CrossOrigin
 class TicketException : ResponseEntityExceptionHandler(){
     @ExceptionHandler(PrimaryKeyNotFoundException::class)
     fun handlePrimaryKeyNotFount(e: PrimaryKeyNotFoundException) = ProblemDetail
@@ -20,7 +22,7 @@ class TicketException : ResponseEntityExceptionHandler(){
 
     @ExceptionHandler(StatusTransitionIncorrect::class)
     fun handleStatusTransitionError(e: StatusTransitionIncorrect) = ProblemDetail
-        .forStatusAndDetail(HttpStatus.BAD_REQUEST,  e.message!! )
+        .forStatusAndDetail(HttpStatus.CONFLICT,  e.message!! )
 
     @ExceptionHandler(RequestParamException::class)
     fun handleRequestBodyError(e: RequestParamException) = ProblemDetail

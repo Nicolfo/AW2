@@ -79,22 +79,15 @@ function changeStatus(ticketID,status) {
                 'Authorization': 'Bearer '+ localStorage.getItem("jwt")
             },
         })
-            .then((response) => {
+            .then(async (response) => {
                 // Check if the response status is OK (200)
                 if (response.ok) {
-                    return response.json(); // Assuming the response is in JSON format
+                    resolve(await response.json()); // Assuming the response is in JSON format
                 } else {
-                    throw new Error(`Error closing ticket: ${response.status}`);
+                    reject(await response.json());
                 }
             })
-            .then((data) => {
-                // Resolve the promise with the returned data
-                resolve(data);
-            })
-            .catch((error) => {
-                // Reject the promise with the error information
-                reject(error);
-            });
+
     });
 }
 

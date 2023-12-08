@@ -204,7 +204,7 @@ function Chat(props) {
                             }
                         ).catch(err => {
                                 setSuccessMessage("")
-                                setErrorMessage(err.details)
+                                setErrorMessage(err.detail)
                             })}>Set
                         new status</Button>
 

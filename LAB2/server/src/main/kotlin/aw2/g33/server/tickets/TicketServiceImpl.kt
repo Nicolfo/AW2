@@ -35,7 +35,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
-            if(ticketToUpdate.status!=="CLOSED"){
+            if(ticketToUpdate.status.compareTo("CLOSED")!=0){
                 ticketToUpdate.status="CLOSED"
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status)
                 ticketRepository.save(ticketToUpdate)
@@ -56,7 +56,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
-            if(ticketToUpdate.status!=="RESOLVED" && ticketToUpdate.status!=="CLOSED"){
+            if(ticketToUpdate.status.compareTo("RESOLVED")!=0 && ticketToUpdate.status.compareTo("CLOSED")!=0){
                 ticketToUpdate.status="RESOLVED"
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status)
                 ticketRepository.save(ticketToUpdate)
@@ -82,7 +82,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         val ticketOptional = ticketRepository.findById(ticket.ticketId)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
-            if(ticketToUpdate.status=="OPEN" || ticketToUpdate.status=="REOPEN"){
+            if(ticketToUpdate.status.compareTo("OPEN")==0 || ticketToUpdate.status.compareTo("REOPENED")==0){
                 ticketToUpdate.status="IN PROGRESS"
                 ticketToUpdate.worker=worker.toProfile()
                 ticketToUpdate.priority=priority
@@ -106,7 +106,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
-            if(ticketToUpdate.status=="IN PROGRESS"){
+            if(ticketToUpdate.status.compareTo("IN PROGRESS")==0){
                 ticketToUpdate.status="OPEN"
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status)
                 ticketRepository.save(ticketToUpdate)
@@ -127,8 +127,9 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
         val ticketOptional = ticketRepository.findById(ticketID)
         if(!ticketOptional.isEmpty){
             val ticketToUpdate=ticketOptional.get()
-            if(ticketToUpdate.status!=="REOPENED" && ticketToUpdate.status!=="IN PROGRESS" && ticketToUpdate.status!=="OPEN"){
+            if(ticketToUpdate.status.compareTo("REOPENED")!=0 && ticketToUpdate.status.compareTo("IN PROGRESS")!=0 && ticketToUpdate.status.compareTo("OPEN")!=0){
                 ticketToUpdate.status="REOPENED"
+                ticketToUpdate.worker=null;
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status)
                 ticketRepository.save(ticketToUpdate)
                 return ticketToUpdate.toDTO()
@@ -146,7 +147,13 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
     @Transactional
     @PreAuthorize("hasAnyAuthority('ROLE_Manager')")
     override fun getListTicketByStatus(statusTicket:String):List<TicketDTO>{
-        return ticketRepository.findTicketsByStatus(statusTicket).map { it -> it.toDTO() }
+        if(statusTicket.compareTo("OPEN")!=0)
+            return ticketRepository.findTicketsByStatus(statusTicket).map { it -> it.toDTO() }
+        else{
+            var firstList=ticketRepository.findTicketsByStatus(statusTicket).map { it -> it.toDTO() };
+            var secondList=ticketRepository.findTicketsByStatus("REOPENED").map { it -> it.toDTO() }
+            return firstList+secondList;
+        }
     }
 
     @Transactional
