@@ -91,7 +91,7 @@ function DisplayTickets(props) {
                                 </div>
                                 <Form.Control as="select" onChange={ev => {
                                     onChangeStatusTicket(ev.target.value)
-                                }} style={{width: "15%", height: "60%", marginRight: "5%", marginBottom: "1%"}}>
+                                }} style={{width: "15%", height: "40%", marginRight: "5%", marginBottom: "1%"}}>
                                     <option key={"-"} value={null}>-</option>
                                     {["OPEN", "IN PROGRESS", "RESOLVED", "REOPENED", "CLOSED"].map((status, index) =>
                                         <option key={status} value={status}> {status}</option>
@@ -158,7 +158,7 @@ function DisplayTickets(props) {
                                                 marginBottom: "2%"
                                             }}>
                                                 <span style={{
-                                                    width: "25%",
+                                                    width: "5rem",
                                                     height: "auto",
                                                     fontWeight: "bold",
                                                     marginLeft: "2%",
@@ -174,7 +174,7 @@ function DisplayTickets(props) {
                                                 marginBottom: "2%"
                                             }}>
                                                 <span style={{
-                                                    width: "25%",
+                                                    width: "5rem",
                                                     height: "auto",
                                                     fontWeight: "bold",
                                                     marginLeft: "2%",
@@ -190,7 +190,7 @@ function DisplayTickets(props) {
                                                 marginBottom: "2%"
                                             }}>
                                                 <span style={{
-                                                    width: "25%",
+                                                    width: "5rem",
                                                     height: "auto",
                                                     fontWeight: "bold",
                                                     marginLeft: "2%",
@@ -206,7 +206,7 @@ function DisplayTickets(props) {
                                                 marginBottom: "2%"
                                             }}>
                                                 <span style={{
-                                                    width: "25%",
+                                                    width: "5rem",
                                                     height: "auto",
                                                     fontWeight: "bold",
                                                     marginLeft: "2%",
@@ -224,7 +224,7 @@ function DisplayTickets(props) {
                                                         marginBottom: "2%"
                                                     }}>
                                                         <span style={{
-                                                            width: "25%",
+                                                            width: "5rem",
                                                             height: "auto",
                                                             fontWeight: "bold",
                                                             marginLeft: "2%",

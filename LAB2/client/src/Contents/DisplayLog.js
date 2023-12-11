@@ -68,22 +68,22 @@ function DisplayLog(props) {
                     {errorMessage!=="" ? (<> <span style={{color: "red", fontSize: "18px", fontWeight: "bold"}}>{errorMessage}</span> </>) : ""}
                     {errorMessage==="" ?  listLogToDisplay.map(logEntry =>
                         <div style={{width:"75%",height:"auto", paddingTop :"1rem",border:"1px solid black",borderRadius:"10px",display:"flex",flexDirection:"row", alignItems:"start",marginTop:"1rem"}}>
-                            <div style={{width:"30%",height:"auto",display:"flex",flexDirection:"column", alignItems:"start",marginLeft:"15px",marginRight:"1rem"}}>
+                            <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"column", alignItems:"start",marginLeft:"15px",marginRight:"1rem"}}>
                                 <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                    <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>TicketID:</span>
+                                    <span style ={{width:"5rem",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>TicketID:</span>
                                     <span>{"Ticket-"+logEntry.ticketId.split("-")[2]}</span>
                                 </div>
                                 <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                    <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Status:</span>
+                                    <span style ={{width:"5rem",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>Status:</span>
                                     <span>{logEntry.status}</span>
                                 </div>
                                 <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                    <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>LogId:</span>
+                                    <span style ={{width:"5rem",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>LogId:</span>
                                     <span>{logEntry.logId}</span>
                                 </div>
                                 <div style={{width:"100%",height:"auto",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
-                                    <span style ={{width:"25%",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>TimeStamp:</span>
-                                    <span>{logEntry.timeStamp}</span>
+                                    <span style ={{width:"5rem",height:"auto",fontWeight:"bold",marginLeft:"2%",marginRight:"2%"}}>TimeStamp:</span>
+                                    <span>{new Date(logEntry.timeStamp).toLocaleString('default', {year: 'numeric',month:"long",day:"numeric",hour:"numeric",minute:"numeric"})}</span>
                                 </div>
 
                 </div>

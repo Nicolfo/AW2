@@ -5,6 +5,7 @@ import {Button, Col, Container, FormControl, InputGroup, Row} from "react-bootst
 import 'bootstrap/dist/css/bootstrap.css';
 import {BsFillFileEarmarkPlusFill, BsFillTrashFill} from "react-icons/bs";
 import API_Ticket from "../API/API_TICKET/API_Ticket";
+import {useNavigate} from "react-router-dom";
 
 
 function Chat(props) {
@@ -18,6 +19,7 @@ function Chat(props) {
     let [files, setFiles] = useState([]);
     let userName = props.user && props.user.username ? props.user.username : null;
     let chatId = props.ticketID ? props.ticketID : null;
+    const navigate = useNavigate();
 
     const messagesContainerRef = useRef(null);
 
@@ -201,6 +203,7 @@ function Chat(props) {
                             onClick={() => API_Ticket.changeStatus(chatId, newStatus).then(() => {
                                 setErrorMessage("")
                                 setSuccessMessage("Status Changed Correctly")
+                                navigate("/")
                             }
                         ).catch(err => {
                                 setSuccessMessage("")
