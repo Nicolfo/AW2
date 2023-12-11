@@ -25,7 +25,7 @@ class MessageWebSocketController (var messagingTemplate: SimpMessagingTemplate, 
 
         println("Register/Cancel of ${messageDTO.sender}, with message ${messageDTO.type}")
 
-        if(messageService.sendMessage(ticketID,messageDTO)!==null) {
+        if(messageService.sendMessage(ticketID,messageDTO,true)!==null) {
             return messageDTO;
         }else{
             return MessageDTO("Error cannot register to this chat!","SYSTEM",MessageDTO.MessageType.ERROR,listOf());
@@ -39,7 +39,7 @@ class MessageWebSocketController (var messagingTemplate: SimpMessagingTemplate, 
            if( messageService.sendMessage(ticketID,messageDTO)!=null){
                return messageDTO
            }
-        return MessageDTO("Error cannot register to this chat!","SYSTEM",MessageDTO.MessageType.ERROR,listOf());
+        return MessageDTO("Error cannot send messages to this chat! Verify the ticket status","SYSTEM",MessageDTO.MessageType.ERROR,listOf());
 
     }
 

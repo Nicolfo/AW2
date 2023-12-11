@@ -258,12 +258,12 @@ function DisplayTickets(props) {
                                             alignItems: "center",
                                             justifyContent: "center"
                                         }}>
-                                            <Button variant="primary" type="submit"
+                                            {(ticket.status==="IN PROGRESS" || props.roleUser==="Manager" ||  props.roleUser==="Expert" )  && <Button variant="primary" type="submit"
                                                     style={{backgroundColor: "blue", color: "white", width: "30%"}}
                                                     onClick={() => {
                                                         setTicketIDChat(ticket.ticketId);
                                                         setChatDisplayed(true)
-                                                    }}>CHAT</Button>
+                                                    }}>CHAT</Button>}
                                         </div>
                                     </div>
                                 ) : ""}

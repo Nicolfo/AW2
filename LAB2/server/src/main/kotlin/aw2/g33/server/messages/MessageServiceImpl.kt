@@ -17,9 +17,12 @@ class MessageServiceImpl(
     private val attachmentService: AttachmentService,
     val ticketRepository: TicketRepository
 ) : MessageService {
-    override fun sendMessage(ticketID: UUID, messageDTO: MessageDTO): Message? {
+    override fun sendMessage(ticketID: UUID, messageDTO: MessageDTO,ignoreStatus:Boolean): Message? {
         return try {
             var ticket = ticketRepository.getReferenceById(ticketID);
+            if(!ignoreStatus && ticket.status.compareTo("IN PROGRESS") != 0)
+                return null
+
             var message: Message = if (messageDTO.files.isEmpty())
                 Message(
                     ticket,

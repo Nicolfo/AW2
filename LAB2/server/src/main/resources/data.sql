@@ -1450,6 +1450,15 @@ INSERT INTO public.products (product_id, name, brand) VALUES ('9780785225690', '
 INSERT INTO public.products (product_id, name, brand) VALUES ('4894855642906', 'Universal 400w 40000lm 7inch LED Car Motorcycle Headlight Phare Farol Moto R1s5', 'SODIAL');
 INSERT INTO public.products (product_id, name, brand) VALUES ('9780008201616', 'KS2 Spelling SATs Practice Question Book: English Home Learning and School Resources from the Publisher of 2022 Test and Exam Revision Practice Guides, Workbooks, and Activities. (Collins KS2 SATs Practice) by Collins KS2 (Paperback, 2016)', 'HarperCollins');
 INSERT INTO public.products (product_id, name, brand) VALUES ('4025258739324', 'BILSTEIN B8 Shock Absorbers Damper 19-236315 Rear Axle for Toyota YARIS', 'BILSTEIN');
-INSERT INTO public.profiles (email, username, role) VALUES ('u1@test.it', 'u1', 'Expert');
-INSERT INTO public.profiles (email, username, role) VALUES ('u2@test.it', 'u2', 'Manager');
+INSERT INTO public.profiles (email, username, role) VALUES ('u1@test.it', 'u1', 'Manager');
+INSERT INTO public.profiles (email, username, role) VALUES ('u2@test.it', 'u2', 'Expert');
 INSERT INTO public.profiles (email, username, role) VALUES ('u3@test.it', 'u3', 'Client');
+INSERT INTO public.ticket (ticket_id, description, priority, status, customer_username, worker_username) VALUES ('8d25f9ad-216c-4cb3-990b-5de0c17d41ba', 'Test ticket 1', -1, 'OPEN', 'u3', null);
+INSERT INTO public.ticket (ticket_id, description, priority, status, customer_username, worker_username) VALUES ('0b0ec2ce-c56f-419c-b08d-16ec0d1dd701', 'Test ticket 3', 1, 'IN PROGRESS', 'u3', 'u2');
+INSERT INTO public.ticket (ticket_id, description, priority, status, customer_username, worker_username) VALUES ('28c1ede4-cc7d-4493-820b-c50d511d983c', 'Test ticket 2', 2, 'RESOLVED', 'u3', 'u2');
+INSERT INTO public.ticket_log (log_id, status, time_stamp, ticket_id) VALUES ('2111b557-3a95-4151-9c95-2f3b91f98fbd', 'OPEN', '2023-12-11 18:40:49.769209', '8d25f9ad-216c-4cb3-990b-5de0c17d41ba');
+INSERT INTO public.ticket_log (log_id, status, time_stamp, ticket_id) VALUES ('864cd203-6cc0-4b30-a497-98691fee1cf0', 'OPEN', '2023-12-11 18:40:57.458336', '28c1ede4-cc7d-4493-820b-c50d511d983c');
+INSERT INTO public.ticket_log (log_id, status, time_stamp, ticket_id) VALUES ('4764d154-ca9c-49d5-80bf-b5003cda8426', 'OPEN', '2023-12-11 18:41:05.680893', '0b0ec2ce-c56f-419c-b08d-16ec0d1dd701');
+INSERT INTO public.ticket_log (log_id, status, time_stamp, ticket_id) VALUES ('eeb3552f-ae28-41d5-9bd0-05f4b543f5c5', 'IN PROGRESS', '2023-12-11 18:41:21.040941', '28c1ede4-cc7d-4493-820b-c50d511d983c');
+INSERT INTO public.ticket_log (log_id, status, time_stamp, ticket_id) VALUES ('8f875647-3d6a-4865-a8d1-04956c66cace', 'IN PROGRESS', '2023-12-11 18:41:28.249607', '0b0ec2ce-c56f-419c-b08d-16ec0d1dd701');
+INSERT INTO public.ticket_log (log_id, status, time_stamp, ticket_id) VALUES ('c1f618f6-65fd-438f-953d-bcb0085367ca', 'RESOLVED', '2023-12-11 18:41:57.452679', '28c1ede4-cc7d-4493-820b-c50d511d983c');

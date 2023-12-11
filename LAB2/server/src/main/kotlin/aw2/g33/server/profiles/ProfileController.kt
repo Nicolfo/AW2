@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController
 @CrossOrigin
 
 class ProfileController(private val profileService: ProfileService) {
-    @GetMapping("/API/profiles/{username}")
+    @GetMapping("/API/profiles/{email}")
     @ResponseStatus(HttpStatus.OK)
-    fun getProfile(@PathVariable username:String):ProfileDTO?{
-        return profileService.getProfileInfo(username)
+    fun getProfile(@PathVariable email:String):ProfileDTO?{
+        return profileService.getProfileInfo(email)
     }
 
     @GetMapping("/API/profiles/")

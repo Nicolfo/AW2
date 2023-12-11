@@ -14,6 +14,7 @@ function SingleProfileForm(props){
         setIsSubmitted(true);
         props.getProfile(usernameToSearch).then((profile)=>{
             setErrMsg("");
+            setUsernameToSearch(profile.username);
             setEmail(profile.email);
             setRole(profile.role);
         })
@@ -25,7 +26,7 @@ function SingleProfileForm(props){
     if(!isSubmitted && errMsg==="")
         return  <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3 col-5">
-                <Form.Label>Username</Form.Label>
+                <Form.Label>Username or Email</Form.Label>
                 <Form.Control type="text" placeholder="Enter username to search " onChange={ev=>setUsernameToSearch(ev.target.value)}/>
                 <Form.Text className="text-muted">
                 </Form.Text>

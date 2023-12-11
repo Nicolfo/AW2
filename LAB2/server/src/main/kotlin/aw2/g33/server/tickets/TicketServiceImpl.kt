@@ -108,6 +108,7 @@ class TicketServiceImpl (private val ticketRepository: TicketRepository,private 
             val ticketToUpdate=ticketOptional.get()
             if(ticketToUpdate.status.compareTo("IN PROGRESS")==0){
                 ticketToUpdate.status="OPEN"
+                ticketToUpdate.worker=null;
                 ticketLogService.addToLog(ticketToUpdate,ticketToUpdate.status)
                 ticketRepository.save(ticketToUpdate)
                 return ticketToUpdate.toDTO()
