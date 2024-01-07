@@ -310,7 +310,7 @@ function Chat(props) {
                                         onChange={ev => setNewMessage(ev.target.value)}
                                         value={newMessage}
                                     />
-                                    <label htmlFor="file_upload" style={{paddingLeft: "1rem", paddingRight: "1rem"}}>
+                                    <label htmlFor="file_upload" style={{paddingLeft: "0.5rem", paddingRight: "0.5rem",paddingTop:"0.3rem"}}>
                                         <BsFillFileEarmarkPlusFill/>
                                     </label>
                                     <input id="file_upload" type="file" style={{display: "none"}}
