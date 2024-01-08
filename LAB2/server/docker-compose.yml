@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'nicolfo/aw2.g33.final-project:1.2'
+    image: 'nicolfo/aw2.g33.final-project:1.3'
     ports:
       - "8081:8081"
     expose:
@@ -20,7 +20,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - KEYCLOAK_HOST=keycloak
       - LOKI_HOST=loki
       - TEMPO_HOST=tempo
