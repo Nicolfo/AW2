@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'nicolfo/aw2.g33.final-project:1.1'
+    image: 'nicolfo/aw2.g33.final-project:1.2'
     ports:
       - "8081:8081"
     expose:
