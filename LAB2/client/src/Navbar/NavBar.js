@@ -42,13 +42,12 @@ function NavBar(props) {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link >Web Application 2- 2023</Nav.Link>
-                        <Nav.Link >Lab 5</Nav.Link>
+                        <Nav.Link >Final Project</Nav.Link>
                         <Nav.Link >Group 33</Nav.Link>
                         <NavDropdown title="Members" id="basic-nav-dropdown">
                             <NavDropdown.Item >Matteo Fontana S292567</NavDropdown.Item>
                             <NavDropdown.Item >Nicolò Fontana S303361</NavDropdown.Item>
                             <NavDropdown.Item >Jacopo Spaccatrosi S285891</NavDropdown.Item>
-                            <NavDropdown.Item >Giuseppe Galluzzo S261187</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>

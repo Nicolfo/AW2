@@ -37,13 +37,17 @@ function DisplayLog(props) {
     }, [props.roleUser,props.currentUser]);
 
     function onChangeSearchBar(search=""){
+        setSearch(search);
         if(search!=="")
-            setListLogToDisplay(listLog.filter(log => (log.id && log.id.includes(search)) ))
+            setListLogToDisplay(listLog.filter(ticket => (ticket.customerUsername && ticket.customerUsername.includes(search)) || (ticket.workerUsername && ticket.workerUsername.includes(search)) || (ticket.ticketId && ticket.ticketId.split("-")[2].includes(search))))
+        else
+            setListLogToDisplay(listLog);
     }
 
 
 
     function onResetButtonClicked(){
+        setSearch("");
         setListLogToDisplay(listLog);
     }
 
@@ -51,9 +55,9 @@ function DisplayLog(props) {
         <>
             <div style={{width:"100%",height:"100%",overflowY:"scroll", marginTop:"2rem"}}>
                 <div style={{display:"flex",alignItems:"center",flexDirection:"row",height:"10vh"}}>
-                    <div style={{display:"flex",alignItems:"center",flexDirection:"row",marginRight:"5%", width:"20%"}}>
+                    <div style={{display:"flex",alignItems:"center",flexDirectiosn:"row",marginRight:"5%", width:"20%"}}>
                         <Form.Group className="mb-3 col-5" controlId="formBasicEmail" style={{width:"100%"}}>
-                            <Form.Control type="text" placeholder="Search Ticket" onChange={ev=>onChangeSearchBar(ev.target.value)}/>
+                            <Form.Control type="text" placeholder="Search Ticket" value={search} onChange={ev=>onChangeSearchBar(ev.target.value)}/>
                             <Form.Text className="text-muted">
                             </Form.Text>
                         </Form.Group>

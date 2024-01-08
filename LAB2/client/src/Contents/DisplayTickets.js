@@ -13,7 +13,9 @@ function DisplayTickets(props) {
     const [currentUser,setCurrentUser] = useState(null);
     const [ticketIDChat,setTicketIDChat] = useState(null);
     const [chatDisplayed,setChatDisplayed] = useState(false);
-    const [search,setSearch] = useState("")
+    const [ticketIdToSearch,setTicketIdToSearch] = useState("")
+    const [statusToSearch,setStatusToSearch] = useState("")
+    const [priorityToSearch,setPriorityToSearch] = useState(0)
     const [errorMessage,setErrorMessage] = useState("")
     let isLoadingData = false;
 
@@ -40,28 +42,41 @@ function DisplayTickets(props) {
         }
     }, [props.roleUser,props.currentUser]);
 
+    useEffect(()=>{
+        if(isLoadingData)
+            return;
+        let newList=[];
+        if(ticketIdToSearch!=="")
+            newList=listTicket.filter(ticket => (ticket.customerUsername && ticket.customerUsername.includes(ticketIdToSearch)) || (ticket.workerUsername && ticket.workerUsername.includes(ticketIdToSearch)) || (ticket.ticketId && ticket.ticketId.split("-")[2].includes(ticketIdToSearch)))
+        else
+            newList=listTicket;
+
+        if(statusToSearch!=="-"){
+            newList=newList.filter(ticket => ticket.status && ticket.status.toLowerCase() ===  statusToSearch.toLowerCase() )
+        }
+
+        if(priorityToSearch!==0){
+            newList=newList.filter(ticket => ticket.priority && ticket.priority >=  priorityToSearch );
+        }
+        setListTicketToDisplay(newList);
+
+    },[ticketIdToSearch,statusToSearch,priorityToSearch]);
             function onChangeSearchBar(search=""){
-                if(search!=="")
-                    setListTicketToDisplay(listTicket.filter(ticket => (ticket.customerUsername && ticket.customerUsername.includes(search)) || (ticket.workerUsername && ticket.workerUsername.includes(search)) || (ticket.ticketId && ticket.ticketId.split("-")[2].includes(search))))
+                setTicketIdToSearch(search)
             }
 
             function onChangeStatusTicket(status=""){
-                if(status!==""){
-                    setListTicketToDisplay(listTicket.filter(ticket => ticket.status && ticket.status.toLowerCase() ===  status.toLowerCase() ))
-                }
+                setStatusToSearch(status);
             }
 
             function onChangePriorityTicket(priority=-1){
-                if(priority!==0){
-                    setListTicketToDisplay(listTicket.filter(ticket => ticket.priority && ticket.priority >=  priority ))
-                }
-                else{
-                    setListTicketToDisplay(listTicket)
-                }
+                setPriorityToSearch(priority);
             }
 
             function onResetButtonClicked(){
-                setListTicketToDisplay(listTicket);
+                setStatusToSearch("-");
+                setPriorityToSearch(0);
+                setTicketIdToSearch("");
             }
 
             if(chatDisplayed){
@@ -81,15 +96,15 @@ function DisplayTickets(props) {
                                 }}>
                                     <Form.Group className="mb-3 col-5" controlId="formBasicEmail"
                                                 style={{width: "100%"}}>
-                                        <Form.Control type="text" placeholder="Search Ticket"
+                                        <Form.Control type="text" placeholder="Search Ticket" value={ticketIdToSearch}
                                                       onChange={ev => onChangeSearchBar(ev.target.value)}/>
                                         <Form.Text className="text-muted">
                                         </Form.Text>
                                     </Form.Group>
                                     <SearchIcon style={{position: "relative", right: "30px", bottom: "8px"}}
-                                                onClick={() => onChangeSearchBar(search)}/>
+                                                onClick={() => onChangeSearchBar(ticketIdToSearch)}/>
                                 </div>
-                                <Form.Control as="select" onChange={ev => {
+                                <Form.Control as="select" value={statusToSearch} onChange={ev => {
                                     onChangeStatusTicket(ev.target.value)
                                 }} style={{width: "15%", height: "40%", marginRight: "5%", marginBottom: "1%"}}>
                                     <option key={"-"} value={null}>-</option>
@@ -100,6 +115,7 @@ function DisplayTickets(props) {
                                 <Slider
                                     min={0}
                                     max={5}
+                                    value={priorityToSearch}
                                     marks
                                     style={{width: "15%", marginRight: "5%"}}
                                     size="lg"
